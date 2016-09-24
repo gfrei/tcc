@@ -1,0 +1,93 @@
+<html>
+	<head>
+		<title>My first Three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+	  <script src="/socket.io/socket.io.js"></script>
+		<script src="js/three.js"></script>
+		<script>
+
+  var socket = io();
+
+  function onDocumentKeyDown () {
+    switch( event.keyCode ) {
+      case 83: //s
+        socket.emit('move', {'x':0.01,'y':0,'z':0}); 
+        break;
+      case 87: //w
+        socket.emit('move', {'x':-0.01,'y':0,'z':0}); 
+        break;
+      case 68: //d
+        socket.emit('move', {'x':0,'y':0.01,'z':0}); 
+        break;
+      case 81: //q
+        socket.emit('move', {'x':0,'y':0,'z':0.01}); 
+        break;
+      case 65: //a
+        socket.emit('move', {'x':0,'y':-0.01,'z':0}); 
+        break;
+      case 69: //e
+        socket.emit('move', {'x':0,'y':0,'z':-0.01}); 
+        break;
+    }
+  }
+
+  socket.on('move', function (data) {
+    xRot = xRot + data.x
+    yRot = yRot + data.y
+    zRot = zRot + data.z
+
+    console.log(xRot, yRot, zRot);
+  });
+
+
+var scene, camera, renderer
+var geometry, material, cube
+var xRot, yRot, zRot
+
+
+function init() {
+	scene = new THREE.Scene();
+	camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+	renderer = new THREE.WebGLRenderer();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	document.body.appendChild( renderer.domElement );
+
+	geometry = new THREE.BoxGeometry( 1, 1, 1 );
+	material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+	cube = new THREE.Mesh( geometry, material );
+	scene.add( cube );
+
+	camera.position.z = 5;
+	xRot = 0
+	yRot = 0
+	zRot = 0
+
+	document.addEventListener( 'keydown', onDocumentKeyDown, false );
+}
+
+
+
+
+function render() {
+	requestAnimationFrame( render );
+
+	cube.rotation.x += xRot;
+	cube.rotation.y += yRot;
+	cube.rotation.z += zRot;
+
+	renderer.render(scene, camera);
+};
+
+init();
+render();
+
+
+		</script>
+	</body>
+</html>
