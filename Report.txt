@@ -1,0 +1,28 @@
+
+
+Ao tentar rodar o cordova com um simples exemplo de socket, deu esse erro:
+
+	Refused to load the script 'http://cdn.socket.io/socket.io-1.0.3.js' because it violates the following Content Security Policy directive: "default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'". Note that 'script-src' was not explicitly set, so 'default-src' is used as a fallback
+
+	Refused to load the script 'http://cdn.socket.io/socket.io-1.0.3.js' because it violates the following Content Security Policy directive: "script-src 'self' http://onlineerp.solution.quebec 'unsafe-inline' 'unsafe-eval'".
+
+Eu arrumei o import do socket.io e deu tudo certo.
+
+
+
+Agora eu to tentando connect no localhost:8000. Parece certo, mas tá dando esse erro.
+
+socket.io-1.0.3.js:2 Refused to connect to 'http://localhost:8000/socket.io/?EIO=2&transport=polling&t=1475795692556-0' because it violates the following Content Security Policy directive: "default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback.
+
+
+eu estou aparentemente mexendo na Whitelist do Cordova pra arrumar esses problemas de CSP, e tem info aqui
+	https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+
+
+Eu consegui conectar adicionando um connect-src, mas agora vieram mais dois erros:
+
+Refused to connect to 'ws://localhost:8000/socket.io/?EIO=2&transport=websocket&sid=s8xGGjMnMI4IBCfGAAAB' because it violates the following Content Security Policy directive: "connect-src localhost:8000".
+
+Uncaught SecurityError: Failed to construct 'WebSocket': Refused to connect to 'ws://localhost:8000/socket.io/?EIO=2&transport=websocket&sid=s8xGGjMnMI4IBCfGAAAB' because it violates the document's Content Security Policy.
+
+Estou tendo muito problema com o CSP, entao eu tirei ele =D
