@@ -7,48 +7,61 @@
 		</style>
 	</head>
 	<body>
-	  <script src="/socket.io/socket.io.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
 		<script src="js/three.js"></script>
 		<script>
 
-  var socket = io();
 
-  function onDocumentKeyDown () {
-    switch( event.keyCode ) {
-      case 83: //s
-        socket.emit('move', {'x':0.01,'y':0,'z':0}); 
-        break;
-      case 87: //w
-        socket.emit('move', {'x':-0.01,'y':0,'z':0}); 
-        break;
-      case 68: //d
-        socket.emit('move', {'x':0,'y':0.01,'z':0}); 
-        break;
-      case 81: //q
-        socket.emit('move', {'x':0,'y':0,'z':0.01}); 
-        break;
-      case 65: //a
-        socket.emit('move', {'x':0,'y':-0.01,'z':0}); 
-        break;
-      case 69: //e
-        socket.emit('move', {'x':0,'y':0,'z':-0.01}); 
-        break;
-    }
-  }
+// Variables
 
-  socket.on('move', function (data) {
-    xRot = xRot + data.x
-    yRot = yRot + data.y
-    zRot = zRot + data.z
-
-    console.log(xRot, yRot, zRot);
-  });
-
+var socket = io();
 
 var scene, camera, renderer
 var geometry, material, cube
 var xRot, yRot, zRot
 
+
+
+// Socket Events
+
+socket.on('move', function (data) {
+	xRot += data.x
+	yRot += data.y
+	zRot += data.z
+});
+
+socket.on('reset', function () {
+	xRot = 0
+	yRot = 0
+	zRot = 0
+});
+
+
+
+// Functions
+
+function onDocumentKeyDown () {
+	switch( event.keyCode ) {
+		case 83: //s
+			socket.emit('move', {'x':0.01,'y':0,'z':0}); 
+			break;
+		case 87: //w
+			socket.emit('move', {'x':-0.01,'y':0,'z':0}); 
+			break;
+		case 68: //d
+			socket.emit('move', {'x':0,'y':0.01,'z':0}); 
+			break;
+		case 81: //q
+			socket.emit('move', {'x':0,'y':0,'z':0.01}); 
+			break;
+		case 65: //a
+			socket.emit('move', {'x':0,'y':-0.01,'z':0}); 
+			break;
+		case 69: //e
+			socket.emit('move', {'x':0,'y':0,'z':-0.01}); 
+			break;
+	}
+}
 
 function init() {
 	scene = new THREE.Scene();
@@ -71,9 +84,6 @@ function init() {
 	document.addEventListener( 'keydown', onDocumentKeyDown, false );
 }
 
-
-
-
 function render() {
 	requestAnimationFrame( render );
 
@@ -83,6 +93,7 @@ function render() {
 
 	renderer.render(scene, camera);
 };
+
 
 init();
 render();

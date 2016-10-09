@@ -26,3 +26,22 @@ Refused to connect to 'ws://localhost:8000/socket.io/?EIO=2&transport=websocket&
 Uncaught SecurityError: Failed to construct 'WebSocket': Refused to connect to 'ws://localhost:8000/socket.io/?EIO=2&transport=websocket&sid=s8xGGjMnMI4IBCfGAAAB' because it violates the document's Content Security Policy.
 
 Estou tendo muito problema com o CSP, entao eu tirei ele =D
+
+
+Sem o CSP, ta tudo certo com o Cordova.
+Para executar em browser, os passos sao:
+	$cordova platform add browser
+	$cordova run browser
+
+	$cordova platform add android
+	$cordova run android
+
+Pra rodar em Android, precisa ter a imagem do emulador (AVD), os Android SDK tools and stuff, API 23.
+
+
+Esta tudo certo tambem com o apk no device, ele conecta e interage certo com os sockets.
+
+
+Estou tendo problemas com o device-orientation. No browser, ele retorna um valor aleatorio, o comportamento esperado. Mas no emulador e no device, vem sempre 0 do compass.
+
+Foda-se o compass, o acelerometro funciona! :sandroyay:
