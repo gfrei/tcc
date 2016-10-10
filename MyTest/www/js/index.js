@@ -54,55 +54,96 @@ app.initialize();
 
 var socket
 
-var spin  = {'client_type':'device','x':0.01,'y':0,'z':0}
-var spin2 = {'client_type':'device','x':0,'y':0,'z':0.05}
-var spin3 = {'client_type':'device','x':-0.01,'y':0,'z':-0.05}
+var speedX = {'client_type':'device','x':0.03,'y':0,'z':0}
+var speedY = {'client_type':'device','x':0,'y':0.03,'z':0}
+var speedZ = {'client_type':'device','x':0,'y':0,'z':0.03}
+
+var watchID = null;
 
 
 
 document.addEventListener('deviceready', function() {
-
     socket = io('http://192.168.0.10:8000');
+
     socket.on('connect', function() {
-        // socket.emit('order_move', spin); 
-        socket.on('doge', function(text) {
-            // alert(text);
-        });
+        socket.emit('ready', 'device');
     });
+
+
+    window.addEventListener("batterystatus", onBatteryStatus, false);
 });
 
 
-function onSuccess(acceleration) {
-    socket.emit('order_print', '~')
-    socket.emit('order_print', 'Acceleration X: ' + acceleration.x)
-    socket.emit('order_print', 'Acceleration Y: ' + acceleration.y)
-    socket.emit('order_print', 'Acceleration Z: ' + acceleration.z)
-    // socket.emit('order_print', 'Timestamp: '      + acceleration.timestamp)
+
+// Aux
+
+function logInServer(message) {
+    socket.emit('device_print', message)
 }
 
-function onError() {
-    socket.emit('order_print', 'onError!');
+
+
+// Event Listeners functions
+
+function onBatteryStatus(status) {
+    var data = {
+        level : status.level, 
+        isPlugged : status.isPlugged
+    }
+
+    logInServer('device_battery_changed')
+    logInServer(data)
+
+    socket.emit('device_battery_changed', data)
 }
-var options = { frequency: 1000 };
+
+function onAccSuccess(acceleration) {
+    logInServer('Acceleration')
+    logInServer(acceleration)
+
+    socket.emit('device_acceleration', acceleration)
+}
+
+function onAccError() {
+    logInServer('Accelerometer error.');
+}
 
 
-var watchID = null;
 
-function doSpin(move) {
+// Socket functions
+
+function toggleAccelerometer(freq) {
+    if (watchID == null) {
+        startAccelerometer(freq);
+    }
+    else {
+        stopAccelerometer();
+    }
+
+}
+
+function startAccelerometer(freq) {
     if (watchID == null) {
         watchID = navigator.accelerometer.watchAcceleration(
-            onSuccess, 
-            onError, 
-            options
+            onAccSuccess,
+            onAccError,
+            { frequency: freq }
         );
     };
-    navigator.accelerometer.getCurrentAcceleration(onSuccess, onError);
-    socket.emit('order_move', move); 
-    // window.open("http://www.w3schools.com", "_self");
+    navigator.accelerometer.getCurrentAcceleration(onAccSuccess, onAccError);
 }
 
-function doReset() {
-    navigator.accelerometer.clearWatch(watchID);
-    watchID = null;
-    socket.emit('order_reset'); 
+function stopAccelerometer() {
+    if (watchID) {
+        navigator.accelerometer.clearWatch(watchID);
+        watchID = null;
+    };
+}
+
+function addSpeed(speed_vector) {
+    socket.emit('device_add_speed', speed_vector); 
+}
+
+function resetSpeed() {
+    socket.emit('device_reset_speed'); 
 }

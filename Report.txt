@@ -44,4 +44,11 @@ Esta tudo certo tambem com o apk no device, ele conecta e interage certo com os 
 
 Estou tendo problemas com o device-orientation. No browser, ele retorna um valor aleatorio, o comportamento esperado. Mas no emulador e no device, vem sempre 0 do compass.
 
-Foda-se o compass, o acelerometro funciona! :sandroyay:
+
+>> Sensores
+O compass no meu device não funciona, utilizo somente o acelerômetro.
+
+Também estou utilizando o sensor de bateria, event driven, informa o nível da bateria e se está charging. O evento ocorre quando o app inicializa, quando a bateria começa/para de ser carregada, e quando a porcentagem muda em pelo menos 1%.
+
+Tentei utilizar o plugin para medir dB, mas a instalação não completa.
+Não encontrei nenhum sensor confiável para luminosidade.
