@@ -114,30 +114,17 @@ function onAccError() {
 
 function toggleAccelerometer(freq) {
     if (watchID == null) {
-        startAccelerometer(freq);
-    }
-    else {
-        stopAccelerometer();
-    }
-
-}
-
-function startAccelerometer(freq) {
-    if (watchID == null) {
         watchID = navigator.accelerometer.watchAcceleration(
             onAccSuccess,
             onAccError,
             { frequency: freq }
         );
-    };
-    navigator.accelerometer.getCurrentAcceleration(onAccSuccess, onAccError);
-}
-
-function stopAccelerometer() {
-    if (watchID) {
+        navigator.accelerometer.getCurrentAcceleration(onAccSuccess, onAccError);
+    }
+    else {
         navigator.accelerometer.clearWatch(watchID);
         watchID = null;
-    };
+    }
 }
 
 function addSpeed(speed_vector) {
