@@ -50,9 +50,10 @@ var app = {
 
 app.initialize();
 
-// My vars
+// Variables
 
 var socket
+var default_port = 8000;
 
 var speedX = {'client_type':'device','x':0.03,'y':0,'z':0}
 var speedY = {'client_type':'device','x':0,'y':0.03,'z':0}
@@ -63,15 +64,40 @@ var watchID = null;
 
 
 document.addEventListener('deviceready', function() {
-    socket = io('http://192.168.0.10:8000');
+    socket = io('http://192.168.0.17:' + default_port);
 
     socket.on('connect', function() {
         socket.emit('ready', 'device');
     });
 
-
     window.addEventListener("batterystatus", onBatteryStatus, false);
 });
+
+
+
+// Unused
+
+function validateIPaddress(ipaddress)   
+{  
+ if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress))  
+  {  
+    return (true)  
+  }  
+alert("You have entered an invalid IP address!")  
+return (false)  
+}  
+
+
+function connectSocket(ipaddress, port) {
+    if(validateIPaddress(ipaddress)) {
+        if(socket != null) {
+            socket.emit('device_disconnected');
+            socket.disconnect();
+            socket = null;
+        }
+        socket = io('http://' + ipaddress + ':' + port);
+    }
+}
 
 
 
