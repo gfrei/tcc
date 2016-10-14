@@ -72,7 +72,7 @@ io.on('connection', function (socket) {
 
 
     // Echo browser > server > browser
-    socket.on('move', function (data) {
+    socket.on('echo_move', function (data) {
         socket.emit('move', data);
     });
 

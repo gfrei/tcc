@@ -1,4 +1,4 @@
-<html>
+<!-- <html>
     <head>
         <title>My first Three.js app</title>
         <style>
@@ -12,155 +12,88 @@
         <script>
 
 
-// Variables
-
-var socket = io();
-
-var scene, camera, renderer
-var cube, sphere
-var xRot, yRot, zRot
-var r, g, b
-
-var hasNewColors = false
-
-
-
-function onDocumentKeyDown () {
-    switch( event.keyCode ) {
-        case 83: /*s*/ socket.emit('move', {'x': 0.01,'y':0,'z':0}); break;
-        case 87: /*w*/ socket.emit('move', {'x':-0.01,'y':0,'z':0}); break;
-        case 68: /*d*/ socket.emit('move', {'x':0,'y': 0.01,'z':0}); break;
-        case 65: /*a*/ socket.emit('move', {'x':0,'y':-0.01,'z':0}); break;
-        case 81: /*q*/ socket.emit('move', {'x':0,'y':0,'z': 0.01}); break;
-        case 69: /*e*/ socket.emit('move', {'x':0,'y':0,'z':-0.01}); break;
-    }
-}
-
-function updateCubeRotation() {
-    cube.rotation.x += xRot;
-    cube.rotation.y += yRot;
-    cube.rotation.z += zRot;
-}
-
-function updateCubeColor() {
-    cube.material.color.r = r
-    cube.material.color.g = g
-    cube.material.color.b = b
-}
-
-
-
-// Socket Events
-
-socket.on('connect', function() {
-    socket.emit('ready', 'browser');
-});
-
-socket.on('move', function (data) {
-    xRot += data.x
-    yRot += data.y
-    zRot += data.z
-});
-
-socket.on('reset', function () {
-    xRot = 0
-    yRot = 0
-    zRot = 0
-});
-
-socket.on('update_acceleration', function (data) {
-    var cap = 9
-    var x = Math.min(Math.abs(data.x), cap)
-    var y = Math.min(Math.abs(data.y), cap)
-    var z = Math.min(Math.abs(data.z), cap)
-
-    var weight = 5
-
-    r = (weight * r + (x / cap)) / (weight + 1)
-    g = (weight * g + (y / cap)) / (weight + 1)
-    b = (weight * b + (z / cap)) / (weight + 1)
-
-    hasNewColors = true
-})
-
-
-
-// Functions
-
-function init() {
-    xRot = 0
-    yRot = 0
-    zRot = 0
-
-    r = 1
-    g = 1
-    b = 0
-
-    scene = new THREE.Scene();
-
-    var view_angle = window.innerWidth/window.innerHeight
-    camera = new THREE.PerspectiveCamera( 75, view_angle, 0.1, 1000 );
-    camera.position.z = 5;
-    scene.add(camera);
-
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    document.body.appendChild( renderer.domElement );
-
-    //-------------------------------------------
-
-    // create a point light
-    var pointLight = new THREE.PointLight(0xFFFFFF);
-
-    // set its position
-    pointLight.position.x = 10;
-    pointLight.position.y = 50;
-    pointLight.position.z = 130;
-
-    // add to the scene
-    scene.add(pointLight);
-
-    //-------------------------------------------
-
-    // New Cube
-    var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    var material = new THREE.MeshLambertMaterial( { color: 0xffff00 } );
-    cube = new THREE.Mesh( geometry, material );
-    scene.add( cube );
-
-    // New Sphere
-    var radius = 0.6;
-    var segments = 16;
-    var rings = 16;
-
-    var sphereGeo = new THREE.SphereGeometry(radius, segments, rings)
-    var sphereMaterial = new THREE.MeshLambertMaterial( { color: 0xCC0000 } );
-    sphere = new THREE.Mesh( sphereGeo, sphereMaterial )
-    // scene.add( sphere );
-
-    //-------------------------------------------
-    console.log(sphere.material.color)
-
-    document.addEventListener( 'keydown', onDocumentKeyDown, false );
-}
-
-function render() {
-    requestAnimationFrame( render );
-
-    updateCubeRotation();
-    if (hasNewColors) {
-        updateCubeColor();
-        hasNewColors = false;
-    };
-    
-    renderer.render(scene, camera);
-};
-
-
-init();
-render();
-
-
         </script>
+
+        <script src="js/global.js"></script>
+        <script src="js/socket_events.js"></script>
+        <script src="js/keyboard_events.js"></script>
+        <script src="js/three_cube.js"></script>
+
+
+    </body>
+</html> -->
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>three.js webgl - geometry - terrain</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <style>
+            body {
+                color: #61443e;
+                font-family:Monospace;
+                font-size:13px;
+                text-align:center;
+
+                background-color: #bfd1e5;
+                margin: 0px;
+                overflow: hidden;
+            }
+
+            #info {
+                position: absolute;
+                top: 0px; width: 100%;
+                padding: 5px;
+            }
+
+            a {
+
+                color: #a06851;
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <div id="container"><br /><br /><br /><br /><br />Generating world...</div>
+        <div id="info"><a href="http://threejs.org" target="_blank">three.js</a> - webgl terrain demo<br />(left click: forward, right click: backward)</div>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="js/three.js"></script>
+
+
+
+
+<!-- THREE.JS Examples -->
+        <script src="js/controls/FirstPersonControls.js"></script>
+        <script src="js/ImprovedNoise.js"></script>
+        <script src="js/Detector.js"></script>
+        <script src="js/libs/stats.min.js"></script>
+
+<!-- 
+        <script src="js/static_terrain_test.js"></script>
+        <script src="js/static_terrain.js"></script>
+        <script src="js/dynamic_terrain.js"></script>
+ -->
+        <script src="js/dynamic_terrain_test.js"></script>
+
+
+
+
+<!-- MY DELICIA DE PROGRAM -->
+<!-- 
+        <script src="js/global.js"></script>
+        <script src="js/socket_events.js"></script>
+        <script src="js/keyboard_events.js"></script>
+        <script src="js/three_cube.js"></script>
+ -->
+
+
     </body>
 </html>

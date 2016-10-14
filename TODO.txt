@@ -1,0 +1,15 @@
+Device:
+	TODO > Fazer campo no app para conectar em um IP:Port especifico.
+
+
+Server:
+
+
+Browser:
+	Verificar o que sao THREE.OrbitControls
+
+
+
+remember this shit:
+	That ~~ is a double NOT bitwise operator.
+	It is used as a faster substitute for Math.floor().
