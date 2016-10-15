@@ -1,11 +1,11 @@
 
 
 if ( ! Detector.webgl ) {
-
     Detector.addGetWebGLMessage();
     document.getElementById( 'container' ).innerHTML = "";
-
 }
+
+var clock = new THREE.Clock();
 
 var container, stats;
 
@@ -20,6 +20,13 @@ var worldDepth = 128;
 var worldHalfWidth = worldWidth / 2;
 var worldHalfDepth = worldDepth / 2;
 
+var needToRender = true;
+
+
+// Global variables
+hasNewSeed = false;
+seed = 1;
+
 
 init();
 animate();
@@ -29,6 +36,7 @@ function init() {
     container = document.getElementById( 'container' );
 
     scene = new THREE.Scene();
+    // scene.fog = new THREE.FogExp2( 0xaaccff, 0.0007 );
 
     camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
 
@@ -36,6 +44,12 @@ function init() {
 
     camera.position.y = 600;
     camera.position.z = 4000;
+
+
+    controls = new THREE.FirstPersonControls( camera );
+
+    controls.movementSpeed = 5000;
+    controls.lookSpeed = 0.3;
 
     //
 
@@ -84,12 +98,12 @@ function init() {
 }
 
 function onWindowResize() {
-
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
     renderer.setSize( window.innerWidth, window.innerHeight );
 
+    controls.handleResize();
 }
 
 function generateHeight( width, height, seed ) {
@@ -112,7 +126,7 @@ function generateHeight( width, height, seed ) {
     // var qualityFactor = 3;
 
     var octaves = 4;
-    var quality = 1;
+    var quality = 0.5;
     var qualityFactor = 5;
 
     for ( var j = 0; j < octaves; j ++ ) {
@@ -141,27 +155,26 @@ function updateHeight(seed) {
 
     modelMesh.geometry.verticesNeedUpdate = true;
 
+    hasNewSeed = false
 }
 
 
 //
 
-var updated = true;
-var count = 1;
 
 function animate() {
     requestAnimationFrame( animate );
 
-    if (count % 5 == 0) { updateHeight(count/500) };
-    count++;
+    if (hasNewSeed) { updateHeight(seed) };
 
-    if(updated) { render(); }
+    if(needToRender) { render(); }
     stats.update();
 }
 
 function render() {
 
-    updated = false;
+    needToRender = false;
+    var delta = clock.getDelta();
     
     for ( var i = 0, l = terrainGeometry.vertices.length; i < l; i ++ ) {
 
@@ -175,9 +188,12 @@ function render() {
 
     }
 
+    // Uncomment to control
+    // controls.update( delta );
+
     terrainMesh.geometry.verticesNeedUpdate = true;
 
     renderer.render( scene, camera );
 
-    updated = true;
+    needToRender = true;
 }

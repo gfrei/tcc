@@ -10,45 +10,74 @@ var container, stats;
 
 var camera, controls, scene, renderer;
 
-var mesh, texture, geometry, material;
+var mesh, texture, terrainGeometry, modelGeometry, material;
 
-var worldWidth = 128, worldDepth = 128,
-worldHalfWidth = worldWidth / 2, worldHalfDepth = worldDepth / 2;
+var worldWidth = 8;
+var worldDepth = 8;
+var planeSize = 750;
+var worldHalfWidth = worldWidth / 2
+var worldHalfDepth = worldDepth / 2;
 
 var clock = new THREE.Clock();
 
 init();
 animate();
+// render();
+
+
+function render() {
+    updated = false;
+    var perlin = new ImprovedNoise();
+
+    var delta = clock.getDelta(),
+        time = clock.getElapsedTime() * 10;
+
+    for ( var i = 0, l = terrainGeometry.vertices.length; i < l; i ++ ) {
+
+        var x = terrainGeometry.vertices[ i ].x / worldWidth;
+        var y = terrainGeometry.vertices[ i ].y / worldDepth;
+        var z = terrainGeometry.vertices[ i ].z;
+
+        var height = ( perlin.noise( x, y, 1 ) * 1.75 );
+        terrainGeometry.vertices[ i ].y += 10 * height;
+
+    }
+
+    mesh.geometry.verticesNeedUpdate = true;
+
+    renderer.render( scene, camera );
+
+    updated = true;
+}
 
 function init() {
 
-    container = document.getElementById( 'container' );
-
-    camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
-    camera.position.y = 200;
-
-    controls = new THREE.FirstPersonControls( camera );
-
-    controls.movementSpeed = 5000;
-    controls.lookSpeed = 0.1;
-
     scene = new THREE.Scene();
 
-    geometry = new THREE.PlaneGeometry( 20000, 20000, worldWidth - 1, worldDepth - 1 );
-    geometry.rotateX( - Math.PI / 2 );
+    container = document.getElementById( 'container' );
 
-    console.log((worldWidth)*(worldDepth))
-    console.log(geometry.vertices.length)
+    camera = new THREE.PerspectiveCamera( 
+        60, 
+        window.innerWidth / window.innerHeight, 
+        1, 
+        20000 
+    );
 
-    for ( var i = 0, l = geometry.vertices.length; i < l; i ++ ) {
+    camera.position.y = 200;
+    camera.position.z = 1000;
 
-        geometry.vertices[ i ].y = 35 * Math.sin( i / 2 );
+    terrainGeometry = new THREE.PlaneGeometry( planeSize, planeSize, worldWidth - 1, worldDepth - 1 );
+    terrainGeometry.rotateX( - Math.PI / 2 );
+
+    for ( var i = 0, l = terrainGeometry.vertices.length; i < l; i ++ ) {
+
+        terrainGeometry.vertices[ i ].y = 35 * Math.sin( i / 2 );
 
     }
 
     material = new THREE.MeshBasicMaterial( { color: 0x0044ff, wireframe: true } );
 
-    mesh = new THREE.Mesh( geometry, material );
+    mesh = new THREE.Mesh( terrainGeometry, material );
     scene.add( mesh );
 
     renderer = new THREE.WebGLRenderer();
@@ -76,36 +105,22 @@ function onWindowResize() {
 
     renderer.setSize( window.innerWidth, window.innerHeight );
 
-    controls.handleResize();
+    // controls.handleResize();
 
 }
 
 //
 
+var updated = true;
+
 function animate() {
 
     requestAnimationFrame( animate );
 
-    render();
-    stats.update();
-
-}
-
-function render() {
-
-    var delta = clock.getDelta(),
-        time = clock.getElapsedTime() * 10;
-
-    for ( var i = 0, l = geometry.vertices.length; i < l; i ++ ) {
-
-        geometry.vertices[ i ].y = 35 * Math.sin( i / 5 + ( time + i ) / 7 );
-        geometry.vertices[ i ].y = 35 * Math.sin( i / 5 + ( time + i ) / 7 );
-
+    if(updated) {
+        render();
+        stats.update();
     }
-
-    mesh.geometry.verticesNeedUpdate = true;
-
-    controls.update( delta );
-    renderer.render( scene, camera );
-
 }
+
+

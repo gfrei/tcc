@@ -44,10 +44,13 @@ function init() {
     //-------------------------------------------
 
     // New Cube
-    var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    var material = new THREE.MeshLambertMaterial( { color: 0xffff00, wireframe : true } );
-    cube = new THREE.Mesh( geometry, material );
-    scene.add( cube );
+    // var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    // var material = new THREE.MeshLambertMaterial( { 
+    //     color: 0xffff00, 
+    //     wireframe : true 
+    // } );
+    // cube = new THREE.Mesh( geometry, material );
+    // scene.add( cube );
 
     // New Sphere
     var radius = 0.6;
@@ -55,9 +58,12 @@ function init() {
     var rings = 16;
 
     var sphereGeo = new THREE.SphereGeometry(radius, segments, rings)
-    var sphereMaterial = new THREE.MeshLambertMaterial( { color: 0xCC0000 } );
-    sphere = new THREE.Mesh( sphereGeo, sphereMaterial )
-    // scene.add( sphere );
+    var sphereMaterial = new THREE.MeshLambertMaterial( { 
+        color: 0xCC0000, 
+        wireframe : true 
+    } );
+    cube = new THREE.Mesh( sphereGeo, sphereMaterial )
+    scene.add( cube );
 
     //-------------------------------------------
     
