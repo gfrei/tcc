@@ -54,12 +54,12 @@ app.initialize();
 
 var socket
 var default_port = 8000;
-
-var speedX = {'client_type':'device','x':0.03,'y':0,'z':0}
-var speedY = {'client_type':'device','x':0,'y':0.03,'z':0}
-var speedZ = {'client_type':'device','x':0,'y':0,'z':0.03}
-
 var watchID = null;
+
+var speedX = {'client_type':'device','x':1,'y':0,'z':0}
+var speedY = {'client_type':'device','x':0,'y':1,'z':0}
+var speedZ = {'client_type':'device','x':0,'y':0,'z':1}
+
 
 
 
@@ -117,16 +117,10 @@ function onBatteryStatus(status) {
         isPlugged : status.isPlugged
     }
 
-    logInServer('device_battery_changed')
-    logInServer(data)
-
     socket.emit('device_battery_changed', data)
 }
 
 function onAccSuccess(acceleration) {
-    logInServer('Acceleration')
-    logInServer(acceleration)
-
     socket.emit('device_acceleration', acceleration)
 }
 
@@ -138,7 +132,8 @@ function onAccError() {
 
 // Socket functions
 
-function toggleAccelerometer(freq) {
+function toggleAccelerometer(period) {
+    var freq = ~~(1000 / period);
     if (watchID == null) {
         watchID = navigator.accelerometer.watchAcceleration(
             onAccSuccess,

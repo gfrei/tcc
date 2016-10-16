@@ -1,13 +1,12 @@
+var socket;
 
-var socket = io();
+var xRot, yRot, zRot;
+var r, g, b;
+var hasNewColors;
 
-var xRot, yRot, zRot
-var r, g, b
-
-var hasNewColors = false
-
-
-
-
-var newSeed;
-var seed;
+var g_hasNewSeed;
+var g_seed;
+var g_octaves;
+var g_period;
+var g_amplitude;
+var g_frequencyFactor;

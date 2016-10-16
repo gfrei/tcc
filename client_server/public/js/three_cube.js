@@ -1,6 +1,8 @@
-var scene, camera, renderer
-var cube, sphere
+var scene, camera, renderer;
+var cube, sphere;
 
+
+hasNewColors = false;
 
 function updateCubeRotation(xRot, yRot, zRot) {
     cube.rotation.x += xRot;
@@ -9,9 +11,9 @@ function updateCubeRotation(xRot, yRot, zRot) {
 }
 
 function updateCubeColor(r, g, b) {
-    cube.material.color.r = r
-    cube.material.color.g = g
-    cube.material.color.b = b
+    cube.material.color.r = r;
+    cube.material.color.g = g;
+    cube.material.color.b = b;
 }
 
 
@@ -57,23 +59,23 @@ function init() {
     var segments = 16;
     var rings = 16;
 
-    var sphereGeo = new THREE.SphereGeometry(radius, segments, rings)
+    var sphereGeo = new THREE.SphereGeometry(radius, segments, rings);
     var sphereMaterial = new THREE.MeshLambertMaterial( { 
         color: 0xCC0000, 
         wireframe : true 
     } );
-    cube = new THREE.Mesh( sphereGeo, sphereMaterial )
+    cube = new THREE.Mesh( sphereGeo, sphereMaterial );
     scene.add( cube );
 
     //-------------------------------------------
     
-    xRot = 0
-    yRot = 0
-    zRot = 0
+    xRot = 0;
+    yRot = 0;
+    zRot = 0;
 
-    r = 1
-    g = 1
-    b = 0
+    r = 1;
+    g = 1;
+    b = 0;
 }
 
 function render() {

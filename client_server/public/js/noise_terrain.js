@@ -5,7 +5,23 @@ if ( ! Detector.webgl ) {
     document.getElementById( 'container' ).innerHTML = "";
 }
 
+// ----------------- //
+// Global variables
+// ----------------- //
+
+g_hasNewSeed = false;
+g_seed = 1;
+g_octaves = 3;
+g_period = 100;
+g_amplitude = 0.5;
+g_frequencyFactor = 0.6;
+
+// ----------------- //
+// Local variables
+// ----------------- //
+
 var clock = new THREE.Clock();
+var perlin = new ImprovedNoise();
 
 var container, stats;
 
@@ -23,13 +39,10 @@ var worldHalfDepth = worldDepth / 2;
 var needToRender = true;
 
 
-// Global variables
-hasNewSeed = false;
-seed = 1;
 
-
-init();
-animate();
+// --------- //
+// Functions
+// --------- //
 
 function init() {
 
@@ -40,7 +53,7 @@ function init() {
 
     camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
 
-    data = generateHeight( worldWidth, worldDepth );
+    data = generatePerlinHeight( worldWidth, worldDepth );
 
     camera.position.y = 600;
     camera.position.z = 4000;
@@ -106,28 +119,17 @@ function onWindowResize() {
     controls.handleResize();
 }
 
-function generateHeight( width, height, seed ) {
-
+function generatePerlinHeight( width, height, seed ) {
     var size = width * height;
     var data = new Uint8Array( size );
-    var perlin = new ImprovedNoise();
 
     var z = seed;
     if (!seed) {z = Math.random() * 100};
-    
-    // Default
-    // var octaves = 4;
-    // var quality = 1;
-    // var qualityFactor = 5;
 
-    // Loucura
-    // var octaves = 7;
-    // var quality = 1;
-    // var qualityFactor = 3;
-
-    var octaves = 4;
-    var quality = 0.5;
-    var qualityFactor = 5;
+    var octaves = g_octaves;
+    var frequency = 1 / g_period;
+    var freqFactor = g_frequencyFactor;
+    var amplitude = g_amplitude;
 
     for ( var j = 0; j < octaves; j ++ ) {
         for ( var i = 0; i < size; i ++ ) {
@@ -135,19 +137,18 @@ function generateHeight( width, height, seed ) {
             var x = i % width;
             var y = ~~ ( i / width );
 
-            var noise = perlin.noise( x / quality, y / quality, z );
-            data[ i ] += Math.abs( noise * quality * 1.75 );
+            var noise = perlin.noise( x * frequency, y * frequency, z );
+            data[ i ] += Math.abs( (noise / frequency) * amplitude );
         }
 
-        quality *= qualityFactor;
+        frequency *= 1 / freqFactor;
     }
 
     return data;
 }
 
 function updateHeight(seed) {
-    // console.log(seed);
-    data = generateHeight( worldWidth, worldDepth, seed );
+    data = generatePerlinHeight( worldWidth, worldDepth, seed );
 
     for ( var i = 0, l = modelGeometry.vertices.length; i < l; i ++ ) {
         modelGeometry.vertices[ i ].y = data[ i ] * 10;
@@ -155,7 +156,7 @@ function updateHeight(seed) {
 
     modelMesh.geometry.verticesNeedUpdate = true;
 
-    hasNewSeed = false
+    g_hasNewSeed = false
 }
 
 
@@ -165,7 +166,7 @@ function updateHeight(seed) {
 function animate() {
     requestAnimationFrame( animate );
 
-    if (hasNewSeed) { updateHeight(seed) };
+    if (g_hasNewSeed) { updateHeight(g_seed) };
 
     if(needToRender) { render(); }
     stats.update();
@@ -178,7 +179,7 @@ function render() {
     
     for ( var i = 0, l = terrainGeometry.vertices.length; i < l; i ++ ) {
 
-        var w = 10;
+        var w = 15;
 
         var terrainHeight = terrainGeometry.vertices[ i ].y;
         var modelHeight  = modelGeometry.vertices[ i ].y;
@@ -197,3 +198,12 @@ function render() {
 
     needToRender = true;
 }
+
+
+
+// --- //
+// Run
+// --- //
+
+init();
+animate();
