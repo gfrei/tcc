@@ -52,41 +52,32 @@ app.initialize();
 
 // Variables
 
-var socket
+var socket;
 var default_port = 8000;
 var watchID = null;
 
-var speedX = {'client_type':'device','x':1,'y':0,'z':0}
-var speedY = {'client_type':'device','x':0,'y':1,'z':0}
-var speedZ = {'client_type':'device','x':0,'y':0,'z':1}
+var speedX = {'x':1,'y':0,'z':0};
+var speedY = {'x':0,'y':1,'z':0};
+var speedZ = {'x':0,'y':0,'z':1};
 
 
 
 
-document.addEventListener('deviceready', function() {
-    socket = io('http://192.168.0.17:' + default_port);
+// Auxiliar functions
 
-    socket.on('connect', function() {
-        socket.emit('ready', 'device');
-    });
-
-    window.addEventListener("batterystatus", onBatteryStatus, false);
-});
-
-
+function logInServer(message) {
+    socket.emit('device_print', message)
+}
 
 // Unused
-
-function validateIPaddress(ipaddress)   
-{  
- if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress))  
-  {  
-    return (true)  
-  }  
-alert("You have entered an invalid IP address!")  
-return (false)  
-}  
-
+/*
+function validateIPaddress(ipaddress) {
+    if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
+        return (true)
+    }
+    alert("You have entered an invalid IP address!")
+    return (false)
+}
 
 function connectSocket(ipaddress, port) {
     if(validateIPaddress(ipaddress)) {
@@ -98,49 +89,21 @@ function connectSocket(ipaddress, port) {
         socket = io('http://' + ipaddress + ':' + port);
     }
 }
+*/
 
 
 
-// Aux
-
-function logInServer(message) {
-    socket.emit('device_print', message)
-}
-
-
-
-// Event Listeners functions
-
-function onBatteryStatus(status) {
-    var data = {
-        level : status.level, 
-        isPlugged : status.isPlugged
-    }
-
-    socket.emit('device_battery_changed', data)
-}
-
-function onAccSuccess(acceleration) {
-    socket.emit('device_acceleration', acceleration)
-}
-
-function onAccError() {
-    logInServer('Accelerometer error.');
-}
-
-
-
-// Socket functions
+// Accelerometer Toggle
 
 function toggleAccelerometer(period) {
     var freq = ~~(1000 / period);
     if (watchID == null) {
         watchID = navigator.accelerometer.watchAcceleration(
-            onAccSuccess,
-            onAccError,
+            sendAcceration,
+            sendAccError,
             { frequency: freq }
         );
-        navigator.accelerometer.getCurrentAcceleration(onAccSuccess, onAccError);
+        navigator.accelerometer.getCurrentAcceleration(sendAcceration, sendAccError);
     }
     else {
         navigator.accelerometer.clearWatch(watchID);
@@ -148,10 +111,66 @@ function toggleAccelerometer(period) {
     }
 }
 
+
+
+// Socket emit functions
 function addSpeed(speed_vector) {
-    socket.emit('device_add_speed', speed_vector); 
+    socket.emit('device_add_speed', speed_vector);
 }
 
 function resetSpeed() {
-    socket.emit('device_reset_speed'); 
+    socket.emit('device_reset_speed');
 }
+
+function sendAcceration(acceleration) {
+    socket.emit('device_acceleration', acceleration)
+}
+
+function sendAccError() {
+    logInServer('Accelerometer error.');
+}
+
+function emitBatteryStatus(status) {
+    var data = {
+        level : status.level,
+        isPlugged : status.isPlugged
+    }
+
+    socket.emit('device_battery_changed', data)
+}
+
+function sendPing() {
+    var timestamp = Date.now();
+    socket.emit('device_ping', timestamp);
+}
+
+
+
+// Socket events
+
+function onServerConnect() {
+    socket.emit('ready', 'device');
+}
+
+function onServerPing(data) {
+    var t0 = data.t0;
+    var t1 = data.t1;
+    var t2 = Date.now();
+
+    logInServer('Ping: ' + (t2 - t0));
+    // logInServer('Device -> Server: ' + (t1 - t0));
+    // logInServer('Server -> Device: ' + (t2 - t1));
+}
+
+
+
+// Device Ready Event
+
+document.addEventListener('deviceready', function() {
+    socket = io('http://192.168.0.17:' + default_port);
+
+    socket.on('connect', onServerConnect);
+    socket.on('server_ping', onServerPing);
+
+    window.addEventListener("batterystatus", emitBatteryStatus, false);
+});

@@ -44,6 +44,14 @@ io.on('connection', function (socket) {
 
 
     // Device
+    socket.on('device_ping', function (sent) {
+        var receivedInServer = Date.now();
+        socket.emit('server_ping', {
+            t0 : sent,
+            t1 : receivedInServer
+        });
+    });
+
     socket.on('device_add_speed', function (data) {
         console.log('device_add_speed', data);
         sendToBrowserSocket('move', data)

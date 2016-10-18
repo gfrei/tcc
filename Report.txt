@@ -52,3 +52,49 @@ Também estou utilizando o sensor de bateria, event driven, informa o nível da 
 
 Tentei utilizar o plugin para medir dB, mas a instalação não completa.
 Não encontrei nenhum sensor confiável para luminosidade.
+
+
+
+
+
+
+MAPA GERAL DO QUE TA COM TESENO:
+
+Device:
+	O aplicativo é criado usando o Cordova.
+		Cordova é uma IDE (?) que faz o porte de programas em Javascript para várias plataformas, como Android e iOS.
+
+		> Tiveram mil problemas até o Cordova ser escolhido.
+
+	O device se conecta ao servidor utilizando Socket.io
+
+
+
+
+
+
+Server:
+	Usa socket.io para fazer a comunicação com os clients.
+	> Usa node.js para ~something~
+
+
+
+
+
+Browser:
+	Primeiro client, lançado pelo server;
+	Recebe dados por Socket;
+	Não envia dados;
+
+	Visualização de dados;
+		Visualização 3D:
+			Usa Three.js (Biblioteca 3D para js);
+			Usa os dados recebidos para alteração de objetos 3D.
+
+			Foram feitas duas páginas de Three.js:
+				1) Um simples objeto é rotacionado e tem sua cor alterada de acordo com dados recebidos.
+
+				2) É a aplicação de um algoritmo de ruído para geração procedural de terreno em um grid. Utiliza os dados recebidos para alterar os parâmetros do algoritmo.
+					No teste inicial ele altera em tempo real o grid, de forma que o envio constante de dados cria um movimento também constante.
+
+					> Talvez possa fazer um teste de performance, e rodar o algoritmo em um grid muito maior.
