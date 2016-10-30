@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.10.7)  29 OCT 2016 19:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.10.7)  30 OCT 2016 17:19
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -806,73 +806,88 @@ Package babel Info: Redefining portuges shorthand "|
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 130.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 143.
+(babel)             in language  on input line 141.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 151.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 157.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 157.
+(babel)             in language  on input line 141.
  [1]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 175.
+(babel)             in language  on input line 157.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 189.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 219.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 233.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 233.
+(babel)             in language  on input line 157.
  [2]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 256.
+(babel)             in language  on input line 165.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 260.
+(babel)             in language  on input line 173.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 260.
+(babel)             in language  on input line 173.
  [3]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 275.
+(babel)             in language  on input line 192.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 288.
+(babel)             in language  on input line 216.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 288.
+(babel)             in language  on input line 230.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 238.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 238.
  [4]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 302.
+(babel)             in language  on input line 260.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 290.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 290.
+ [5]
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 297.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 316.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 320.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 320.
+ [6]
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 343.
 
 No file main.bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 317.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 368.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 317.
+(babel)             in language  on input line 368.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 317.
-[5]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 317.
+(babel)             in language  on input line 368.
+[7]
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 368.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 368.
+ [8]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 368.
  (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 317.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 317.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 368.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 368.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 120B314EFDCCFD950CAB8DE708B0E278;562.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 317.
+(rerunfilecheck)             Checksum: 3C41DB249E13B896984305C97DCC8448;585.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 368.
  ) 
 Here is how much of TeX's memory you used:
- 9898 strings out of 493029
- 143804 string characters out of 6136234
+ 9901 strings out of 493029
+ 143822 string characters out of 6136234
  262453 words of memory out of 5000000
  13271 multiletter control sequences out of 15000+600000
  5152 words of font info for 19 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 36i,6n,38p,1102b,342s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,7n,38p,1102b,342s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/sha
 re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on main.pdf (7 pages, 77563 bytes).
+Output written on main.pdf (10 pages, 85624 bytes).
 PDF statistics:
- 122 PDF objects out of 1000 (max. 8388607)
- 107 compressed objects within 2 object streams
- 21 named destinations out of 1000 (max. 500000)
+ 134 PDF objects out of 1000 (max. 8388607)
+ 116 compressed objects within 2 object streams
+ 24 named destinations out of 1000 (max. 500000)
  97 words of extra memory for PDF output out of 10000 (max. 10000000)
 

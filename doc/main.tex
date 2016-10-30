@@ -131,13 +131,36 @@ TODOs:
 
 A comunicação de dados entre computadores através da Internet é algo muito comum, e necessita de uma arquitetura de rede adequada para ocorrer.
 
+(TODO explicar TCP e/ou TCP/IP)
+
 A mais utilizada é o modelo cliente-servidor. Neste modelo, existem dois tipos de processos rodando, o Cliente e o Servidor. O Cliente é o processo que roda nos computadores locais, e se conecta ao Servidor. A comunicação é dada quando o Cliente manda uma requisição ao Servidor (esta requisição pode ser uma página web, um processamento de dados, entre outros). Por sua vez, o servidor recebe esses dados e faz o processamento necessário para completar essa requisição, para em seguida enviar uma resposta ao Cliente, que pode ser o que foi requisitado ou outro tipo de mensagem, como de erro, caso ocorra uma falha no processamento, ou negação de permissão. O Cliente então pode continuar com o seu próprio processo.
 
-Este modelo é suficiente para Websites, pois o cliente pede por páginas estáticas e o Servidor as fornece sempre que necessário. Mas essa arquitetura não permite um uso mais dinâmico de websites, algo como uma Aplicação Web. Sua estrutura é muito burocrática. Cada ação do Cliente precisa ser enviado ao Servidor, com um cabeçalho de todo o seu estado e mais uma série de dados sobre conexão, para ser processado e enviado de volta, também com um cabeçalho bastante carregado. O overhead que essa estrutura carrega impossibilita um envio contante de requisições para criar uma impressão de responsividade nativa maior. Algo inviável com essa limitação, por exemplo, é mudar pequenas coisas na página Web a cada ação do usuário. Não faz sentido um usuário alterar algo na página, como a entrada de um formulário, e o Servidor precisar renderizar toda a página de volta, com grande parte do arquivo HTML inalterado, somente para um feedback pequeno.
+Este modelo é suficiente para páginas Web, pois o cliente pede páginas estáticas e o Servidor as fornece sempre que necessário. Mas essa arquitetura não permite um uso mais dinâmico de websites, pois sua estrutura é muito burocrática. Para fazer uma página mais responsiva, com feedbacks a cada ação do usuário e dados novos, seria necessário que Cliente fizesse uma requisição ao Servidor após o usuário ativar algum gatilho (como preencher um formulário ou levar o cursor a algum ponto específico, por exemplo). Essa requisição teria em seu cabeçalho toda a estrutura de dados http (TODO http) para ser processado e enviado de volta, também com um cabeçalho bastante carregado. Ao receber a página atualizada, o Cliente ainda precisa atualizar o que for necessário. Para tal, ele precisa, por fim, atualizar a página. Há dois problemas claros nessa estrutura:
 
-Da discussão gerada à partir desse problema, surgiu o Ajax (Asynchronous JavaScript e XML). Ajax é uma técnica de desenvolvimento Web usada para fazer requisições ao Servidor para receber dados por baixo dos panos, sem precisar recarregar a página inteira. Com ele, é possível receber dados novos e atualizá-los no código sem alterar o resto da página. Um exemplo dele é no Google (TODO link), no qual você começa a digitar uma busca e resultados já começam a aparecer mesmo antes de dar o comando Enter, sem a página recarregar. Nesse exemplo, ele requisita continuamente os resultados gerados pela busca, mesmo incompleta, enquanto ela é formada.
+- A necessidade de recarregar a página inteira, mesmo que somente uma pequena parcela dos dados tenha sido alterada. Esse comportamento foi criado em um momento no qual não se tinha a necessidade de alterar pequenas coisas, na página, e que cada HTML vindo do Servidor seria uma página completamente nova. A impossibilidade de atualizar dados individualmente remove qualquer dinamicidade desejada.
 
-(TODO) A conexão só dura durante o processo de requisição entre ambos, ela é fechada uma vez que a requisição é satisfeita.
+- O overhead gerado pelas pela estrutura de dados http. Esse overhead cria uma latência alta e faz com que um envio contante de requisições ao Servidor exija muito recurso.
+
+Um exemplo de comportamento impossível com essas restrições é dar um feedback instantâneo para o usuário na hora que ele está preenchendo um cadastro em algum site, como informar se o email inserido já foi usado, ou se a senha possui os parâmetros mínimos necessários de segurança.
+
+(TODO falar de Flash?)
+(TODO verificar se) A conexão só dura durante o processo de requisição entre ambos, ela é fechada uma vez que a requisição é satisfeita.
+
+
+Da discussão gerada à partir desses problemas, surgiu o Ajax (Asynchronous JavaScript e XML). Ajax é uma técnica de desenvolvimento Web usada para fazer requisições ao Servidor para receber dados no background de forma assíncrona, sem precisar recarregar a página inteira. Com ele, é possível receber dados novos e atualizá-los no código sem alterar o resto da página. Isso com essa técnica passa a ser possível atualizar partes de uma página com base em eventos do usuário.
+
+Para ilustrar esse funcionamento com um exemplo simples, basta usar a ferramenta de busca do Google (TODO link). O usuário começa a digitar uma busca e os resultados já começam a aparecer sem a necessidade de atualizar a página, mesmo antes da busca estar completa (TODO imagem). O input do usuário ativa requisições no background para obter e atualizar os resultados exibidos, sem se preocupar se a busca será alterada no futuro. Assim, o usuário recebe um feedback muito mais dinâmico e menos burocrático do que o convencional (digitar a busca completa e ir para uma página de resultados).
+
+Com o Ajax, nota-se uma mudança de paradigmas na Web. Onde antes só havia a noção de página Web, agora começa a se formar uma noção de Aplicação Web. Antes, a maior interatividade possível era algo como um fluxo de telas com dados dependentes da tela passada, mas agora ações de usuários passam a ter resultados instantâneos. Sites com um fluxo de dados muito grande e dinâmico passam a ser possíveis, como Facebook (TODO link), no qual é possível fazer comentários, interagir com usuários e visualizar tanto conteúdo quando desejado sem precisar atualizar a página.
+
+Essa mudança de paradigmas fez com que muitas Aplicações tipicamente executadas em Desktop fossem desenvolvidas para Web, como Chats ou aplicações que exigissem um fluxo de dados muito grande entre o Cliente e o Servidor. O que ficou claro com o tempo é que Ajax não bastava para muitas dessas Aplicações, em específico as que funcionavam em tempo real. Muitas vezes é o Servidor que precisa se comunicar ao Cliente sobre mudança nos dados. O modelo de funcionamento do Ajax não possui esse tipo de interface, então, para fazer aplicações assim funcionarem corretamente, é necessário muito esforço, lutar muito com a linguagem.
+
+(TODO explicar / entender Polling)
+
+Um exemplo mais claro disso é uma aplicação de Chat. Não é possível ter um padrão de quando o Servidor tem mensagens novas, então é necessário que o Cliente faça requisições a cada período de tempo. Se esse período for curto, o fluxo de dados intenso pode se tornar um problema. Se o período for longo, vai contra o princípio de ser uma comunicação em tempo real, pois as mensagens vão demorar mais a serem entregues. Além disso, ao fazer uma atualização síncrona com o Servidor, o próprio modelo de Ajax tem um comportamento de enviar as mensagens em paralelo, o que não preserva sua ordem, outro fator primordial em um Chat.
+A necessidade de vários tratamentos para uma aplicação relativamente simples como essa funcionar deixa claro que há necessidade de mais ferramentas para o desenvolvimento Web.
+
+Até esse momento, não era possível para o Servidor mandar dados espontaneamente, o Cliente precisava fazer uma requisição. Esse fato era muito limitante para o desenvolvimento, então finalmente foi criada uma API de mais baixo nível para lidar com sockets (soquetes) de uma conexão, chamada Websockets.
 
 
 
@@ -147,7 +170,24 @@ Essa arquitetura é conhecida principalmente por ser usada para a transmissão d
 Esta arquitetura não serve para as necessidades do projeto, a hipótese de uso foi descartada após o estudo de sua estrutura.
 
 
+\section{Sockets}
+
+No modelo cliente-servidor uma conexão é dada por dois pontos finais, um no Cliente e um no Servidor. Essa é a conexão de baixo nível definida pelo protocolo TCP. Cada um desses pontos finais serve para mandar e receber os dados em relação ao outro lado da conexão e eles são nomeados como Soquetes de Rede (Sockets). Cada Socket é definido por um endereço de IP e uma Porta (por exemplo, 192.168.0.1:8000), independente se está no Cliente ou no Servidor, e a conexão TCP é definida de maneira única por seus dois Sockets.
+
+A conexão cliente-servidor, considerando os Sockets, é feita da seguite maneira:
+
+No lado do cliente, Primeiramente ele precisa saber o endereço de IP da máquina onde o servidor roda e a porta que ouve (esses dados definem o socket do servidor). Ele então envia um sinal a esse socket para pedir a conexão. Nesse sinal há um identificador, que contem seu próprio IP e uma porta escolhida na hora, para que o servidor saiba a quem enviar as respostas. É importante ter em mente que o cliente não possui um socket ainda, ele será criado caso a conexão seja bem sucedida.
+No lado do servidor, se não ocorrer nenhum erro, a conexão é aceita. Neste momento, o servidor cria um novo socket com o mesmo IP e porta local do original, para conectá-lo com o cliente. Esse novo socket é necessário para que o servidor possa continuar ouvindo a outras conexões naquela porta com o socket original, enquanto a cópia passa a ser exclusiva ao cliente.
+De volta ao cliente, se a conexão é aceita, o seu socket é criado (com as especificações que foram enviadas no pedido).
+
+Agora o cliente e o servidor podem se comunicar com leitura ou escrita nesses novos sockets criados.
+
+
+
 \section{Websockets}
+
+
+
 
 
 
@@ -312,6 +352,16 @@ Há também Plugins desenvolvidos por terceiros (em geral pela própria comunida
 % https://en.wikipedia.org/wiki/Kivy
 % https://en.wikipedia.org/wiki/Natural_user_interface
 
+
+% Imagens:
+
+
+
+% Ajax
+% https://en.wikipedia.org/wiki/Ajax_(programming)
+
+% Imagens de conexão cliente servidor com Sockets
+% https://docs.oracle.com/javase/tutorial/networking/sockets/definition.html
 
 
 
