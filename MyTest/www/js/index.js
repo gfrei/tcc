@@ -144,6 +144,23 @@ function sendPing() {
     socket.emit('device_ping', timestamp);
 }
 
+function localCalculation() {
+    var t0 = Date.now();
+    var r = 0;
+    var i, j, k;
+    for(i = 0; i < 1000000; i++) {
+        for(i = 0; i < 10000000; i++) {
+            for(i = 0; i < 10000000; i++) {
+                r += (3 * i + (j + k / 2))% 103;
+            }
+        }
+    }
+
+    var t1 = Date.now();
+    socket.emit('request_calculation');
+    logInServer('Finished device calculation in ' + (t1 - t0));
+}
+
 
 
 // Socket events

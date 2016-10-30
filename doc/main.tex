@@ -1,0 +1,324 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[11pt,twoside,a4paper]{book}
+\usepackage{float}
+\usepackage{graphicx} %pacote pra colocar imagem
+\graphicspath{ {images/} }
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+% \usepackage{cite}
+
+ \usepackage{setspace}                   % espaçamento flexível
+ \usepackage{indentfirst}                % indentação do primeiro parágrafo
+ \usepackage[fixlanguage]{babelbib}
+ \usepackage[font=small,format=plain,labelfont=bf,up,textfont=it,up]{caption}
+ \usepackage[usenames,svgnames,dvipsnames]{xcolor}
+%  \usepackage[a4paper,top=2.54cm,bottom=2.0cm,left=2.0cm,right=2.54cm]{geometry} % margens
+ \usepackage{amsmath,amssymb,exscale}
+
+%  \usepackage[pdftex]{hyperref}
+ \usepackage[pdftex,plainpages=false,pdfpagelabels,pagebackref,colorlinks=true,citecolor=DarkGreen,linkcolor=NavyBlue,urlcolor=DarkRed,filecolor=green,bookmarksopen=true]{hyperref} % links coloridos
+ \usepackage[all]{hypcap}                    % soluciona o problema com o hyperref e capitulos
+ \usepackage[round,sort,nonamebreak]{natbib} % citação bibliográfica textual(plainnat-ime.bst)
+ \bibpunct{[}{]}{;}{n}{\hspace{-0.7ex},}{,} % estilo de citação. Veja alguns exemplos em http://merkel.zoneo.net/Latex/natbib.php
+
+ \usepackage{pdfpages}
+
+%  \fontsize{60}{62}\usefont{OT1}{cmr}{m}{n}{\selectfont}
+
+\title{Trabalho de Conclusão de Curso}
+\author{Guilherme Freire Silva}
+\date{\today}
+
+% ---------------------------------------------------------------------------- %
+% INFORMAÇÕES
+
+%titulo antigo: Aplicação de técnicas de Lean UX no desenvolvimento de um aplicativo
+\pdfinfo{%
+  /Title    (Comunicação cliente-servidor de baixa latência com Mobile)
+  /Author   (Guilherme Freire Silva)
+  /Subject  (Trabalho de Conclusão de Curso)
+  /Keywords (TCC, Lean UX)
+}
+
+\begin{document}
+\pagenumbering{gobble}
+% ---------------------------------------------------------------------------- %
+% CAPA
+% Nota: O título para as dissertações/teses do IME-USP devem caber em um
+% orifício de 10,7cm de largura x 6,0cm de altura que há na capa fornecida pela SPG.
+
+\thispagestyle{empty}
+\begin{center}
+    \vspace*{2.3cm}
+    \textbf{\Large{Comunicação cliente-servidor de baixa latência com Mobile}}\\
+
+
+    \vspace*{1.2cm}
+    \Large{
+        Guilherme Freire Silva
+    }
+    \vskip 2cm
+    \textsc{
+     Trabalho de Conclusão de Curso \\[-0.25cm]
+    Instituto de Matemática e Estatística\\[-0.25cm]
+    da\\[-0.25cm]
+    Universidade de São Paulo\\[-0.25cm]%}
+    }
+
+    \vskip 2.5cm
+    Orientador: Prof. Dr. Marco Dimas Gubitoso\\
+    %Coorientador: \\
+
+    \vskip 3.5cm
+    \normalsize{São Paulo, 2016}
+\end{center}
+
+\newpage
+% \include{secoes/quote}
+
+\newpage
+\listoffigures
+\listoftables
+\tableofcontents
+
+% \include{secoes/resumo}
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagenumbering{arabic}     % começamos a numerar
+
+\renewcommand{\arraystretch}{1.2}
+
+% \include{secoes/introducao}
+% \include{secoes/metodologias/ux}
+% \include{secoes/metodologias/lean}
+% \include{secoes/metodologias/agile}
+% \include{secoes/metodologias/lean_ux}
+% \include{secoes/desenvolvimento/processos_lean}
+% \include{secoes/desenvolvimento/processos_app}
+% %\include{secoes/analiseSubjetiva}
+% \include{secoes/apendice/apendice}
+
+%\section{Análise Subjetiva}
+\addcontentsline{toc}{section}{Referências}
+
+\newpage
+
+
+
+\section{Motivação}
+
+Conhecer o desenvolvimento de um aplicativo para Android,
+Entender como se dá a comunicação Cliente-Servidor,
+Fazer uma transmissão de dados eficiente o aplicativo e o servidor.
+
+
+
+
+
+\section{MAPA GERAL DO QUE TA COM TESENO}
+
+TODOs:
+> Explicar o ganho de utilizar JS.
+> Estrutura Cliente-Servidor
+  > Network Socket > Websocket > Socket.io
+> Explicar node.js
+
+
+
+
+
+\section{Comunicação Web e Aplicações Web}
+
+A comunicação de dados entre computadores através da Internet é algo muito comum, e necessita de uma arquitetura de rede adequada para ocorrer.
+
+A mais utilizada é o modelo cliente-servidor. Neste modelo, existem dois tipos de processos rodando, o Cliente e o Servidor. O Cliente é o processo que roda nos computadores locais, e se conecta ao Servidor. A comunicação é dada quando o Cliente manda uma requisição ao Servidor (esta requisição pode ser uma página web, um processamento de dados, entre outros). Por sua vez, o servidor recebe esses dados e faz o processamento necessário para completar essa requisição, para em seguida enviar uma resposta ao Cliente, que pode ser o que foi requisitado ou outro tipo de mensagem, como de erro, caso ocorra uma falha no processamento, ou negação de permissão. O Cliente então pode continuar com o seu próprio processo.
+
+Este modelo é suficiente para Websites, pois o cliente pede por páginas estáticas e o Servidor as fornece sempre que necessário. Mas essa arquitetura não permite um uso mais dinâmico de websites, algo como uma Aplicação Web. Sua estrutura é muito burocrática. Cada ação do Cliente precisa ser enviado ao Servidor, com um cabeçalho de todo o seu estado e mais uma série de dados sobre conexão, para ser processado e enviado de volta, também com um cabeçalho bastante carregado. O overhead que essa estrutura carrega impossibilita um envio contante de requisições para criar uma impressão de responsividade nativa maior. Algo inviável com essa limitação, por exemplo, é mudar pequenas coisas na página Web a cada ação do usuário. Não faz sentido um usuário alterar algo na página, como a entrada de um formulário, e o Servidor precisar renderizar toda a página de volta, com grande parte do arquivo HTML inalterado, somente para um feedback pequeno.
+
+Da discussão gerada à partir desse problema, surgiu o Ajax (Asynchronous JavaScript e XML). Ajax é uma técnica de desenvolvimento Web usada para fazer requisições ao Servidor para receber dados por baixo dos panos, sem precisar recarregar a página inteira. Com ele, é possível receber dados novos e atualizá-los no código sem alterar o resto da página. Um exemplo dele é no Google (TODO link), no qual você começa a digitar uma busca e resultados já começam a aparecer mesmo antes de dar o comando Enter, sem a página recarregar. Nesse exemplo, ele requisita continuamente os resultados gerados pela busca, mesmo incompleta, enquanto ela é formada.
+
+(TODO) A conexão só dura durante o processo de requisição entre ambos, ela é fechada uma vez que a requisição é satisfeita.
+
+
+
+(TODO nota de rodapé)
+A outra grande arquitetura muito utilizada também é a peer-to-peer (P2P). Nessa arquitetura, não há um computador central para funcionar como servidor, cada computador conectado (Peer) na rede realiza funções tanto de cliente como de servidor na aplicação que está sendo executada. Essa aplicação tem suas tarefas organizadas e divididas entre os Peers.
+Essa arquitetura é conhecida principalmente por ser usada para a transmissão de arquivos grandes, como músicas e vídeos. Nessa transmissão, os Peers que tem o arquivo são conectados aos que não tem, e começam a transferência de pequenos pacotes de dados. Esses pacotes não precisam vir ordenados e o Peer receptor os armazena localmente. Uma vez que a transferência é completada, ele ordena os pacotes e monta o arquivo final. Uma vantagem dessa arquitetura é que a tranferência não é limitada pela capacidade de banda de Servidor, e Peers podem se conectar e desconectar sem que haja problemas para o receptor, o arquivo são será corrompido por eventuais problemas de conexão. Um ponto negativo é que, sem um Servidor, não há um controle de que tipos de arquivos estão sendo transferidos (o que abre uma porta para pirataria) e não é fácil interromper uma transferência, uma vez que ela pode ser composta de milhares de conexões. Outro ponto é que não é fácil de se conhecer a procedência dos dados recebidos, a segurança não pode ser garantida.
+Esta arquitetura não serve para as necessidades do projeto, a hipótese de uso foi descartada após o estudo de sua estrutura.
+
+
+\section{Websockets}
+
+
+
+
+
+
+
+\section{Device}
+
+
+Device:
+  O aplicativo é criado usando o Cordova.
+    Cordova é uma IDE (?) que faz o porte de programas em Javascript para várias plataformas, como Android e iOS.
+
+
+    > Tiveram mil problemas até o Cordova ser escolhido.
+
+
+  O device se conecta ao servidor utilizando Socket.io
+
+
+
+
+Estruturação de um código Web (JavaScript, CSS, HTML5)
+
+
+
+
+
+
+
+\section{Server}
+
+Server:
+  Usa socket.io para fazer a comunicação com os clients.
+  > Usa node.js para ~something~
+
+
+
+
+
+
+
+
+
+\section{Browser}
+
+Browser:
+  Primeiro client, lançado pelo server;
+  Recebe dados por Socket;
+  Não envia dados;
+
+
+  Visualização de dados;
+    Visualização 3D:
+      Usa Three.js (Biblioteca 3D para js);
+      Usa os dados recebidos para alteração de objetos 3D.
+
+
+      Foram feitas duas páginas de Three.js:
+        1) Um simples objeto é rotacionado e tem sua cor alterada de acordo com dados recebidos.
+
+
+        2) É a aplicação de um algoritmo de ruído para geração procedural de terreno em um grid. Utiliza os dados recebidos para alterar os parâmetros do algoritmo.
+          No teste inicial ele altera em tempo real o grid, de forma que o envio constante de dados cria um movimento também constante.
+
+
+          > Talvez possa fazer um teste de performance, e rodar o algoritmo em um grid muito maior.
+
+
+
+
+
+
+
+\section{Parte Subjetiva}
+
+Parte Subjetiva:
+
+
+
+
+Evolução do Projeto:
+
+
+Esse projeto utiliza várias tecnologias que eu nunca tive contato.
+
+
+Inicialmente a ideia inicial do TCC era usar um Arduino e um conjunto de sensores para coletar dados do meio e mandar de maneira síncrona para um servidor. O servidor então usaria esses dados para fazer algum controle. Numa primeira discussão com o orientador, a ideia foi rapidamente descartada, pelos seguintes motivos:
+
+Os sensores dele normalmente são imprecisos;
+A montagem de um dispositivo como o idealizado seria desnecessariamente custosa e muito propensa a erros;
+Sem uma montagem muito bem executada, o dispositivo ficaria muito frágil;
+É possível conseguir muitas leituras de sensores utilizando um smartphone.
+
+
+  Com os argumentos apresentados, a decisão foi criar um aplicativo para Android com o mesmo propósito. Todos os argumentos apresentados são resolvidos com essa solução. A implementação é extremamente mais simples; os sensores são muito mais precisos; a estrutura física já está pronta e é um objeto que já está presente em todo o mundo (o produto final atinge grande parte da população); e, por fim, é muito viável a adição ou remoção de funcionalidades, além de muito mais suporte para a plataforma.
+
+
+  Uma vez que a decisão de utilizar um smartphone, foi necessário saber como implementar um aplicativo que tenha acesso aos sensores.
+  A primeira ideia foi utilizar serviço MIT App Inventor.
+
+
+MIT App Inventor:
+  É um serviço disponibilizado pelo MIT para a criação de aplicativos. Ele é extremamente didático e inclusivo, sua interface não é dada por linhas de código, e sim por blocos lógicos que se encaixam e formam um algoritmo (na prática, é bastante ruim não poder escrever linhas de código livremente). Sua API possui interface para o uso de sensores, além de outras funcionalidades que não foram exploradas neste TCC, como acesso à ferramenta de reconhecimento de voz e ferramentas sociais, como email, mensagem e Twitter. O serviço é bom, porém possui várias restrições, então é difícil de ser usado.
+
+
+Com certa dificuldade um primeiro aplicativo de teste foi feito, para pegar valores do giroscópio. O próximo passo seria criar um servidor e estabelecer uma conexão entre ambos, porém as opções de conectividade do App Inventor também são muito restritas, então, dada a dificuldade prevista, eu achei melhor deixar essa plataforma de lado no momento e procurar outras alternativas para a criação de um app.
+
+
+A ferramenta escolhida foi o Kivy.
+
+\section{Kivy}
+
+É um framework Open Source de Python. Seu objetivo é o desenvolvimento rápido de aplicações multiplataforma que fazem o uso de interfaces inovadoras, como telas com Multitouch e sensores de movimento. Sua API, por exemplo, lida com eventos de mouse, teclado e toques de tela. Ele também possui um foco na criação de apps com NUI (Natural User Interface).
+  NUI é uma metodologia de interface cuja proposta é ser invisível ao usuário, e apresentar uma experiência natural e intuitiva. Seu principal foco é evitar grandes barreiras durante o aprendizado. Através de decisões de design, o usuário tem um entendimento do software sem grandes dificuldades, à medida que a complexidade da interação aumenta.
+
+[TODO] Para exemplificar a facilidade de desenvolvimento de lógica e de uma interface gráfica, abaixo tem o código para se criar um jogo de Pong.
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Cordova}
+
+Cordova:
+O Apache Cordova é um framework open-source para desenvolvimento mobile. Ele permite o uso de tecnologias Web, como HTML5, CSS3 e JavaScript. Seu desenvolvimento é multiplataforma, então há uma API de alto nível para acessar módulos desejados, como sensores, arquivos e rede. Isso implica em uma interface abstrata para o uso das features, de forma que código desenvolvido será executado em todas as plataformas oferecidas e o desenvolvedor não precisa se preocupar com os detalhes de cada uma na hora da implementação.
+
+
+A aplicação é implementada como uma página Web em um arquivo ‘index.html’ que referencia os recursos necessários, como CSS, JavaScript, imagens e arquivos de mídia. A parte lógica é feita em JavaScript, e a renderização em HTML5 e CSS3. O HTML é enviado para a classe “Wrapper” específica da plataforma escolhida, na qual estão definidos os detalhes de implementação. Ela também tem incorporada um browser nativo, o WebView, que executará o programa Web.
+
+
+Para a comunicação entre o aplicativo e os componentes nativos de cada plataforma, é necessária a instalação de Plugins.
+Cada Plugin é uma biblioteca adicional que permite ao WebView se comunicar com a plataforma nativa na qual está rodando. Eles provêm acesso a funcionalidades que normalmente não estão disponíveis em aplicações Web. Essas ferramentas são disponibilizadas para o desenvolvedor através de uma expansão da API inicial, que serve de interface e toma para si os detalhes da implementação em cada plataforma, simplificando o uso para o desenvolvedor.
+Há um conjunto principal de Plugins, chamado de Core, que é mantido pelo próprio Cordova. Nele estão contidos os que acessam as principais funcionalidades de um dispositivo mobile, como acesso ao acelerômetro, câmera, bateria e geolocalização.
+Há também Plugins desenvolvidos por terceiros (em geral pela própria comunidade ativa) que trazem relações com outras funcionalidades, que podem ser exclusivas de uma plataforma. Enquanto no Core há apenas umas poucas dezenas, a lista de Plugins criada pela comunidade oferece centenas com as mais diversas funcionalidades, como um para compras dentro do App e um para enviar notificações para dispositivos vestíveis (Smartwatches, por exemplo). A criação de um Plugin é simples e incentivada, no site do Cordova há um tutorial.
+
+
+  O método de desenvolvimento descrito até agora, focado em várias plataformas, é um dentre dois possíveis Workflows disponíveis no Cordova e seu nome é “Cross-platform” (CLI). Ele deve ser usado se o aplicativo desenvolvido pretende abranger a maior variedade de Sistemas Operacionais mobile, com pouca ou nenhuma ênfase em um desenvolvimento em uma plataforma específica.
+  O segundo Workflow é chamado “Platform-centered”, e deve ser usado se o projeto é focado para uma única plataforma e se pretende modificá-la em baixo nível.
+
+
+  A arquitetura interna está descrita no diagrama:
+
+% TODO adicionar imagem
+
+
+
+
+
+\section{Bibliografia}
+
+% Bibliografia:
+% https://en.wikipedia.org/wiki/Kivy
+% https://en.wikipedia.org/wiki/Natural_user_interface
+
+
+
+
+% BIBLIOGRAFIA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \singlespacing   % espaçamento simples
+\bibliographystyle{unsrt}
+ % citação bibliográfica textual
+ \bibliography{referencias}  % associado ao arquivo: 'referencias.bib'
+
+\end{document}

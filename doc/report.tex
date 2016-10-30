@@ -1,0 +1,554 @@
+\documentclass{amsart}
+
+\usepackage[brazilian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage[singlelinecheck=false]{caption}
+\usepackage{enumitem}
+\usepackage[justification=centering]{caption}
+\usepackage{indentfirst}
+\usepackage{listings}
+\usepackage{minted}
+
+\makeatletter
+\def\subsection{\@startsection{subsection}{3}%
+  \z@{.5\linespacing\@plus.7\linespacing}{.1\linespacing}%
+  {\normalfont}}
+\makeatother
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\newcommand\defeq{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily def}}}{=}}}
+
+\captionsetup[table]{labelsep=space}
+
+\theoremstyle{plain}
+
+\newtheorem*{definition}{Definição}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{exercise}{Exercise}
+
+\newcommand{\set}[1]{\mathcal{#1}}
+\newcommand{\pr}{\mathbb{P}}
+\renewcommand{\implies}{\Rightarrow}
+\newcommand{\prompt}{$\$$}
+
+\newcommand{\code}[1]{\lstinline[mathescape=true]{#1}}
+\newcommand{\mcode}[1]{\lstinline[mathescape]!#1!}
+
+\lstset{%
+  language=C,
+  numbers=left,
+  breaklines=true,
+  keywordstyle=\bfseries,
+  basicstyle=\ttfamily
+}
+
+\lstdefinestyle{numbers}{numbers=left, stepnumber=1, numberstyle=\tiny, numbersep=10pt}
+\lstdefinestyle{nonumbers}{numbers=none}
+
+\setlength{\parskip}{1em}
+
+\title[]{\rule{10.5cm}{0.8pt}\\Exercício-Programa 2:\\
+Escalonamento de Processos
+\\\vspace{2mm}\footnotesize
+  Sistemas Operacionais --- MAC0422\\\rule{10cm}{0.8pt}}
+\author[]{Renato Lui Geh\\NUSP\@: 8536030\\
+          Guilherme Freire\\NUSP\@: 7557373}
+
+\begin{document}
+\date{\today}
+\maketitle
+
+\section{Introdução}
+
+O EP foi feito em um Minix 3.1.2a simulado pela VM VirtualBox. Os arquivos fonte estão localizados
+em \code{/usr/local/}.
+
+Os arquivos modificados foram:
+
+\begin{itemize}
+  \item \code{/usr/include/unistd.h}
+  \item \code{/usr/include/minix/callnr.h}
+  \item \code{/usr/include/minix/com.h}
+  \item \code{/usr/include/minix/syslib.h}
+  \item \code{/usr/src/kernel/proc.c}
+  \item \code{/usr/src/kernel/proc.h}
+  \item \code{/usr/src/kernel/system.h}
+  \item \code{/usr/src/kernel/system/Makefile}
+  \item \code{/usr/src/include/unistd.h}
+  \item \code{/usr/src/include/minix/callnr.h}
+  \item \code{/usr/src/include/minix/com.h}
+  \item \code{/usr/src/include/minix/syslib.h}
+  \item \code{/usr/src/lib/posix/Makefile.in}
+  \item \code{/usr/src/lib/syslib/Makefile.in}
+  \item \code{/usr/src/servers/fs/misc.c}
+  \item \code{/usr/src/servers/fs/proto.h}
+  \item \code{/usr/src/servers/fs/table.c}
+  \item \code{/usr/src/servers/pm/misc.c}
+  \item \code{/usr/src/servers/pm/proto.h}
+  \item \code{/usr/src/servers/pm/table.c}
+\end{itemize}
+
+As versões modificadas estão em \code{/usr/local/}, assim como os arquivos não modificados. Deste
+jeito, pode-se rodar \code{/usr/local/src/tools/Makefile} sem alterar o código original. Três
+arquivos foram adicionados:
+
+\begin{itemize}
+  \item \code{/usr/local/src/lib/posix/_fork_batch.c}
+  \item \code{/usr/local/src/lib/syslib/sys_fork_batch.c}
+  \item \code{/usr/local/src/kernel/system/do_fork_batch.c}
+\end{itemize}
+
+Quando os blocos de código transcritos neste relatório não forem muito grandes, vamos indicar as
+modificações feitas. Um símbolo \code{-} no início da linha indica a linha original no Minix. Um
+símbolo \code{+} no início da linha indica a nova linha adaptada para o EP\@. Uma linha vazia com o
+símbolo \code{-} indica que no código original a linha não existia. Analogamente, \code{+} em uma
+linha vazia indica que deletamos a linha original. Um \code{#} indica um comentário no código, ou
+seja, a linha indicada por este símbolo não existe no arquivo original.
+
+\section{Escalonamento em batch}
+
+Para fazer o escalonamento em batch foram modificados os seguintes arquivos do kernel:
+
+\begin{enumerate}
+  \item\label{proc_c} \code{/usr/local/src/kernel/proc.c}
+  \item\label{proc_h} \code{/usr/local/src/kernel/proc.h}
+\end{enumerate}
+
+No arquivo~\ref{proc_h}, adicionamos uma nova macro \code{BATCH_Q}:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+-
++ #define BATCH_Q 15 /* batch queue, before IDLE and after user queues. */
+\end{lstlisting}
+
+Esta nova macro indica uma nova fila de prioridade, antes da fila \code{idle} (\code{IDLE_Q}) e
+depois da última fila de prioridade de usuário (\code{MIN_USER_Q}). Como adicionamos uma nova fila,
+precisamos incrementar em um a macro que indica o número total de filas:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+- #define NR_SCHED_QUEUES 16
++ #define NR_SCHED_QUEUES 17
+\end{lstlisting}
+
+Além disso, como estamos transladando a fila de \code{idle}, precisamos incrementa-la também.
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+- #define IDLE_Q 15
++ #define IDLE_Q 16
+\end{lstlisting}
+
+Estas modificações em \code{proc.h} concluem a tarefa 1 do EP\@. Agora discutiremos as mudanças
+feitas em \code{proc.c}, que coincidem justamente com a tarefa 3.
+
+Seguindo a convenção ANSI descrita em \code{/usr/lib/ansi.h} e seguida pelo Minix 3.1.2a, devemos
+primeiro declarar a nova função de escalonamento em batch:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+-
++ FORWARD _PROTOTYPE (void sched_batch, (struct proc *rp, int *queue, int *front));
+\end{lstlisting}
+
+Vamos agora transcrever e analisar a nova função \code{sched_batch} que trata do escalonamento em
+batch.
+
+\begin{minted}[linenos=true,gobble=2,frame=lines]{c}
+  /*=================================================================*
+   *        sched_batch          *
+   *=================================================================*/
+
+  PRIVATE void sched_batch(rp, queue, front)
+  register struct proc *rp;  /* process to be scheduled */
+  int *queue;   /* return: queue to use */
+  int *front;   /* return: front or back */
+  {
+    register struct proc *batch_it;
+    int lmin, diff;
+
+    batch_it = rdy_head[BATCH_Q];
+    diff = 0;
+    lmin = -1;
+    if (batch_it->p_time_left <= 0) {
+      /* Find `last' proc wrt user time */
+      for (; batch_it != NIL_PROC; batch_it = batch_it->p_nextready) {
+        if (batch_it == rp) continue;
+        if (lmin < 0)
+          lmin = batch_it->p_user_time;
+        else if (batch_it->p_user_time < lmin)
+          lmin = batch_it->p_user_time;
+      }
+      /* Invariant: diff >= 0, since lmin is minimum */
+      diff = rp->p_user_time - lmin;
+      /* If diff == 0, rp is next to lmin => rp must go front */
+      if (diff <= 0)
+        rp->p_ticks_left = rp->p_quantum_time;
+      /* Else, rp is `in front` of lmin => rp must wait for last proc */
+      else
+        rp->p_ticks_left = 0;
+    }
+    *queue = BATCH_Q;
+    /* If there is still time left, keep it front. Else, depends on diff. */
+    *front = !diff;
+  }
+\end{minted}
+
+A função \code{sched_batch}, assim como a função original \code{sched} do Minix, toma como
+argumentos uma \code{struct proc*} que representa o endereço do processo a ser escalonado, e dois
+endereços para inteiros, \code{queue} que sinaliza qual a fila de prioridade para se usar, e
+\code{front} que indica se o processo deve ir na frente da fila ou atrás.
+
+Vamos analisar a função. Antes de mais nada, declaramos as variáveis que iremos utilizar. A
+variável \code{register struct proc *batch_it} será, no \code{for} da linha 18, o endereço para
+processo de cada item da fila de prioridade indexado por \code{BATCH_Q}. O inteiro \code{lmin}
+é o menor tempo de usuário de todos os processos da fila. Já \code{diff} será usado para medir a
+diferença entre o menor tempo de usuário e o tempo de usuário do processo a ser escalonado.
+
+As linhas 18-24 apenas acham o menor tempo de execução da fila de processos em batch. Percorremos
+a fila e consideramos os tempos de execução de usuário desde que o processo visto é distinto
+daquele que estamos escalonando. Em seguida, na linha 26, atribuímos o valor da diferença entre o
+menor tempo ao tempo de execução de usuário do processo a ser escalonado. Note a invariância de que
+nesta linha \mcode{diff $\geq 0$}. Isso ocorre pois, como \code{lmin} é mínimo, então se
+considerarmos o oposto, então \code{rp->p_user_time < lmin}, o que é uma contradição.
+
+Note que na linha 14, inicializamos a variável \code{diff} como 0. Isso ocorre pois devemos
+considerar dois casos. No caso em que o processo ainda possue tempo de execução (ou seja, se a
+linha 16 retornar falso) devemos colocar o processo no começo da fila. Como diff é inicializado
+como 0, a linha 36 funciona como intencionado. Agora considere o caso em que o processo precisa ser
+re-escalonado (ou seja, se a linha 16 retornar verdadeiro). Neste caso, vamos ter dois subcasos:
+
+\begin{enumerate}[label*=\arabic*o.~subcaso]
+  \item~\\
+    \begin{enumerate}[label=1.\arabic*.]
+      \item Temos que \code{diff == 0} (linha 28).
+      \item Ou seja, \code{rp} está tão ``atrasado'' quanto o processo que rodou menos.
+      \item Isto indica que devemos rodar \code{rp} antes, já que ele está empatado com o último.
+      \item Portanto, \code{rp} deve ir ``na frente'' da fila. Como \code{diff} é 0, \code{*front=1}.
+      \item Além disso, damos um tempo de ticks igual ao número de ticks equivalente a um quantum.
+    \end{enumerate}
+  \item~\\
+  \begin{enumerate}[label=2.\arabic*.]
+    \item No segundo caso, \code{diff > 0} (linha 31).
+    \item Ou seja, \code{rp} está ``adiantado'' em relação ao processo mais ``atrasado''.
+    \item Isto indica que devemos rodar o processo mais atrasado antes de \code{rp}.
+    \item Portanto, \code{rp} deve ir no final da fila e dar passagem para os processos atrasados,
+      e já que \mcode{diff $> 0$}, então \code{*front=0}.
+    \item Como vamos ``pular'' este processo, damos um tempo de 0 ticks restantes e pomos no final
+      da fila.
+  \end{enumerate}
+\end{enumerate}
+
+Perceba que, quando todos os processos ``empatarem'' em relação ao tempo de execução, um deles será
+escolhido e dado um tempo equivalente a um quantum de tempo. Quando este terminar, todos os outros
+processos também percorrerão um quantum de tempo cada um, um de cada vez. Além disso, todos os
+processos que estão na frente esperarão os atrasados. Isso é a definição de escalonamento
+\textit{Round Robin}, como foi pedido no enunciado quando todos os processos empatam.
+
+Ao final da função, anunciamos que a fila de prioridade a ser usada é aquela indexada por
+\code{BATCH_Q} (linha 34). Em seguida, atribuímos o valor de \code{diff} como descrito
+anteriormente.
+
+Agora resta chamarmos a função de escalonamento. Faremos isso dentro da função \code{enqueue}, no
+próprio \code{proc.c}.
+
+\begin{minted}[linenos=true,gobble=2,frame=lines,mathescape=true]{c}
+  PRIVATE void enqueue(rp)
+  register struct proc *rp; /* this process is now runnable */
+  {
+    /* $\ldots$ */
+    /* Determine where to insert to process. */
+      /* ########################################################## */
+      if (rp->p_priority == BATCH_Q)
+        sched_batch(rp, &q, &front);
+      else
+      /* ########################################################## */
+        sched(rp, &q, &front);
+    /* $\ldots$ */
+  }
+\end{minted}
+
+Quando o processo a ser escalonado tem prioridade igual a \code{BATCH_Q}, escalonamos com a função
+\code{sched_batch}, senão escalonamos normalmente com \code{sched}.
+
+\section{Kernel call}
+
+Para criarmos a \textit{system call} \code{fork_batch}, precisamos criar uma \textit{kernel call}
+(no caso chamada de \code{sys_fork_batch}) que irá criar o novo processo e dar a prioridade de
+batch ao processo filho. Em seguida podemos criar uma \textit{system call} para mandarmos uma
+mensagem para o system task executar \code{sys_fork_batch}. Nesta seção trataremos da kernel call.
+Na seção seguinte iremos enunciar o \textit{system call} e finalmente, na última seção sobre a
+implementação, iremos mostrar como foi feita a chamada para usuário.
+
+Para criarmos o \textit{kernel call}, devemos avisar ao kernel que adicionamos uma syscall. Em
+\code{minix/com.h}, incrementamos o número de syscalls:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+- #define NR_SYS_CALLS 31
++ #define NR_SYS_CALLS 32
+\end{lstlisting}
+
+E em seguida adicionamos uma nova macro sinalizando a nova kernel call:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+-
++ #define SYS_FORK_BATCH (KERNEL CALL + 31) /* sys_fork_batch() */
+\end{lstlisting}
+
+Agora podemos criar uma nova \code{sys_function} em \mcode{$\ldots$/src/kernel/system/}. Mas antes
+vamos declarar o protótipo da função em \mcode{$\ldots$/include/minix/syslib.h}:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+-
++ _PROTOTYPE(int sys_fork_batch, (int parent, int child, int*));
+\end{lstlisting}
+
+Agora devemos criar o handler para o \code{_taskcall}. Criamos o arquivo
+\mcode{$\ldots$/src/lib/syslib/sys_fork_batch.c}.
+
+\begin{minted}[linenos=true,gobble=2,frame=lines]{c}
+  #include ``syslib.h''
+
+  PUBLIC int sys_fork_batch(parent, child, child_endpoint)
+  int parent;
+  int child;
+  int *child_endpoint;
+  {
+    /* A process has forked. Tell the kernel. */
+    message m;
+    int r;
+
+    m.PR_ENDPT = parent;
+    m.PR_SLOT = child;
+    r = _taskcall(SYSTASK, SYS_FORK_BATCH, &m);
+    *child_endpoint = m.PR_ENDPT;
+    return r;
+  }
+\end{minted}
+
+Compare com o arquivo \mcode{$\ldots$/src/lib/syslib/sys_fork.c}. Ambos são iguais com a exceção
+do \code{_taskcall}. Isso pois ambos criam um processo, porém \code{fork_batch} irá atribuir uma
+prioridade fixa ao processo.
+
+Agora podemos implementar o nosso \code{fork_batch} no kernel. Para isso, criamos um arquivo
+\mcode{$\ldots$/src/kernel/system/do_fork_batch.c}. O arquivo é igual ao seu \code{fork}
+equivalente, porém com a seguinte linha adicional:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+rpc->p_sys_time = 0;
+-
++ rpc->p_priority = rpc->p_max_priority = BATCH_Q;
+\end{lstlisting}
+
+Ou seja, daremos uma prioridade fixa \code{BATCH_Q}, que corresponde exatamente a nossa fila de
+prioridade \code{batch} enunciada na Seção 2. Agora precisamos avisar ao
+\mcode{$\ldots$/src/kernel/system.h} que implementamos tal função:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+-
++ _PROTOTYPE(int do_fork_batch, (message *m_ptr));
++ #if !USE_FORK_BATCH
++ #define do_fork_batch do_unused
++ #endif
+\end{lstlisting}
+
+Agora temos nossa kernel call, que será chamada a partir de um system call.
+
+\section{System call}
+
+Para criarmos a \textit{system call}, vamos primeiro alterar os arquivos do servidor responsável
+pelo process manager (pm) e do file system (fs), que se encontram em
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+/usr/local/src/servers/pm
+/usr/local/src/servers/fs
+\end{lstlisting}
+
+Primeiro, encontramos no arquivo \mcode{$\ldots$/src/servers/pm/table.c} um endereço que não está
+sendo utilizado para alocar a nossa função. Também fazemos a mesma modificação em
+\mcode{$\ldots$/src/servers/fs/table.c}. O endereço escolhido é o 57, então temos:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+-  no_sys, /* 57 = unused */
++  /* ####################################### */
++  do_fork_batch,    /* 57 = FORK_BATCH */
++  /* ####################################### */
+\end{lstlisting}
+
+Em seguida declaramos o protótipo da função em \mcode{$\ldots$/src/servers/pm/proto.h} e em seu
+equivalente no \code{fs}:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+-
++ _PROTOTYPE(int do_fork_batch, (void));
+\end{lstlisting}
+
+Implementamos a função em \mcode{$\ldots$/src/servers/pm/misc.c}. Toda a função age igual ao seu
+equivalente \code{do_fork} em \mcode{$\ldots$/src/servers/pm/forkexit.c} com a exceção da linha:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+-
++ rmc->mp_nice = BATCH_Q;
+\end{lstlisting}
+
+Que diz ao \code{mproc} que a prioridade é \code{BATCH_Q}. E também os dois seguintes trechos:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+# Chama fork_batch ao inves de fork.
+- if((r=sys_fork(who_e, child_nr, &rmc->mp_endpoint)) != OK)
++ if((r=sys_fork_batch(who_e, child_nr, &rmc->mp_endpoint)) != OK)
+# Diz ao SO para atualizar o fs do novo processo rodando a funcao do FORK_BATCH em fs.
+- tell_fs(FORK, who_e, rmc->mp_endpoint, rmc->mp_pid);
++ tell_fs(FORK_BATCH, who_e, rmc->mp_endpoint, rmc->mp_pid);
+\end{lstlisting}
+
+Para o equivalente do \code{fs}, apenas chamamos \code{do_fork}, já que a atualização das tabelas
+é idêntico ao \code{fork} normal. Agora devemos dizer ao SO qual é o endereço da chamada de
+sistema. Em \mcode{$\ldots$minix/callnr.h}:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+-
++ /* ########################################## */
++ #define FORK_BATCH        57
++ /* ########################################## */
+\end{lstlisting}
+
+Isso indica que o syscall 57 é definido pela chamada \code{FORK_BATCH}, que mapeia a função
+\code{do_fork_batch} no \code{callvec} da \code{table.c} modificada anteriormente.
+
+\section{Library handler}
+
+Agora que temos as syscalls e kernel calls, podemos chamar a função \code{fork_batch} por meio
+da \code{_syscall}:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+_syscall(PM_PROC_NR, FORK_BATCH, &m);
+\end{lstlisting}
+
+Onde \code{m} é uma variável do tipo \code{message}. Mas a função \code{_syscall} não deve ser
+chamada pelo usuário diretamente. Para resolvermos esse problema, criaremos uma função de usuário
+que chama o syscall.
+
+Modificaremos o arquivo \mcode{$\ldots$/include/unistd.h}:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+-
++ _PROTOTYPE(pid_t fork_batch, (void));
+\end{lstlisting}
+
+E em seguida implementaremos a função em \code{/usr/local/src/lib/posix/_fork_bath.c} que fará a
+chamada \code{_syscall} pelo usuário:
+
+\begin{minted}[linenos=true,gobble=2,frame=lines]{c}
+  #include <lib.h>
+  #include <unistd.h>
+
+  PUBLIC pid_t fork_batch()
+  {
+    message m;
+    return _syscall(MM, FORK_BATCH, &m);
+  }
+\end{minted}
+
+Note que \code{MM} é definido em \code{lib.h} como:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+#define MM PM_PROC_NR
+\end{lstlisting}
+
+Portanto, no final \code{fork_batch} apenas servirá de \textit{wrapper} para a chamada de função
+\code{_syscall}.
+
+\section{Usando \code{fork_batch}}
+
+Agora podemos chamar a nossa nova função \code{fork_batch} da seguinte forma:
+
+\begin{minted}[linenos=true,gobble=2,frame=lines]{c}
+  pid_t chid;
+  chid = fork_batch();
+  if (chid == 0) {
+    /* Processo pai */
+  } else if (chid == EAGAIN || chid == ENOMEM) {
+    if (chid == EAGAIN) {
+      /* Tabela de processos cheia */
+    } else {
+      /* Sem memoria */
+    }
+  } else {
+    /* Processo filho */
+  }
+\end{minted}
+
+\section{Compilando}
+
+Para compilarmos tudo, rodamos os seguintes comandos:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+cd /usr/local/src/tools
+make fresh install
+\end{lstlisting}
+
+Isto cria uma nova imagem em \code{/boot/image/} com a convenção:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+3.1.2arN
+\end{lstlisting}
+
+Onde \code{N} é a versão da imagem. Para rodarmos a imagem para aplicarmos as modificações feitas
+no código:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+shutdown
+image=/boot/image/3.1.2arN
+boot
+\end{lstlisting}
+
+\section{Observações importantes quanto a execução do EP}
+
+Como usamos um Floppy Controller na nossa VM, a tela inicial irá indicar que não foi encontrado um
+local de boot. Para resolver isto, pressione \code{F12} e em seguida pressione \code{1}. Isto
+selecionará o controlador principal (a que possue a imagem do Minix) como local de boot.
+
+Como não mudamos o caminho de boot padrão do Minix, quando a VM for rodada, deve-se dar boot na
+imagem correta. Por padrão, a VM irá dar boot na imagem padrão original.
+
+É recomendável que se recompile o Minix novamente para garantir que tudo esteja o mais recente
+possível. Caso não se recompile o Minix, a imagem em \code{/boot/image} mais recente é:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+/boot/image/3.1.2ar30
+\end{lstlisting}
+
+Para rodar a imagem escolhida, basta indicar o caminho. Por exemplo, caso a imagem desejada seja
+\code{/boot/image/3.1.2ar30}, então:
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+# Garanta que esteja na tela de boot.
+shutdown
+# Indique qual imagem deve ser escolhida.
+image=/boot/image/3.1.2ar30
+# Faca o boot.
+boot
+\end{lstlisting}
+
+\section{Testes}
+
+Fizemos alguns testes que se encontram no diretório \code{/home/ep2}. Apenas compile e rode. Para
+executar o teste com o \code{fork} normal, não use argumentos. Para executar o teste como
+\code{fork_batch}, adicione um argumento.
+
+\begin{lstlisting}[frame=leftline,mathescape=true,style=nonumbers]
+# Rodando com fork normal:
+cc test.c
+./a.out
+# Rodando com fork_batch:
+cc test.c
+./a.out 0
+\end{lstlisting}
+
+\end{document}
