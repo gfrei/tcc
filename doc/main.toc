@@ -3,11 +3,15 @@
 \contentsline {section}{\numberline {1}Motiva\IeC {\c c}\IeC {\~a}o}{1}{section.1}
 \contentsline {section}{\numberline {2}MAPA GERAL DO QUE TA COM TESENO}{1}{section.2}
 \contentsline {section}{\numberline {3}Comunica\IeC {\c c}\IeC {\~a}o Web e Aplica\IeC {\c c}\IeC {\~o}es Web}{1}{section.3}
-\contentsline {section}{\numberline {4}Websockets}{3}{section.4}
-\contentsline {section}{\numberline {5}Device}{4}{section.5}
-\contentsline {section}{\numberline {6}Server}{4}{section.6}
-\contentsline {section}{\numberline {7}Browser}{5}{section.7}
-\contentsline {section}{\numberline {8}Parte Subjetiva}{5}{section.8}
-\contentsline {section}{\numberline {9}Kivy}{6}{section.9}
-\contentsline {section}{\numberline {10}Cordova}{6}{section.10}
-\contentsline {section}{\numberline {11}Bibliografia}{8}{section.11}
+\contentsline {section}{\numberline {4}Polling}{4}{section.4}
+\contentsline {section}{\numberline {5}Long-Polling}{4}{section.5}
+\contentsline {section}{\numberline {6}Streaming}{4}{section.6}
+\contentsline {section}{\numberline {7}Websockets}{5}{section.7}
+\contentsline {section}{\numberline {8}Sockets}{5}{section.8}
+\contentsline {section}{\numberline {9}Device}{6}{section.9}
+\contentsline {section}{\numberline {10}Server}{6}{section.10}
+\contentsline {section}{\numberline {11}Browser}{6}{section.11}
+\contentsline {section}{\numberline {12}Parte Subjetiva}{7}{section.12}
+\contentsline {section}{\numberline {13}Kivy}{8}{section.13}
+\contentsline {section}{\numberline {14}Cordova}{8}{section.14}
+\contentsline {section}{\numberline {15}Bibliografia}{9}{section.15}

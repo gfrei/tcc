@@ -135,7 +135,16 @@ A comunicação de dados entre computadores através da Internet é algo muito c
 
 A mais utilizada é o modelo cliente-servidor. Neste modelo, existem dois tipos de processos rodando, o Cliente e o Servidor. O Cliente é o processo que roda nos computadores locais, e se conecta ao Servidor. A comunicação é dada quando o Cliente manda uma requisição ao Servidor (esta requisição pode ser uma página web, um processamento de dados, entre outros). Por sua vez, o servidor recebe esses dados e faz o processamento necessário para completar essa requisição, para em seguida enviar uma resposta ao Cliente, que pode ser o que foi requisitado ou outro tipo de mensagem, como de erro, caso ocorra uma falha no processamento, ou negação de permissão. O Cliente então pode continuar com o seu próprio processo.
 
-Este modelo é suficiente para páginas Web, pois o cliente pede páginas estáticas e o Servidor as fornece sempre que necessário. Mas essa arquitetura não permite um uso mais dinâmico de websites, pois sua estrutura é muito burocrática. Para fazer uma página mais responsiva, com feedbacks a cada ação do usuário e dados novos, seria necessário que Cliente fizesse uma requisição ao Servidor após o usuário ativar algum gatilho (como preencher um formulário ou levar o cursor a algum ponto específico, por exemplo). Essa requisição teria em seu cabeçalho toda a estrutura de dados http (TODO http) para ser processado e enviado de volta, também com um cabeçalho bastante carregado. Ao receber a página atualizada, o Cliente ainda precisa atualizar o que for necessário. Para tal, ele precisa, por fim, atualizar a página. Há dois problemas claros nessa estrutura:
+(TODO a requisição é um HTTP, explicar HTTP)
+
+
+(TODO nota de rodapé)
+A outra grande arquitetura muito utilizada também é a peer-to-peer (P2P). Nessa arquitetura, não há um computador central para funcionar como servidor, cada computador conectado (Peer) na rede realiza funções tanto de cliente como de servidor na aplicação que está sendo executada. Essa aplicação tem suas tarefas organizadas e divididas entre os Peers.
+Essa arquitetura é conhecida principalmente por ser usada para a transmissão de arquivos grandes, como músicas e vídeos. Nessa transmissão, os Peers que tem o arquivo são conectados aos que não tem, e começam a transferência de pequenos pacotes de dados. Esses pacotes não precisam vir ordenados e o Peer receptor os armazena localmente. Uma vez que a transferência é completada, ele ordena os pacotes e monta o arquivo final. Uma vantagem dessa arquitetura é que a tranferência não é limitada pela capacidade de banda de Servidor, e Peers podem se conectar e desconectar sem que haja problemas para o receptor, o arquivo são será corrompido por eventuais problemas de conexão. Um ponto negativo é que, sem um Servidor, não há um controle de que tipos de arquivos estão sendo transferidos (o que abre uma porta para pirataria) e não é fácil interromper uma transferência, uma vez que ela pode ser composta de milhares de conexões. Outro ponto é que não é fácil de se conhecer a procedência dos dados recebidos, a segurança não pode ser garantida.
+Esta arquitetura não serve para as necessidades do projeto, a hipótese de uso foi descartada após o estudo de sua estrutura.
+
+
+Este modelo é suficiente para páginas Web, pois o cliente pede páginas estáticas e o Servidor as fornece sempre que necessário. Mas essa arquitetura não permite um uso mais dinâmico de websites, pois sua estrutura é muito burocrática. Para fazer uma página mais responsiva, com feedbacks a cada ação do usuário e dados novos, seria necessário que Cliente fizesse uma requisição ao Servidor após o usuário ativar algum gatilho (como preencher um formulário ou levar o cursor a algum ponto específico, por exemplo). Como essa requisição é um HTTP (TODO http), ela possui em seu cabeçalho toda a estrutura de dados para ser processado e enviado de volta, também com um cabeçalho bastante carregado. Ao receber a página atualizada, o Cliente ainda precisa atualizar o que for necessário. Para tal, ele precisa, por fim, atualizar a página. Há dois problemas claros nessa estrutura:
 
 - A necessidade de recarregar a página inteira, mesmo que somente uma pequena parcela dos dados tenha sido alterada. Esse comportamento foi criado em um momento no qual não se tinha a necessidade de alterar pequenas coisas, na página, e que cada HTML vindo do Servidor seria uma página completamente nova. A impossibilidade de atualizar dados individualmente remove qualquer dinamicidade desejada.
 
@@ -155,19 +164,36 @@ Com o Ajax, nota-se uma mudança de paradigmas na Web. Onde antes só havia a no
 
 Essa mudança de paradigmas fez com que muitas Aplicações tipicamente executadas em Desktop fossem desenvolvidas para Web, como Chats ou aplicações que exigissem um fluxo de dados muito grande entre o Cliente e o Servidor. O que ficou claro com o tempo é que Ajax não bastava para muitas dessas Aplicações, em específico as que funcionavam em tempo real. Muitas vezes é o Servidor que precisa se comunicar ao Cliente sobre mudança nos dados. O modelo de funcionamento do Ajax não possui esse tipo de interface, então, para fazer aplicações assim funcionarem corretamente, é necessário muito esforço, lutar muito com a linguagem.
 
-(TODO explicar / entender Polling)
-
 Um exemplo mais claro disso é uma aplicação de Chat. Não é possível ter um padrão de quando o Servidor tem mensagens novas, então é necessário que o Cliente faça requisições a cada período de tempo. Se esse período for curto, o fluxo de dados intenso pode se tornar um problema. Se o período for longo, vai contra o princípio de ser uma comunicação em tempo real, pois as mensagens vão demorar mais a serem entregues. Além disso, ao fazer uma atualização síncrona com o Servidor, o próprio modelo de Ajax tem um comportamento de enviar as mensagens em paralelo, o que não preserva sua ordem, outro fator primordial em um Chat.
 A necessidade de vários tratamentos para uma aplicação relativamente simples como essa funcionar deixa claro que há necessidade de mais ferramentas para o desenvolvimento Web.
 
-Até esse momento, não era possível para o Servidor mandar dados espontaneamente, o Cliente precisava fazer uma requisição. Esse fato era muito limitante para o desenvolvimento, então finalmente foi criada uma API de mais baixo nível para lidar com sockets (soquetes) de uma conexão, chamada Websockets.
+Até esse momento, não era possível para o Servidor mandar dados espontaneamente, o Cliente precisava fazer uma requisição. Foram criadas técnicas para simular essa comunicação bilateral que o ambiente Web não permite, e elas são: Polling, Long-Polling e Streaming.
+
+\section{Polling}
+
+Essa técnica já foi descrita acima no exemplo do Chat. Ela consiste em fazer o cliente mandar requisições em intervalos regulares de tempo e receber a resposta logo em seguida. Ela foi a primeira tentativa de se contornar o problema, principalmente por ser a implementação mais simples e direta. Essa solução é boa quando se sabe o tempo de atualização de dados no servidor, pois então é possível sincronizar os tempos de requisição e atualização. Porém esse é somente um dos cenários possíveis, dados em tempo real não costumam ser tão previsíveis, então é inevitável que uma parcela dessas requisições seja desnecessária e muitas conexões são abertas e fechadas sem necessidade, em momentos de baixo fluxo de atualização do servidor.
+
+
+\section{Long-Polling}
+
+No Long-Polling, o cliente manda uma requisição, e o servidor a mantém aberta durante um determinado período de tempo. Se uma atualização chegar durante esse período, a resposta é enviada ao cliente com os dados. Se o tempo acabar sem que haja mudanças, o servidor envia uma resposta para encerrar a requisição aberta. Essa técnica apresenta melhoras em relação ao Polling, porém, se existe um fluxo alto de atualizações no servidor, ela não oferece nenhuma melhora substancial em relação a ele. Nesse contexto aliás, o Long-Polling pode ser pior, pois pode ficar instável em um loop contínuo de Polls imediatos.
+
+
+\section{Streaming}
+
+Com a técnica de streaming, o cliente manda uma requisição, e o servidor manda e mantém uma resposta aberta, que é atualizada continuamente, sem ter uma data certa para ser fechada (um intervalo de tempo pode ser definido, mas normalmente a conexão é mantida indefinidamente). Essa resposta é atualizada sempre que há novos dados no servidor, mas ele nunca manda um sinal para completar a resposta e encerrar a conexão. O ponto negativo dessa técnica é que, como o streaming ainda é encapsulado no HTTP, é possível que firewalls e servidores proxy possam escolher armazenar a resposta em um buffer, o que aumenta muito a latência da mensagem.
 
 
 
-(TODO nota de rodapé)
-A outra grande arquitetura muito utilizada também é a peer-to-peer (P2P). Nessa arquitetura, não há um computador central para funcionar como servidor, cada computador conectado (Peer) na rede realiza funções tanto de cliente como de servidor na aplicação que está sendo executada. Essa aplicação tem suas tarefas organizadas e divididas entre os Peers.
-Essa arquitetura é conhecida principalmente por ser usada para a transmissão de arquivos grandes, como músicas e vídeos. Nessa transmissão, os Peers que tem o arquivo são conectados aos que não tem, e começam a transferência de pequenos pacotes de dados. Esses pacotes não precisam vir ordenados e o Peer receptor os armazena localmente. Uma vez que a transferência é completada, ele ordena os pacotes e monta o arquivo final. Uma vantagem dessa arquitetura é que a tranferência não é limitada pela capacidade de banda de Servidor, e Peers podem se conectar e desconectar sem que haja problemas para o receptor, o arquivo são será corrompido por eventuais problemas de conexão. Um ponto negativo é que, sem um Servidor, não há um controle de que tipos de arquivos estão sendo transferidos (o que abre uma porta para pirataria) e não é fácil interromper uma transferência, uma vez que ela pode ser composta de milhares de conexões. Outro ponto é que não é fácil de se conhecer a procedência dos dados recebidos, a segurança não pode ser garantida.
-Esta arquitetura não serve para as necessidades do projeto, a hipótese de uso foi descartada após o estudo de sua estrutura.
+Por fim, todas essas técnicas envolvem requisições e respostas com um cabeçalho HTTP, que contém muitos dados desnecessários para esse uso, gerando latência. Além disso, uma verdadeira conexão bilateral requer mais do que o fluxo de dados vindo do servidor, é necessário também ter o fluxo originado no cliente. Para fazer uma simulação mais consistente com o desejado, muitas soluções hoje usam duas conexões de fluxo, uma para o cliente e uma para o servidor. A coordenação e manutenção dessas duas conexões gera um overhead ainda maior em termos de recursos, além do claro aumento de complexidade do código.
+
+
+Por todos esses fatos, ficou claro que era necessário ter uma conexão bilateral de verdade. Para isso, um controle maior da transferência de dados era necessário. Esse controle é feito pelos Sockets, mas eles eram indisponíveis ao desenvolvimento Web até então. Então foi criada o Websocket, uma API para fazer a interface com os Sockets de uma conexão.
+
+
+
+
+\section{Websockets}
 
 
 \section{Sockets}
@@ -182,9 +208,17 @@ De volta ao cliente, se a conexão é aceita, o seu socket é criado (com as esp
 
 Agora o cliente e o servidor podem se comunicar com leitura ou escrita nesses novos sockets criados.
 
+% TODO Sei lá se vou falar disso
+% A API básica para manipulação de Sockets :
 
-
-\section{Websockets}
+% SOCKET : Cria um ponto final de uma comunicação.
+% BIND : Associa um endereço local a um Socket.
+% LISTEN : Anuncia que aceita conexões, e dá o tamanho da queue.
+% ACCEPT : Aceita um pedido de conexão.
+% CONNECT : Envia um pedido de conexão.
+% SEND : Envia dados através de sua conexão.
+% RECEIVE : Recebe dados vindos de sua conexão.
+% CLOSE : Encerra a conexão.
 
 
 
@@ -343,7 +377,7 @@ Há também Plugins desenvolvidos por terceiros (em geral pela própria comunida
 % TODO adicionar imagem
 
 
-
+% TODO Apendice: falar do SPDY (protocolo tipo http)
 
 
 \section{Bibliografia}
@@ -365,7 +399,11 @@ Há também Plugins desenvolvidos por terceiros (em geral pela própria comunida
 
 
 
-% BIBLIOGRAFIA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% BIBLIOGRAFIA
+% https://www.websocket.org/quantum.html
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  \singlespacing   % espaçamento simples
 \bibliographystyle{unsrt}
  % citação bibliográfica textual
