@@ -66,8 +66,7 @@
     }
 
     \vskip 2.5cm
-    Orientador: Prof. Dr. Marco Dimas Gubitoso\\
-    %Coorientador: \\
+    Orientador: Prof. Dr. Marco Dimas Gubitoso
 
     \vskip 3.5cm
     \normalsize{São Paulo, 2016}
@@ -194,6 +193,95 @@ Por todos esses fatos, ficou claro que era necessário ter uma conexão bilatera
 
 
 \section{Websockets}
+
+
+
+
+
+
+\section{Teste de eficiência de Websockets}
+
+
+No experimento a seguir, é mostrado a diferença de tráfego de dados e latência entre Websocket e Polling para requisitar dados em tempo real. Ele foi retirado do site https://www.websocket.org/quantum.html , e é somente transcrito aqui, em tradução livre:
+
+Vamos comparar uma aplicação que usa Polling e uma que usa Websocket.
+
+
+
+%----------------------------------------------------
+
+% So how dramatic is that reduction in unnecessary network traffic and latency? Let's compare a polling application and a WebSocket application side by side.
+O quão dramática é a redução de tráfego de dados desnecessários e latência? Vamos comparar uma aplicação Polling e uma WebSocket lado a lado.
+
+
+% For the polling example, I created a simple web application in which a web page requests real-time stock data from a RabbitMQ message broker using a traditional publish/subscribe model. It does this by polling a Java Servlet that is hosted on a web server. The RabbitMQ message broker receives data from a fictitious stock price feed with continuously updating prices. The web page connects and subscribes to a specific stock channel (a topic on the message broker) and uses an XMLHttpRequest to poll for updates once per second. When updates are received, some calculations are performed and the stock data is shown in a table as shown in the following image.
+Para o exemplo de Polling, eu criei uma simples aplicação Web, na qual a página requisita dados do Mercado de Ações (i18n) em tempo real de um RabbitMQ Message Broker (i18n) usando um modelo publish/subscribe tradicional. Ele requisita esses dados por fazer Polling para uma Java Servlet hospedado no Servidor Web. O RabbitMQ Message Broker (i18n) recebe dados de um feed de Mercado (i18n) com preço fictício atualizado continuamente. A página Web conecta e se inscreve em um canal específico do Mercado (i18n) (um tópico do Message Broker) e usa uma chamada XMLHttpRequest para pedir (fazer um Poll) por updates uma vez por segundo. Quando updates chegas, alguns cálculos são feitos e os dados do Mercado são mostrados em uma tabela, como na imagem a seguir
+
+% Figure 2 — A JavaScript stock ticker application
+(TODO imagem)
+
+% Note: The back-end stock feed actually produces a lot of stock price updates per second, so using polling at one-second intervals is actually more prudent than using a Comet long-polling solution, which would result in a series of continuous polls. Polling effectively throttles the incoming updates here.
+Nota:  do Mercado (i18n) produz
+
+% It all looks great, but a look under the hood reveals there are some serious issues with this application. For example, in Mozilla Firefox with Firebug (a Firefox add-on that allows you to debug web pages and monitor the time it takes to load pages and execute scripts), you can see that GET requests hammer the server at one-second intervals. Turning on Live HTTP Headers (another Firefox add-on that shows live HTTP header traffic) reveals the shocking amount of header overhead that is associated with each request. The following two examples show the HTTP header data for just a single request and response.
+Tudo parece certo, mas, ao ver se olhar o funcionamento, é revelado que há algums problemas sérios com essa aplicação.
+
+% Example 2 — HTTP request header
+%  GET /PollingStock//PollingStock HTTP/1.1
+%  Host: localhost:8080
+%  User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.5)
+%  Gecko/20091102 Firefox/3.5.5
+%  Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+%  Accept-Language: en-us
+%  Accept-Encoding: gzip,deflate
+%  Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
+%  Keep-Alive: 300
+%  Connection: keep-alive
+%  Referer: http://www.example.com/PollingStock/
+%  Cookie: showInheritedConstant=false; showInheritedProtectedConstant=false;
+%  showInheritedProperty=false; showInheritedProtectedProperty=false;
+%  showInheritedMethod=false; showInheritedProtectedMethod=false;
+%  showInheritedEvent=false; showInheritedStyle=false; showInheritedEffect=false
+% Example 3 — HTTP response header
+% HTTP/1.x 200 OK
+% X-Powered-By: Servlet/2.5
+% Server: Sun Java System Application Server 9.1_02
+% Content-Type: text/html;charset=UTF-8
+% Content-Length: 21
+% Date: Sat, 07 Nov 2009 00:32:46 GMT
+% Just for fun, I counted all the characters. The total HTTP request and response header information overhead contains 871 bytes and that does not even include any data! Of course, this is just an example and you can have less than 871 bytes of header data, but I have also seen cases where the header data exceeded 2000 bytes. In this example application, the data for a typical stock topic message is only about 20 characters long. As you can see, it is effectively drowned out by the excessive header information, which was not even required in the first place!
+
+% So, what happens when you deploy this application to a large number of users? Let's take a look at the network throughput for just the HTTP request and response header data associated with this polling application in three different use cases.
+
+% Use case A: 1,000 clients polling every second: Network throughput is (871 x 1,000) = 871,000 bytes = 6,968,000 bits per second (6.6 Mbps)
+% Use case B: 10,000 clients polling every second: Network throughput is (871 x 10,000) = 8,710,000 bytes = 69,680,000 bits per second (66 Mbps)
+% Use case C: 100,000 clients polling every 1 second: Network throughput is (871 x 100,000) = 87,100,000 bytes = 696,800,000 bits per second (665 Mbps)
+% That's an enormous amount of unnecessary network throughput! If only we could just get the essential data over the wire. Well, guess what? You can with HTML5 Web Sockets! I rebuilt the application to use HTML5 Web Sockets, adding an event handler to the web page to asynchronously listen for stock update messages from the message broker (check out the many how-tos and tutorials on tech.kaazing.com/documentation/ for more information on how to build a WebSocket application). Each of these messages is a WebSocket frame that has just two bytes of overhead (instead of 871)! Take a look at how that affects the network throughput overhead in our three use cases.
+
+% Use case A: 1,000 clients receive 1 message per second: Network throughput is (2 x 1,000) = 2,000 bytes = 16,000 bits per second (0.015 Mbps)
+% Use case B: 10,000 clients receive 1 message per second: Network throughput is (2 x 10,000) = 20,000 bytes = 160,000 bits per second (0.153 Mbps)
+% Use case C: 100,000 clients receive 1 message per second: Network throughput is (2 x 100,000) = 200,000 bytes = 1,600,000 bits per second (1.526 Mbps)
+% As you can see in the following figure, HTML5 Web Sockets provide a dramatic reduction of unnecessary network traffic compared to the polling solution.
+
+
+% Figure 3 — Comparison of the unnecessary network throughput overhead between the polling and the WebSocket applications
+% And what about the reduction in latency? Take a look at the following figure. In the top half, you can see the latency of the half-duplex polling solution. If we assume, for this example, that it takes 50 milliseconds for a message to travel from the server to the browser, then the polling application introduces a lot of extra latency, because a new request has to be sent to the server when the response is complete. This new request takes another 50ms and during this time the server cannot send any messages to the browser, resulting in additional server memory consumption.
+
+% In the bottom half of the figure, you see the reduction in latency provided by the WebSocket solution. Once the connection is upgraded to WebSocket, messages can flow from the server to the browser the moment they arrive. It still takes 50 ms for messages to travel from the server to the browser, but the WebSocket connection remains open so there is no need to send another request to the server.
+
+
+% Figure 4 — Latency comparison between the polling and WebSocket applications
+
+
+
+%----------------------------------------------------
+
+
+
+
+
+
+
 
 
 \section{Sockets}
