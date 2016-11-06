@@ -118,9 +118,9 @@ Fazer uma transmissão de dados eficiente o aplicativo e o servidor.
 
 TODOs:
 > Explicar o ganho de utilizar JS.
+  > Explicar node.js
 > Estrutura Cliente-Servidor
   > Network Socket > Websocket > Socket.io
-> Explicar node.js
 
 
 
@@ -134,7 +134,9 @@ A comunicação de dados entre computadores através da Internet é algo muito c
 
 A mais utilizada é o modelo cliente-servidor. Neste modelo, existem dois tipos de processos rodando, o Cliente e o Servidor. O Cliente é o processo que roda nos computadores locais, e se conecta ao Servidor. A comunicação é dada quando o Cliente manda uma requisição ao Servidor (esta requisição pode ser uma página web, um processamento de dados, entre outros). Por sua vez, o servidor recebe esses dados e faz o processamento necessário para completar essa requisição, para em seguida enviar uma resposta ao Cliente, que pode ser o que foi requisitado ou outro tipo de mensagem, como de erro, caso ocorra uma falha no processamento, ou negação de permissão. O Cliente então pode continuar com o seu próprio processo.
 
+
 (TODO a requisição é um HTTP, explicar HTTP)
+https://www.jmarshall.com/easy/http/
 
 
 (TODO nota de rodapé)
@@ -161,11 +163,14 @@ Para ilustrar esse funcionamento com um exemplo simples, basta usar a ferramenta
 
 Com o Ajax, nota-se uma mudança de paradigmas na Web. Onde antes só havia a noção de página Web, agora começa a se formar uma noção de Aplicação Web. Antes, a maior interatividade possível era algo como um fluxo de telas com dados dependentes da tela passada, mas agora ações de usuários passam a ter resultados instantâneos. Sites com um fluxo de dados muito grande e dinâmico passam a ser possíveis, como Facebook (TODO link), no qual é possível fazer comentários, interagir com usuários e visualizar tanto conteúdo quando desejado sem precisar atualizar a página.
 
+% Começo da necessidade de comunicação bilateral
 Essa mudança de paradigmas fez com que muitas Aplicações tipicamente executadas em Desktop fossem desenvolvidas para Web, como Chats ou aplicações que exigissem um fluxo de dados muito grande entre o Cliente e o Servidor. O que ficou claro com o tempo é que Ajax não bastava para muitas dessas Aplicações, em específico as que funcionavam em tempo real. Muitas vezes é o Servidor que precisa se comunicar ao Cliente sobre mudança nos dados. O modelo de funcionamento do Ajax não possui esse tipo de interface, então, para fazer aplicações assim funcionarem corretamente, é necessário muito esforço, lutar muito com a linguagem.
 
+% Exemplo da necessidade de comunicação bilateral
 Um exemplo mais claro disso é uma aplicação de Chat. Não é possível ter um padrão de quando o Servidor tem mensagens novas, então é necessário que o Cliente faça requisições a cada período de tempo. Se esse período for curto, o fluxo de dados intenso pode se tornar um problema. Se o período for longo, vai contra o princípio de ser uma comunicação em tempo real, pois as mensagens vão demorar mais a serem entregues. Além disso, ao fazer uma atualização síncrona com o Servidor, o próprio modelo de Ajax tem um comportamento de enviar as mensagens em paralelo, o que não preserva sua ordem, outro fator primordial em um Chat.
 A necessidade de vários tratamentos para uma aplicação relativamente simples como essa funcionar deixa claro que há necessidade de mais ferramentas para o desenvolvimento Web.
 
+% Maneiras de simular CommBi
 Até esse momento, não era possível para o Servidor mandar dados espontaneamente, o Cliente precisava fazer uma requisição. Foram criadas técnicas para simular essa comunicação bilateral que o ambiente Web não permite, e elas são: Polling, Long-Polling e Streaming.
 
 \section{Polling}
@@ -187,15 +192,115 @@ Com a técnica de streaming, o cliente manda uma requisição, e o servidor mand
 Por fim, todas essas técnicas envolvem requisições e respostas com um cabeçalho HTTP, que contém muitos dados desnecessários para esse uso, gerando latência. Além disso, uma verdadeira conexão bilateral requer mais do que o fluxo de dados vindo do servidor, é necessário também ter o fluxo originado no cliente. Para fazer uma simulação mais consistente com o desejado, muitas soluções hoje usam duas conexões de fluxo, uma para o cliente e uma para o servidor. A coordenação e manutenção dessas duas conexões gera um overhead ainda maior em termos de recursos, além do claro aumento de complexidade do código.
 
 
-Por todos esses fatos, ficou claro que era necessário ter uma conexão bilateral de verdade. Para isso, um controle maior da transferência de dados era necessário. Esse controle é feito pelos Sockets, mas eles eram indisponíveis ao desenvolvimento Web até então. Então foi criada o Websocket, uma API para fazer a interface com os Sockets de uma conexão.
-
+Por todos esses fatos, ficou claro que era necessário ter uma conexão bilateral de verdade. Para que essa conexão fosse possível, era necessário ter um controle maior da transferência de dados era necessário. Dentro do protocolo TCP(TODO verificar informação), esse controle é feito por meio dos Sockets, mas, até então, não havia interface para interagir diretamente com eles, eles eram indisponíveis ao desenvolvimento Web.
 
 
 
 \section{Websockets}
 
+https://www.websocket.org/aboutwebsocket.html
+
+WebSocket é o protocolo que lida com os Sockets de uma conexão que foi criada para permitir a comunicação bilateral entre o cliente e o servidor. Ele dá ao programador muito mais liberdade para criar novos protocolos e novas maneiras de se transferir dados, em ambas as direções.
+
+A interface em si é bastante simples, seu objetivo é o envio e recebimento de mensagens entre o cliente e o servidor. Na realidade, para o protocolo, não existe essa diferenciação entre os dois, eles são apenas dois processos conectados em uma conexão HTTP. Não existe mais essa hierarquia nem uma separação de funções entre ambos. Esses podem enviar mensagens a qualquer momento e estão ouvindo um ao outro.
+
+Em um momento arbitrário, talvez porque dados tenham sido atualizados ou o usuário tenha feito alguma ação em específico, um desses processos envia uma mensagem ao outro. Essa mensagem é enviada e esse processo volta ao que estava fazendo, sem a necessidade de esperar uma resposta (com a exceção talvez de qualquer confirmação sobre a entre1ga). Esse comportamento é chamado de assíncrono, pois não necessita de uma resposta para continuar com sua execução.
+
+O outro processo vê a chegada dessa nova mensagem como um evento. Quando esse evento acontece, ele executa um comportamento específico com os dados recebidos, como alteração de informações exibidos ou um cálculo com os valores novos. Por isso é dito que Websocket é voltado a eventos.
+
+Existem 4 tipos de eventos e o comportamento que eles executam é definido quando o Websocket é criado no processo. Esses eventos são:
+- onopen é executado quando a conexão é feita,
+- onclose é executado quando ela é fechada,
+- onmessage é executado quando uma mensagem do outro WebSocket chega,
+- onerror é executado se há algum erro na conexão.
+
+Para ilustrar melhor esse comportamento de conexão, mensagens e eventos, abaixo há um exemplo em HTML de uma página que utiliza WebSockets.
 
 
+(TODO link)
+https://www.websocket.org/echo.html
+
+
+\begin{small}
+\begin{verbatim}
+  <!DOCTYPE html>
+  <meta charset="utf-8" />
+  <title>WebSocket Test</title>
+  <script language="javascript" type="text/javascript">
+
+  var wsUri = "ws://echo.websocket.org/";
+  var output;
+
+  function init()
+  {
+    output = document.getElementById("output");
+    testWebSocket();
+  }
+
+  function testWebSocket()
+  {
+    websocket = new WebSocket(wsUri);
+    websocket.onopen = function(evt) { onOpen(evt) };
+    websocket.onclose = function(evt) { onClose(evt) };
+    websocket.onmessage = function(evt) { onMessage(evt) };
+    websocket.onerror = function(evt) { onError(evt) };
+  }
+
+  function onOpen(evt)
+  {
+    writeToScreen("CONNECTED");
+    doSend("WebSocket rocks");
+  }
+
+  function onClose(evt)
+  {
+    writeToScreen("DISCONNECTED");
+  }
+
+  function onMessage(evt)
+  {
+    writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data+'</span>');
+    websocket.close();
+  }
+
+  function onError(evt)
+  {
+    writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+  }
+
+  function doSend(message)
+  {
+    writeToScreen("SENT: " + message);
+    websocket.send(message);
+  }
+
+  function writeToScreen(message)
+  {
+    var pre = document.createElement("p");
+    pre.style.wordWrap = "break-word";
+    pre.innerHTML = message;
+    output.appendChild(pre);
+  }
+
+  window.addEventListener("load", init, false);
+
+  </script>
+
+  <h2>WebSocket Test</h2>
+
+  <div id="output"></div>
+
+\end{verbatim}
+\end{small}
+
+
+Essa página executa um código simples. Ela cria um WebSocket conectado com "ws://echo.websocket.org/".
+
+O evento de conexão (onOpen) ativa uma função que escreve na tela e manda uma string para o outro WebSocket.
+
+O evento de recebimento de mensagem (onMessage) escreve na tela o conteúdo que foi recebido e fecha a conexão.
+
+O evento de encerramento de conexão e de erro (onClose e onError) só escrevem na tela um status.
 
 
 
@@ -204,10 +309,16 @@ Por todos esses fatos, ficou claro que era necessário ter uma conexão bilatera
 
 No experimento a seguir, é mostrado a diferença de tráfego de dados e latência entre Websocket e Polling para requisitar dados em tempo real. Ele foi retirado do site https://www.websocket.org/quantum.html , e é somente transcrito aqui, em tradução livre:
 
-Vamos comparar uma aplicação que usa Polling e uma que usa Websocket.
+(TODO REF https://www.websocket.org/quantum.html)
 
+%----------------------------------------------------
 
-
+Informações para entender o exemplo:
+RabbitMQ Message Broker: um simples programa que recebe e encaminha mensagens. Nesse exemplo ele está em um servidor, recebe dados de um mercado de ações fictício. (TODO REF: https://www.rabbitmq.com/tutorials/tutorial-one-python.html)
+Java Servlet: uma classe Java usada para estender as funcionalidades de um servidor. Pode ser definido como um componente semelhante um servidor, que gera dados HTML e XML para a camada de apresentação de uma aplicação Web. Ele processa dinamicamente requisições e respostas. (TODO REF: https://pt.wikipedia.org/wiki/Servlet)
+Mozilla Firefox: Browser muito utilizado.
+Firebug: .
+%a Firefox add-on that allows you to debug web pages and monitor the time it takes to load pages and execute scripts
 %----------------------------------------------------
 
 % So how dramatic is that reduction in unnecessary network traffic and latency? Let's compare a polling application and a WebSocket application side by side.
@@ -215,63 +326,98 @@ O quão dramática é a redução de tráfego de dados desnecessários e latênc
 
 
 % For the polling example, I created a simple web application in which a web page requests real-time stock data from a RabbitMQ message broker using a traditional publish/subscribe model. It does this by polling a Java Servlet that is hosted on a web server. The RabbitMQ message broker receives data from a fictitious stock price feed with continuously updating prices. The web page connects and subscribes to a specific stock channel (a topic on the message broker) and uses an XMLHttpRequest to poll for updates once per second. When updates are received, some calculations are performed and the stock data is shown in a table as shown in the following image.
-Para o exemplo de Polling, eu criei uma simples aplicação Web, na qual a página requisita dados do Mercado de Ações (i18n) em tempo real de um RabbitMQ Message Broker (i18n) usando um modelo publish/subscribe tradicional. Ele requisita esses dados por fazer Polling para uma Java Servlet hospedado no Servidor Web. O RabbitMQ Message Broker (i18n) recebe dados de um feed de Mercado (i18n) com preço fictício atualizado continuamente. A página Web conecta e se inscreve em um canal específico do Mercado (i18n) (um tópico do Message Broker) e usa uma chamada XMLHttpRequest para pedir (fazer um Poll) por updates uma vez por segundo. Quando updates chegas, alguns cálculos são feitos e os dados do Mercado são mostrados em uma tabela, como na imagem a seguir
+Para o exemplo de Polling, eu criei uma simples aplicação Web, na qual a página manda requisições a um RabbitMQ Message Broker pedindo dados de um Mercado de Ações em tempo real, usando um modelo publish/subscribe tradicional. Ele requisita esses dados por fazer Polling para uma Java Servlet hospedado no Servidor Web. O RabbitMQ Message Broker recebe os dados de um feed de Mercado de Ações fictício, atualizado continuamente. A página Web conecta e se inscreve em um canal específico do Mercado (um Tópico do Message Broker) e usa uma chamada XMLHttpRequest para pedir (fazer um Poll) por updates uma vez por segundo. Quando updates chegam, alguns cálculos são feitos e os dados do Mercado são mostrados em uma tabela, como na imagem a seguir
 
 % Figure 2 — A JavaScript stock ticker application
 (TODO imagem)
 
 % Note: The back-end stock feed actually produces a lot of stock price updates per second, so using polling at one-second intervals is actually more prudent than using a Comet long-polling solution, which would result in a series of continuous polls. Polling effectively throttles the incoming updates here.
-Nota:  do Mercado (i18n) produz
+Nota: O feed no Tópico do Mercado produz muitas atualizações de preço por segundo, então usar Polling com um segundo de intervalo é mais prudente do que Long-Polling, pois ele resultaria em uma série de Polls contínuos. O Polling controla de forma efetiva a vinda de atualizações.
 
 % It all looks great, but a look under the hood reveals there are some serious issues with this application. For example, in Mozilla Firefox with Firebug (a Firefox add-on that allows you to debug web pages and monitor the time it takes to load pages and execute scripts), you can see that GET requests hammer the server at one-second intervals. Turning on Live HTTP Headers (another Firefox add-on that shows live HTTP header traffic) reveals the shocking amount of header overhead that is associated with each request. The following two examples show the HTTP header data for just a single request and response.
-Tudo parece certo, mas, ao ver se olhar o funcionamento, é revelado que há algums problemas sérios com essa aplicação.
+Tudo parece certo, mas ao se olhar o funcionamento, é revelado que há problemas sérios com essa aplicação. Por exemplo, com o Firebug (um add-on do Mozilla Firefox que pemite fazer o debug de uma página Web e monitorar o tempo que ela para carregar páginas e executar scripts), você consegue ver que a requisição GET martela o Servidor em invervalos de 1 segundo. Ativando o Live HTTP Headers (outro add-on do Mozilla Firefox que mostra ao vivo o tráfego de cabeçalhos HTTP), é revelado o enorme overhead causado por cabeçalhos associados a cada requisição. Os dois próximos exemplos mostram o cabeçalho HTTP para somente uma requisição e uma resposta.
 
-% Example 2 — HTTP request header
-%  GET /PollingStock//PollingStock HTTP/1.1
-%  Host: localhost:8080
-%  User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.5)
-%  Gecko/20091102 Firefox/3.5.5
-%  Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
-%  Accept-Language: en-us
-%  Accept-Encoding: gzip,deflate
-%  Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
-%  Keep-Alive: 300
-%  Connection: keep-alive
-%  Referer: http://www.example.com/PollingStock/
-%  Cookie: showInheritedConstant=false; showInheritedProtectedConstant=false;
-%  showInheritedProperty=false; showInheritedProtectedProperty=false;
-%  showInheritedMethod=false; showInheritedProtectedMethod=false;
-%  showInheritedEvent=false; showInheritedStyle=false; showInheritedEffect=false
-% Example 3 — HTTP response header
-% HTTP/1.x 200 OK
-% X-Powered-By: Servlet/2.5
-% Server: Sun Java System Application Server 9.1_02
-% Content-Type: text/html;charset=UTF-8
-% Content-Length: 21
-% Date: Sat, 07 Nov 2009 00:32:46 GMT
+% TODO formatação
+Exemplo 2 — cabeçalho de requisição HTTP
+\begin{small}
+\begin{verbatim}
+ GET /PollingStock//PollingStock HTTP/1.1
+ Host: localhost:8080
+ User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.5)
+ Gecko/20091102 Firefox/3.5.5
+ Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+ Accept-Language: en-us
+ Accept-Encoding: gzip,deflate
+ Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
+ Keep-Alive: 300
+ Connection: keep-alive
+ Referer: http://www.example.com/PollingStock/
+ Cookie: showInheritedConstant=false;
+ showInheritedProtectedConstant=false;
+ showInheritedProperty=false;
+ showInheritedProtectedProperty=false;
+ showInheritedMethod=false;
+ showInheritedProtectedMethod=false;
+ showInheritedEvent=false;
+ showInheritedStyle=false;
+ showInheritedEffect=false
+\end{verbatim}
+\end{small}
+
+Exemplo 3 — cabeçalho de resposta HTTP
+\begin{small}
+\begin{verbatim}
+HTTP/1.x 200 OK
+X-Powered-By: Servlet/2.5
+Server: Sun Java System Application Server 9.1_02
+Content-Type: text/html;charset=UTF-8
+Content-Length: 21
+Date: Sat, 07 Nov 2009 00:32:46 GMT
+\end{verbatim}
+\end{small}
+
 % Just for fun, I counted all the characters. The total HTTP request and response header information overhead contains 871 bytes and that does not even include any data! Of course, this is just an example and you can have less than 871 bytes of header data, but I have also seen cases where the header data exceeded 2000 bytes. In this example application, the data for a typical stock topic message is only about 20 characters long. As you can see, it is effectively drowned out by the excessive header information, which was not even required in the first place!
+Só por diversão, eu contei todos os characteres. O total de overhead de informação na requisição e resposta HTTP possui 871 bytes, sem incuir nenhum dado! Claro, esse é somente um exemplo e você pode ter menos de 871 bytes de cabeçalho, mas eu também vi casos onde ele ultrapassava 2000 bytes. Nessa aplicação de exemplo, uma mensagem típica do Tópico de Mercado contém em torno de 20 characteres. Como você pode ver, ela é efetivamente afogada pelo excesso de informação do cabeçalho, que nem é necessário no final das contas!
 
 % So, what happens when you deploy this application to a large number of users? Let's take a look at the network throughput for just the HTTP request and response header data associated with this polling application in three different use cases.
+Então, o que acontece quando você deploy (TODO I18n) essa aplicação para um grande número de usuários? Vamos observar o tráfego de dados somente dos dados do cabeçalho HTTP de requisição e resposta associados a essa aplicação de Polling em três casos diferentes.
 
 % Use case A: 1,000 clients polling every second: Network throughput is (871 x 1,000) = 871,000 bytes = 6,968,000 bits per second (6.6 Mbps)
 % Use case B: 10,000 clients polling every second: Network throughput is (871 x 10,000) = 8,710,000 bytes = 69,680,000 bits per second (66 Mbps)
 % Use case C: 100,000 clients polling every 1 second: Network throughput is (871 x 100,000) = 87,100,000 bytes = 696,800,000 bits per second (665 Mbps)
+(TODO formatação)
+Caso de uso A: 1,000 clientes fazendo Polling a cada segundo: tráfego de dados é (871 x 1,000) = 871,000 bytes = 6,968,000 bits por segundo. (6.6 Mbps)
+Caso de uso B: 10,000 clientes fazendo Polling a cada segundo: tráfego de dados é (871 x 10,000) = 8,710,000 bytes = 69,680,000 bits por segundo. (66 Mbps)
+Caso de uso C: 100,000 clientes fazendo Polling a cada segundo: tráfego de dados é (871 x 100,000) = 87,100,000 bytes = 696,800,000 bits por segundo. (665 Mbps)
+
+(TODO explicar HTML5?)
 % That's an enormous amount of unnecessary network throughput! If only we could just get the essential data over the wire. Well, guess what? You can with HTML5 Web Sockets! I rebuilt the application to use HTML5 Web Sockets, adding an event handler to the web page to asynchronously listen for stock update messages from the message broker (check out the many how-tos and tutorials on tech.kaazing.com/documentation/ for more information on how to build a WebSocket application). Each of these messages is a WebSocket frame that has just two bytes of overhead (instead of 871)! Take a look at how that affects the network throughput overhead in our three use cases.
+Essa é uma quatidade enorme de tráfego de dados desnecessários! Imagina só se fosse possível transferir a informação necessária. Então, com HTML5 Web Sockets você pode! Eu reconstrui a aplicação usando HTML5 Web Sockets, adicionando um manipulador de evento para que a página Web possa assincronamente ouvir por mensagens do Message Broker de atualizações do preço do Mercado. Cada uma dessas mensagens é um WebSocket frame que possui só 2 bytes de overhead (ao invés de 871)! Veja como isso afeta o tráfego de dados de overhead naqueles três casos.
 
 % Use case A: 1,000 clients receive 1 message per second: Network throughput is (2 x 1,000) = 2,000 bytes = 16,000 bits per second (0.015 Mbps)
 % Use case B: 10,000 clients receive 1 message per second: Network throughput is (2 x 10,000) = 20,000 bytes = 160,000 bits per second (0.153 Mbps)
 % Use case C: 100,000 clients receive 1 message per second: Network throughput is (2 x 100,000) = 200,000 bytes = 1,600,000 bits per second (1.526 Mbps)
-% As you can see in the following figure, HTML5 Web Sockets provide a dramatic reduction of unnecessary network traffic compared to the polling solution.
 
+Caso de uso A: 1,000 clientes recebem 1 mensagem por segundo: Tráfego de dados é (2 x 1,000) = 2,000 bytes = 16,000 bits por segundo (0.015 Mbps)
+Caso de uso B: 10,000 clientes recebem 1 mensagem por segundo: Tráfego de dados é (2 x 10,000) = 20,000 bytes = 160,000 bits por segundo (0.153 Mbps)
+Caso de uso C: 100,000 clientes recebem 1 mensagem por segundo: Tráfego de dados é (2 x 100,000) = 200,000 bytes = 1,600,000 bits por segundo (1.526 Mbps)
+
+% As you can see in the following figure, HTML5 Web Sockets provide a dramatic reduction of unnecessary network traffic compared to the polling solution.
+Como você pode ver na figura abaixo, HTML5 Web Sockets provê uma redução dramática no tráfego de dados desnecessários em relação ao método de Polling.
+(TODO I18n de ~polling solution~)
 
 % Figure 3 — Comparison of the unnecessary network throughput overhead between the polling and the WebSocket applications
+(TODO Figura 3)
+
 % And what about the reduction in latency? Take a look at the following figure. In the top half, you can see the latency of the half-duplex polling solution. If we assume, for this example, that it takes 50 milliseconds for a message to travel from the server to the browser, then the polling application introduces a lot of extra latency, because a new request has to be sent to the server when the response is complete. This new request takes another 50ms and during this time the server cannot send any messages to the browser, resulting in additional server memory consumption.
+E em relação à redução na latência? Veja a figura abaixo. Na metade de cima, você consegue a latência do método de Polling. Se assumirmos, nesse exemplo, que é necessário 50 milissegundos para uma mensagem chegue do Servidor para o browser, então a aplicação de Polling introduz muita latência extra, porque cada nova requisição precisa ser enviada ao Servidor quando a resposta está completa. Essa nova requisição requer outros 50 milissegundos, e, durante esse tempo, o Servidor não consegue mandar qualquer outra mensagem ao browser, resultando em um consumo de memória adicional ao Servidor.
 
 % In the bottom half of the figure, you see the reduction in latency provided by the WebSocket solution. Once the connection is upgraded to WebSocket, messages can flow from the server to the browser the moment they arrive. It still takes 50 ms for messages to travel from the server to the browser, but the WebSocket connection remains open so there is no need to send another request to the server.
+Na metade de baixo da figura, você vê a redução na latência proporcionada pelo uso de WebSocket. Uma vez que a conexão é upgraded (TODO I18n) para Websocket, as mensagens podem fluir do Servidor ao browser no momento em que surgem. Ainda leva 50 milissegundos para as mensagens atravessarem do Servidor ao cliente, mas a conexão Websocket permanece aberta para que não haja necessidade de enviar outra requisição ao Servidor.
 
 
 % Figure 4 — Latency comparison between the polling and WebSocket applications
-
+(TODO Figura 4)
 
 
 %----------------------------------------------------
