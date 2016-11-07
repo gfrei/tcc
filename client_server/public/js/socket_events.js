@@ -7,7 +7,7 @@ function update_perlin_seed(data) {
     if (Math.abs(data.y) > 1) {
         value = data.y/100;
     }
-    
+
     g_seed += value;
     g_hasNewSeed = true;
 }

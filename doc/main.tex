@@ -131,68 +131,105 @@ TODOs:
 A comunicação de dados entre computadores através da Internet é algo muito comum, e necessita de uma arquitetura de rede adequada para ocorrer.
 
 (TODO explicar TCP e/ou TCP/IP)
-
-A mais utilizada é o modelo cliente-servidor. Neste modelo, existem dois tipos de processos rodando, o Cliente e o Servidor. O Cliente é o processo que roda nos computadores locais, e se conecta ao Servidor. A comunicação é dada quando o Cliente manda uma requisição ao Servidor (esta requisição pode ser uma página web, um processamento de dados, entre outros). Por sua vez, o servidor recebe esses dados e faz o processamento necessário para completar essa requisição, para em seguida enviar uma resposta ao Cliente, que pode ser o que foi requisitado ou outro tipo de mensagem, como de erro, caso ocorra uma falha no processamento, ou negação de permissão. O Cliente então pode continuar com o seu próprio processo.
+% cliente-servidor
+A mais utilizada é o modelo cliente-servidor. Neste modelo, existem dois tipos de processos rodando, o Cliente e o Servidor. O Cliente é o processo que roda nos computadores locais, e se conecta ao Servidor. A comunicação é dada quando o Cliente manda uma requisição ao Servidor (esta requisição pode ser por uma página web, um processamento de dados, entre outros). Por sua vez, o servidor recebe esses dados e faz o processamento necessário para completar essa requisição, e em seguida envia uma resposta ao Cliente. A resposta pode pode ser o que foi requisitado ou outro tipo de mensagem, como de erro, caso ocorra uma falha no processamento ou negação de permissão. O Cliente então pode continuar com o seu próprio processo.
 
 
 (TODO a requisição é um HTTP, explicar HTTP)
+
 https://www.jmarshall.com/easy/http/
 
 
 (TODO nota de rodapé)
+% P2P
 A outra grande arquitetura muito utilizada também é a peer-to-peer (P2P). Nessa arquitetura, não há um computador central para funcionar como servidor, cada computador conectado (Peer) na rede realiza funções tanto de cliente como de servidor na aplicação que está sendo executada. Essa aplicação tem suas tarefas organizadas e divididas entre os Peers.
-Essa arquitetura é conhecida principalmente por ser usada para a transmissão de arquivos grandes, como músicas e vídeos. Nessa transmissão, os Peers que tem o arquivo são conectados aos que não tem, e começam a transferência de pequenos pacotes de dados. Esses pacotes não precisam vir ordenados e o Peer receptor os armazena localmente. Uma vez que a transferência é completada, ele ordena os pacotes e monta o arquivo final. Uma vantagem dessa arquitetura é que a tranferência não é limitada pela capacidade de banda de Servidor, e Peers podem se conectar e desconectar sem que haja problemas para o receptor, o arquivo são será corrompido por eventuais problemas de conexão. Um ponto negativo é que, sem um Servidor, não há um controle de que tipos de arquivos estão sendo transferidos (o que abre uma porta para pirataria) e não é fácil interromper uma transferência, uma vez que ela pode ser composta de milhares de conexões. Outro ponto é que não é fácil de se conhecer a procedência dos dados recebidos, a segurança não pode ser garantida.
+Essa arquitetura é conhecida principalmente por ser usada para a transferência de arquivos grandes, como músicas e vídeos. Nessa transmissão, os Peers que tem o arquivo são conectados aos que não tem, e começam a transferência de pequenos pacotes de dados. Esses pacotes não precisam vir ordenados e o Peer receptor os armazena localmente. Uma vez que a transferência é completada, ele ordena os pacotes e monta o arquivo final. Uma vantagem dessa arquitetura é que a tranferência não é limitada pela capacidade de banda de Servidor, e Peers podem se conectar e desconectar sem que haja problemas para o receptor, o arquivo são será corrompido por eventuais problemas de conexão. Um ponto negativo é que, sem um Servidor, não há um controle de que tipos de arquivos estão sendo transferidos (o que abre uma porta para pirataria) e não é fácil interromper uma transferência, uma vez que ela pode ser composta de milhares de conexões. Outro ponto é que não é fácil de se conhecer a procedência dos dados recebidos, a segurança não pode ser garantida.
+
 Esta arquitetura não serve para as necessidades do projeto, a hipótese de uso foi descartada após o estudo de sua estrutura.
 
-
-Este modelo é suficiente para páginas Web, pois o cliente pede páginas estáticas e o Servidor as fornece sempre que necessário. Mas essa arquitetura não permite um uso mais dinâmico de websites, pois sua estrutura é muito burocrática. Para fazer uma página mais responsiva, com feedbacks a cada ação do usuário e dados novos, seria necessário que Cliente fizesse uma requisição ao Servidor após o usuário ativar algum gatilho (como preencher um formulário ou levar o cursor a algum ponto específico, por exemplo). Como essa requisição é um HTTP (TODO http), ela possui em seu cabeçalho toda a estrutura de dados para ser processado e enviado de volta, também com um cabeçalho bastante carregado. Ao receber a página atualizada, o Cliente ainda precisa atualizar o que for necessário. Para tal, ele precisa, por fim, atualizar a página. Há dois problemas claros nessa estrutura:
+%Começo de problemas em usar somente cliente-servidor
+Este modelo é suficiente para páginas Web, pois o cliente pede páginas estáticas e o Servidor as fornece sempre que necessário. Mas essa arquitetura não permite um uso mais dinâmico de websites, pois sua estrutura é muito burocrática. Para fazer uma página mais responsiva, com feedbacks a cada ação do usuário e dados novos, seria necessário que Cliente fizesse uma requisição ao Servidor após o usuário ativar algum gatilho (como preencher um formulário ou levar o cursor a algum ponto específico, por exemplo). Como o protocolo dessa requisição é HTTP, ela possui em seu cabeçalho toda a estrutura de dados para ser processado e enviado de volta, também com um cabeçalho equivalente. Ao receber a página atualizada, o Cliente ainda precisa recarregar a página para atualizar o que for necessário. Há dois problemas claros nessa estrutura:
 
 - A necessidade de recarregar a página inteira, mesmo que somente uma pequena parcela dos dados tenha sido alterada. Esse comportamento foi criado em um momento no qual não se tinha a necessidade de alterar pequenas coisas, na página, e que cada HTML vindo do Servidor seria uma página completamente nova. A impossibilidade de atualizar dados individualmente remove qualquer dinamicidade desejada.
 
-- O overhead gerado pelas pela estrutura de dados http. Esse overhead cria uma latência alta e faz com que um envio contante de requisições ao Servidor exija muito recurso.
+- O overhead gerado pelas pelo cabeçalho das requisições e repostas com o protocolo HTTP. Esse overhead cria uma latência alta e faz com que um envio contante de requisições ao Servidor exija muitos recursos.
 
 Um exemplo de comportamento impossível com essas restrições é dar um feedback instantâneo para o usuário na hora que ele está preenchendo um cadastro em algum site, como informar se o email inserido já foi usado, ou se a senha possui os parâmetros mínimos necessários de segurança.
 
 (TODO falar de Flash?)
 (TODO verificar se) A conexão só dura durante o processo de requisição entre ambos, ela é fechada uma vez que a requisição é satisfeita.
 
-
+% Apresento Ajax
 Da discussão gerada à partir desses problemas, surgiu o Ajax (Asynchronous JavaScript e XML). Ajax é uma técnica de desenvolvimento Web usada para fazer requisições ao Servidor para receber dados no background de forma assíncrona, sem precisar recarregar a página inteira. Com ele, é possível receber dados novos e atualizá-los no código sem alterar o resto da página. Isso com essa técnica passa a ser possível atualizar partes de uma página com base em eventos do usuário.
 
+% Exemplo de Ajax
 Para ilustrar esse funcionamento com um exemplo simples, basta usar a ferramenta de busca do Google (TODO link). O usuário começa a digitar uma busca e os resultados já começam a aparecer sem a necessidade de atualizar a página, mesmo antes da busca estar completa (TODO imagem). O input do usuário ativa requisições no background para obter e atualizar os resultados exibidos, sem se preocupar se a busca será alterada no futuro. Assim, o usuário recebe um feedback muito mais dinâmico e menos burocrático do que o convencional (digitar a busca completa e ir para uma página de resultados).
 
+% Final de Ajax
 Com o Ajax, nota-se uma mudança de paradigmas na Web. Onde antes só havia a noção de página Web, agora começa a se formar uma noção de Aplicação Web. Antes, a maior interatividade possível era algo como um fluxo de telas com dados dependentes da tela passada, mas agora ações de usuários passam a ter resultados instantâneos. Sites com um fluxo de dados muito grande e dinâmico passam a ser possíveis, como Facebook (TODO link), no qual é possível fazer comentários, interagir com usuários e visualizar tanto conteúdo quando desejado sem precisar atualizar a página.
 
 % Começo da necessidade de comunicação bilateral
 Essa mudança de paradigmas fez com que muitas Aplicações tipicamente executadas em Desktop fossem desenvolvidas para Web, como Chats ou aplicações que exigissem um fluxo de dados muito grande entre o Cliente e o Servidor. O que ficou claro com o tempo é que Ajax não bastava para muitas dessas Aplicações, em específico as que funcionavam em tempo real. Muitas vezes é o Servidor que precisa se comunicar ao Cliente sobre mudança nos dados. O modelo de funcionamento do Ajax não possui esse tipo de interface, então, para fazer aplicações assim funcionarem corretamente, é necessário muito esforço, lutar muito com a linguagem.
 
 % Exemplo da necessidade de comunicação bilateral
-Um exemplo mais claro disso é uma aplicação de Chat. Não é possível ter um padrão de quando o Servidor tem mensagens novas, então é necessário que o Cliente faça requisições a cada período de tempo. Se esse período for curto, o fluxo de dados intenso pode se tornar um problema. Se o período for longo, vai contra o princípio de ser uma comunicação em tempo real, pois as mensagens vão demorar mais a serem entregues. Além disso, ao fazer uma atualização síncrona com o Servidor, o próprio modelo de Ajax tem um comportamento de enviar as mensagens em paralelo, o que não preserva sua ordem, outro fator primordial em um Chat.
-A necessidade de vários tratamentos para uma aplicação relativamente simples como essa funcionar deixa claro que há necessidade de mais ferramentas para o desenvolvimento Web.
+Um exemplo claro disso é uma aplicação de Chat. Não é possível ter um padrão de quando o Servidor tem novas mensagens, então é necessário que o Cliente faça requisições a cada período de tempo. Se esse período for curto, o fluxo de dados intenso pode se tornar um problema. Se o período for longo, vai contra o princípio de ser uma comunicação em tempo real, mensagens vão demorar mais a serem entregues. Além disso, o modelo de comunicação do Ajax enviar e recebe mensagens em paralelo, sem preservar sua ordem. Então, ao se fazer atualizações síncronas, é necessário ainda mais uma verificação para exibir mensagens em ordem cronológica.
+
+% Conclusão Ajax e necessidade de CommBi
+A necessidade de vários tratamentos para uma aplicação relativamente simples funcionar deixa claro que há necessidade de mais ferramentas para o desenvolvimento de aplicações Web.
+
+
+\section{Necessidade de Comunicação Bilateral}
+
 
 % Maneiras de simular CommBi
-Até esse momento, não era possível para o Servidor mandar dados espontaneamente, o Cliente precisava fazer uma requisição. Foram criadas técnicas para simular essa comunicação bilateral que o ambiente Web não permite, e elas são: Polling, Long-Polling e Streaming.
 
-\section{Polling}
+Um dos fatores mais limitantes era que a comunicação cliente-servidor não era bilateral. Não era possível para o Servidor mandar dados espontaneamente, sem que o Cliente tivesse feito uma requisição antes. Para contornar esse problema foram criadas técnicas para simular essa comunicação bilateral: Polling, Long-Polling e Streaming.
 
-Essa técnica já foi descrita acima no exemplo do Chat. Ela consiste em fazer o cliente mandar requisições em intervalos regulares de tempo e receber a resposta logo em seguida. Ela foi a primeira tentativa de se contornar o problema, principalmente por ser a implementação mais simples e direta. Essa solução é boa quando se sabe o tempo de atualização de dados no servidor, pois então é possível sincronizar os tempos de requisição e atualização. Porém esse é somente um dos cenários possíveis, dados em tempo real não costumam ser tão previsíveis, então é inevitável que uma parcela dessas requisições seja desnecessária e muitas conexões são abertas e fechadas sem necessidade, em momentos de baixo fluxo de atualização do servidor.
+\subsection{Polling}
 
-
-\section{Long-Polling}
-
-No Long-Polling, o cliente manda uma requisição, e o servidor a mantém aberta durante um determinado período de tempo. Se uma atualização chegar durante esse período, a resposta é enviada ao cliente com os dados. Se o tempo acabar sem que haja mudanças, o servidor envia uma resposta para encerrar a requisição aberta. Essa técnica apresenta melhoras em relação ao Polling, porém, se existe um fluxo alto de atualizações no servidor, ela não oferece nenhuma melhora substancial em relação a ele. Nesse contexto aliás, o Long-Polling pode ser pior, pois pode ficar instável em um loop contínuo de Polls imediatos.
+Essa técnica já foi descrita acima no exemplo do Chat. Ela consiste em fazer o cliente mandar requisições em intervalos regulares de tempo e receber a resposta logo em seguida. Ela foi a primeira tentativa de se contornar o problema, principalmente por ser a implementação mais simples e direta. Essa solução é boa quando se sabe o tempo de atualização de dados no servidor, pois então é possível sincronizar os tempos de requisição e atualização. Porém esse é somente um dos cenários possíveis, dados em tempo real não costumam ser tão previsíveis, então é inevitável que uma parcela dessas requisições seja desnecessária e muitas conexões sejam abertas e fechadas sem necessidade, em momentos de baixo fluxo de atualização do servidor.
 
 
-\section{Streaming}
+\subsection{Long-Polling}
 
-Com a técnica de streaming, o cliente manda uma requisição, e o servidor manda e mantém uma resposta aberta, que é atualizada continuamente, sem ter uma data certa para ser fechada (um intervalo de tempo pode ser definido, mas normalmente a conexão é mantida indefinidamente). Essa resposta é atualizada sempre que há novos dados no servidor, mas ele nunca manda um sinal para completar a resposta e encerrar a conexão. O ponto negativo dessa técnica é que, como o streaming ainda é encapsulado no HTTP, é possível que firewalls e servidores proxy possam escolher armazenar a resposta em um buffer, o que aumenta muito a latência da mensagem.
-
-
-
-Por fim, todas essas técnicas envolvem requisições e respostas com um cabeçalho HTTP, que contém muitos dados desnecessários para esse uso, gerando latência. Além disso, uma verdadeira conexão bilateral requer mais do que o fluxo de dados vindo do servidor, é necessário também ter o fluxo originado no cliente. Para fazer uma simulação mais consistente com o desejado, muitas soluções hoje usam duas conexões de fluxo, uma para o cliente e uma para o servidor. A coordenação e manutenção dessas duas conexões gera um overhead ainda maior em termos de recursos, além do claro aumento de complexidade do código.
+No Long-Polling, o cliente manda uma requisição e o servidor a mantém aberta durante um determinado período de tempo. Se uma atualização chegar durante esse período, a resposta é enviada ao cliente com esses dados novos. Se o tempo acabar sem que haja mudanças, o servidor envia uma resposta para encerrar a requisição aberta. Essa técnica apresenta melhoras em relação ao Polling, porém, se existe um fluxo alto de atualizações no servidor, ela não oferece nenhuma melhora substancial em relação a ele. Nessa situação aliás, o Long-Polling pode ser pior, pois pode ficar instável em um loop contínuo de Polls imediatos.
 
 
-Por todos esses fatos, ficou claro que era necessário ter uma conexão bilateral de verdade. Para que essa conexão fosse possível, era necessário ter um controle maior da transferência de dados era necessário. Dentro do protocolo TCP(TODO verificar informação), esse controle é feito por meio dos Sockets, mas, até então, não havia interface para interagir diretamente com eles, eles eram indisponíveis ao desenvolvimento Web.
+\subsection{Streaming}
+
+Com a técnica de streaming, o cliente manda uma requisição, e o servidor manda e mantém uma resposta aberta, que é atualizada continuamente, sem ter um momento certo para ser fechada (um intervalo de tempo pode ser definido, mas normalmente a conexão é mantida indefinidamente). Essa resposta é atualizada sempre que há novos dados no servidor, mas ele nunca manda um sinal para completar a resposta e encerrar a conexão. O ponto negativo dessa técnica é que, como o streaming ainda é encapsulado no HTTP, é possível que firewalls e servidores proxy possam escolher armazenar a resposta em um buffer, o que aumenta muito a latência da mensagem.
+
+
+% Mais problemas e conclusão
+Por fim, todas essas técnicas envolvem requisições e respostas com um cabeçalho HTTP, que contém muitos dados desnecessários para esse uso, gerando latência. Além disso, uma verdadeira conexão bilateral requer mais do que o fluxo de dados vindo do servidor, é necessário também ter o fluxo originado no cliente. Para fazer uma simulação mais consistente com o desejado, muitas soluções hoje usam duas conexões de fluxo, uma para o cliente e uma para o servidor. A coordenação e manutenção dessas duas conexões paralelas gera um overhead ainda maior em termos de recursos, além do claro aumento de complexidade do código.
+
+% Início de Websockets
+Por todos esses fatos, ficou claro que era necessário ter uma conexão bilateral de verdade. Para que essa conexão fosse possível, era necessário ter um controle maior da transferência de dados era necessário. Dentro do protocolo TCP(TODO verificar informação), esse controle é feito por meio dos Sockets, mas, até então, eles eram indisponíveis ao desenvolvimento Web, não havia interface de interação.
+
+
+\section{Sockets}
+
+No modelo cliente-servidor uma conexão é dada por dois pontos finais, um no Cliente e um no Servidor. Essa é a conexão de baixo nível definida pelo protocolo TCP. Cada um desses pontos finais serve para mandar e receber os dados em relação ao outro lado da conexão e eles são nomeados como Soquetes de Rede (Sockets). Cada Socket é definido por um endereço de IP e uma Porta (por exemplo, 192.168.0.1:8000), independente se está no Cliente ou no Servidor, e a conexão TCP é definida de maneira única por seus dois Sockets.
+
+A conexão cliente-servidor, considerando os Sockets, é feita da seguite maneira:
+
+No lado do cliente, Primeiramente ele precisa saber o endereço de IP da máquina onde o servidor roda e a porta que ouve (esses dados definem o socket do servidor). Ele então envia um sinal a esse socket para pedir a conexão. Nesse sinal há um identificador, que contem seu próprio IP e uma porta escolhida na hora, para que o servidor saiba a quem enviar as respostas. É importante ter em mente que o cliente não possui um socket ainda, ele será criado caso a conexão seja bem sucedida.
+No lado do servidor, se não ocorrer nenhum erro, a conexão é aceita. Neste momento, o servidor cria um novo socket com o mesmo IP e porta local do original, para conectá-lo com o cliente. Esse novo socket é necessário para que o servidor possa continuar ouvindo a outras conexões naquela porta com o socket original, enquanto a cópia passa a ser exclusiva ao cliente.
+De volta ao cliente, se a conexão é aceita, o seu socket é criado (com as especificações que foram enviadas no pedido).
+
+Agora o cliente e o servidor podem se comunicar com leitura ou escrita nesses novos sockets criados.
+
+% TODO Sei lá se vou falar disso
+% A API básica para manipulação de Sockets :
+
+% SOCKET : Cria um ponto final de uma comunicação.
+% BIND : Associa um endereço local a um Socket.
+% LISTEN : Anuncia que aceita conexões, e dá o tamanho da queue.
+% ACCEPT : Aceita um pedido de conexão.
+% CONNECT : Envia um pedido de conexão.
+% SEND : Envia dados através de sua conexão.
+% RECEIVE : Recebe dados vindos de sua conexão.
+% CLOSE : Encerra a conexão.
 
 
 
@@ -200,26 +237,32 @@ Por todos esses fatos, ficou claro que era necessário ter uma conexão bilatera
 
 https://www.websocket.org/aboutwebsocket.html
 
-WebSocket é o protocolo que lida com os Sockets de uma conexão que foi criada para permitir a comunicação bilateral entre o cliente e o servidor. Ele dá ao programador muito mais liberdade para criar novos protocolos e novas maneiras de se transferir dados, em ambas as direções.
+WebSocket é o protocolo que lida com os Sockets de uma conexão que foi criada para permitir a comunicação bilateral entre o cliente e o servidor. Ele dá ao programador mais liberdade para criar novos protocolos e novas maneiras de se transferir dados, em ambas as direções.
 
-A interface em si é bastante simples, seu objetivo é o envio e recebimento de mensagens entre o cliente e o servidor. Na realidade, para o protocolo, não existe essa diferenciação entre os dois, eles são apenas dois processos conectados em uma conexão HTTP. Não existe mais essa hierarquia nem uma separação de funções entre ambos. Esses podem enviar mensagens a qualquer momento e estão ouvindo um ao outro.
+A interface em si é bastante simples, seu objetivo é o envio e recebimento de mensagens entre o cliente e o servidor. Na realidade, para o protocolo, não existe essa diferenciação entre os dois, eles são apenas dois processos conectados. Essa hierarquia deixa de existir e não há mais uma separação de funções entre ambos. A comunicação é dada por envio de mensagens e ocorrência de eventos. Esses processos podem enviar mensagens a qualquer momento e estão ouvindo um ao outro.
 
-Em um momento arbitrário, talvez porque dados tenham sido atualizados ou o usuário tenha feito alguma ação em específico, um desses processos envia uma mensagem ao outro. Essa mensagem é enviada e esse processo volta ao que estava fazendo, sem a necessidade de esperar uma resposta (com a exceção talvez de qualquer confirmação sobre a entre1ga). Esse comportamento é chamado de assíncrono, pois não necessita de uma resposta para continuar com sua execução.
+O protocolo foi pensado para funcionar bem com a infraestrutura Web já existente. Como parte desse paradigma, sua especificação determina que uma conexão é estabelecida inicialmente com o protocolo HTTP, garantindo retrocompatibilidade.
+
+A conexão WebSocket é feita da seguinte forma. Após inciada a conexão HTTP, o browser envia uma requisição ao servidor indicando que deseja trocar de protocolos, de HTTP para WebSocket. Se o servidor entende esse protocolo, ele envia uma resposta para permitir a troca. Nesse momento a conexão HTTP é interrompida e a conexão WebSocket toma o seu lugar. Esse processo é chamado de WebSocket Handshake.
+
+A estrutura da mensagem em WebSocket é mínima. O corpo da mensagem, os dados a serem enviados, só possui dois formatos, texto ou binário. O cabeçalho contém um identificador de tipo do formato, que tem um campo para o tamanho da mensagem e nada mais. A mensagem completa é só o conteúdo mais o seu tamanho. Como a conexão não muda em momento algum, todas as informações contidas no cabeçalho de requisição e resposta HTTP são invariantes e, portanto, não precisam ser reenviadas.
+
+Um desses processos, em um momento arbitrário, envia uma mensagem ao outro, talvez porque dados tenham sido atualizados ou o usuário tenha feito alguma ação em específico. Uma vez que a mensagem é enviada, esse processo volta ao que estava fazendo, sem a necessidade de esperar uma resposta (com a exceção talvez de qualquer confirmação sobre a entrega). Esse comportamento é chamado de assíncrono, pois não necessita de uma resposta para continuar com sua execução.
 
 O outro processo vê a chegada dessa nova mensagem como um evento. Quando esse evento acontece, ele executa um comportamento específico com os dados recebidos, como alteração de informações exibidos ou um cálculo com os valores novos. Por isso é dito que Websocket é voltado a eventos.
 
-Existem 4 tipos de eventos e o comportamento que eles executam é definido quando o Websocket é criado no processo. Esses eventos são:
-- onopen é executado quando a conexão é feita,
-- onclose é executado quando ela é fechada,
-- onmessage é executado quando uma mensagem do outro WebSocket chega,
-- onerror é executado se há algum erro na conexão.
+%(TODO bulletpoints)
+Existem 4 tipos de eventos e o comportamento que eles executam é definido quando o Websocket é criado. Esses eventos são:
+- onopen: executado quando a conexão é feita,
+- onclose: executado quando a conexão é fechada,
+- onmessage: executado quando uma mensagem do outro WebSocket chega,
+- onerror: executado se há algum erro na conexão.
+
 
 Para ilustrar melhor esse comportamento de conexão, mensagens e eventos, abaixo há um exemplo em HTML de uma página que utiliza WebSockets.
 
-
 (TODO link)
 https://www.websocket.org/echo.html
-
 
 \begin{small}
 \begin{verbatim}
@@ -294,7 +337,7 @@ https://www.websocket.org/echo.html
 \end{small}
 
 
-Essa página executa um código simples. Ela cria um WebSocket conectado com "ws://echo.websocket.org/".
+Essa página executa um código simples. Ela cria um WebSocket conectado à "ws://echo.websocket.org/".
 
 O evento de conexão (onOpen) ativa uma função que escreve na tela e manda uma string para o outro WebSocket.
 
@@ -304,7 +347,9 @@ O evento de encerramento de conexão e de erro (onClose e onError) só escrevem 
 
 
 
-\section{Teste de eficiência de Websockets}
+
+
+\subsection{Teste de eficiência de Websockets}
 
 
 No experimento a seguir, é mostrado a diferença de tráfego de dados e latência entre Websocket e Polling para requisitar dados em tempo real. Ele foi retirado do site https://www.websocket.org/quantum.html , e é somente transcrito aqui, em tradução livre:
@@ -338,7 +383,7 @@ Nota: O feed no Tópico do Mercado produz muitas atualizações de preço por se
 Tudo parece certo, mas ao se olhar o funcionamento, é revelado que há problemas sérios com essa aplicação. Por exemplo, com o Firebug (um add-on do Mozilla Firefox que pemite fazer o debug de uma página Web e monitorar o tempo que ela para carregar páginas e executar scripts), você consegue ver que a requisição GET martela o Servidor em invervalos de 1 segundo. Ativando o Live HTTP Headers (outro add-on do Mozilla Firefox que mostra ao vivo o tráfego de cabeçalhos HTTP), é revelado o enorme overhead causado por cabeçalhos associados a cada requisição. Os dois próximos exemplos mostram o cabeçalho HTTP para somente uma requisição e uma resposta.
 
 % TODO formatação
-Exemplo 2 — cabeçalho de requisição HTTP
+Exemplo 1 — cabeçalho de requisição HTTP
 \begin{small}
 \begin{verbatim}
  GET /PollingStock//PollingStock HTTP/1.1
@@ -364,7 +409,7 @@ Exemplo 2 — cabeçalho de requisição HTTP
 \end{verbatim}
 \end{small}
 
-Exemplo 3 — cabeçalho de resposta HTTP
+Exemplo 2 — cabeçalho de resposta HTTP
 \begin{small}
 \begin{verbatim}
 HTTP/1.x 200 OK
@@ -419,49 +464,143 @@ Na metade de baixo da figura, você vê a redução na latência proporcionada p
 % Figure 4 — Latency comparison between the polling and WebSocket applications
 (TODO Figura 4)
 
+~ Final do exemplo ~
 
 %----------------------------------------------------
 
 
+Em conclusão, WebSocket é a solução ideal para problemas apresentados anteriormente. É um protocolo feito para a real comunicação plenamente bilateral e obtém isso com o menor gasto de recursos possível. Com ele, a criação de aplicações Web se torna muito mais viável e popular.
+
+Mas existe um problema nesse meio de desenvolvimento Web, que é o fato de que a todo momento a infraestrutura é alterada. Novos protocolos são criados, outros são atualizados, antigos deixam de funcionar corretamente. Esse é um problema inerente ao meio e que afeta a todos.
+
+% https://pt.wikipedia.org/wiki/SPDY
+Para ilustrar esse fato, vamos tomar como exemplo o protocolo SPDY (pronunciado "speedy"), desenvolvido principalmente pela Google. (TODO rodapé: Ele não é um protocolo padrão, porém é bastante promissor e é está sendo utilizado para o desenvolvimento do protocolo HTTP 2.0)
+
+Em linhas gerais, esse protocolo busca velocidade e se baseia no fato de que, se uma conexão é estabelecida com o servidor e o cliente começa a enviar muitas requisições HTTP, essas requisições vão incluir informações repetidas, comuns àquela sessão. Ele define então que, ao invés de enviar essas informações desnecessárias repetidamente durante a sessão, o servidor passa a salvar em um dicionário os usuários conectados e utilizar essas informações salvas. Por conta disso, fazer requisições passa a ser mais rápido e consumir menos recursos. (TODO rodapé: note a semelhança com WebSockets)
+
+Também para aumentar a velocidade, o SPDY multiplexa requisições para permitir que sejam feitas em paralelo. Atualmente no protocolo HTTP as requisições são todas feitas em série. O problema aparece nesse momento, pois o WebSocket esperava ter um socket TCP/IP dedicado e agora passa a funcionar em cima de uma camada de conexão SPDY multiplexada.
+
+O WebSocket (assim como outros protocolos e ferramentas) necessitam de  atualizações de tempos em tempos, por situações inevitáveis como essa. Essa mudança constante aumenta o nível de dificuldade para o desenvolvedor estar sempre atualizado com seus detalhes de implementação.
+
+Uma das maneiras de se contornar essa dificuldade é utillizar outras APIs que cuidam desses detalhes internamente.
 
 
+\section{Socket.io}
+% https://davidwalsh.name/websocket
 
 
+Socket.io é uma API de WebSocket para JavaScript, que é utilizada nesse Projeto. Ele busca cuidar de todos os detalhes de funcionamento do protocolo internamente, deixando uma interface simples ao usuário.
+
+Para uma conexão ser estabelecida, tanto o cliente quanto o servidor precisam estar executando Socket.io. Sua implementação tenta primeiramente fazer a conexão usando WebSocket, mas se o servidor não suporta esse protocolo, ele recua (faz fallback) para outras tecnologias, como AJAX long-polling, AJAX multipart streaming, IFrame, JSONP polling, entre outros (todos utilizando a mesma interface). Esse fallback abrange uma quantidade muito maior de servidores, permitindo um uso não tão restrito dessa API.
+
+Além da implementação básica do protocolo WebSocket, ele também outras funcionalidades muito importantes para o desenvolvimento de uma aplicação maior e mais robusta.
 
 
+É possível conectar múltiplos sockets em uma mesma porta. Internamente, ele faz uma multiplexação das várias conexões abertas em uma mesma porta, mas os processos entendem que tem um socket dedicado a eles. Utilizando WebSockets, cada socket precisa de uma porta exclusiva para fazer a conexão.
 
-\section{Sockets}
+A possibilidade de vários sockets em uma mesma aplicação permite uma modularização muito maior, pois não é necessário que um módulo saiba se tem uma conexão dedicada ou se está compartilhando com mais dezenas de outros sockets.
 
-No modelo cliente-servidor uma conexão é dada por dois pontos finais, um no Cliente e um no Servidor. Essa é a conexão de baixo nível definida pelo protocolo TCP. Cada um desses pontos finais serve para mandar e receber os dados em relação ao outro lado da conexão e eles são nomeados como Soquetes de Rede (Sockets). Cada Socket é definido por um endereço de IP e uma Porta (por exemplo, 192.168.0.1:8000), independente se está no Cliente ou no Servidor, e a conexão TCP é definida de maneira única por seus dois Sockets.
+Ele permite também a criação arbritrária de eventos. Com WebSocket, o desenvolvedor fica preso aos quatro eventos pré definidos: onopen, onclose, onmessage e onerror. Internamente, os quatro são eventos de mensagem, disparados em momentos e situações específicas. O que o Socket.io faz é dar a liberdade de definir quaisquer eventos desejados.
 
-A conexão cliente-servidor, considerando os Sockets, é feita da seguite maneira:
+Essa criação de eventos funciona assim: na hora de enviar uma mensagem, o processo emissor define também o nome do evento que está sendo enviado. O processo receptor define o evento que vai ouvir e a subrotina que vai ser executada na ocorrência desse evento.
 
-No lado do cliente, Primeiramente ele precisa saber o endereço de IP da máquina onde o servidor roda e a porta que ouve (esses dados definem o socket do servidor). Ele então envia um sinal a esse socket para pedir a conexão. Nesse sinal há um identificador, que contem seu próprio IP e uma porta escolhida na hora, para que o servidor saiba a quem enviar as respostas. É importante ter em mente que o cliente não possui um socket ainda, ele será criado caso a conexão seja bem sucedida.
-No lado do servidor, se não ocorrer nenhum erro, a conexão é aceita. Neste momento, o servidor cria um novo socket com o mesmo IP e porta local do original, para conectá-lo com o cliente. Esse novo socket é necessário para que o servidor possa continuar ouvindo a outras conexões naquela porta com o socket original, enquanto a cópia passa a ser exclusiva ao cliente.
-De volta ao cliente, se a conexão é aceita, o seu socket é criado (com as especificações que foram enviadas no pedido).
+Um ponto negativo dessa definição de eventos é que o cabeçalho da mensagem é um pouco maior, pois o de WebSockets é mínimo ao extremo, mas esse tamanho ainda é ínfimo e o overhead causado é desprezível.
 
-Agora o cliente e o servidor podem se comunicar com leitura ou escrita nesses novos sockets criados.
-
-% TODO Sei lá se vou falar disso
-% A API básica para manipulação de Sockets :
-
-% SOCKET : Cria um ponto final de uma comunicação.
-% BIND : Associa um endereço local a um Socket.
-% LISTEN : Anuncia que aceita conexões, e dá o tamanho da queue.
-% ACCEPT : Aceita um pedido de conexão.
-% CONNECT : Envia um pedido de conexão.
-% SEND : Envia dados através de sua conexão.
-% RECEIVE : Recebe dados vindos de sua conexão.
-% CLOSE : Encerra a conexão.
+Essas funcionalidades aumentam muito o grau de liberdade e permitem um escopo muito maior na hora de criar uma aplicação robusta. Imagine um sistema grande, onde dados são recebidos de múltiplas fontes, cálculos são feitos sobre eles, e o resultado pode ativar vários comportamentos de um outro processo. Algo assim exigiria um código complexo com WebSockets, mas com Socket.io é simples e direto.
 
 
+Abaixo, é exibido o código de um chat simples como exemplo. O código está completo, nada foi omitido para explicitar a simplicidade de se fazer uma aplicação com Socket.io.
+
+% http://socket.io/get-started/chat/
+
+No cliente:
+%(TODO definição de sintaxe?)
+\begin{small}
+\begin{verbatim}
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+    </style>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io();
+      $('form').submit(function(){
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+      });
+      socket.on('chat message', function(msg){
+        $('#messages').append($('<li>').text(msg));
+      });
+    </script>
+  </body>
+</html>
+\end{verbatim}
+\end{small}
+
+%(TODO formatação)
+- No browser, a página HTML exibe o histórico da conversa e um formulário para o usuário escrever uma mensagem.
+
+- Ao inserir uma mensagem, o socket envia um evento 'chat message' com a texto.
+
+- O socket ouve um evento com o mesmo nome 'chat message'. Ao ocorrer, o conteúdo recebido é inserido na página e exibido ao usuário.
+
+- Note que não há um evento 'connection' definido, mas ainda assim ele é disparado quando a conexão é definida, e envia seus dados de identificação.
 
 
+No servidor:
 
+\begin{small}
+\begin{verbatim}
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/index.html');
+});
 
+io.on('connection', function(socket){
+  socket.on('chat message', function(msg){
+    io.emit('chat message', msg);
+  });
+});
 
+http.listen(3000, function(){
+  console.log('listening on *:3000');
+});
+\end{verbatim}
+\end{small}
 
+%(TODO formatação)
+- No servidor, o evento 'connection' ativa uma subrotina que recebe o socket e registra nele o evento 'chat message'.
+
+- O evento 'chat message' ativa uma subrotina que emite a mensagem recebida para todos os sockets conectados ao servidor.
+
+Esse exemplo mostra múltiplos sockets em uso no servidor, e a definição de eventos arbitrários, ainda que semelhantes aos de WebSocket.
+
+Por fim, é possível dizer que resolve os problemas apresentados. Ele torna possível a comunicação bilateral cliente-servidor com mínimo custo e baixa latência. Sua interface simples torna o desenvolvimento de aplicações Web rápido e direto, mas suas funcionalidades são poderosas o bastante para se criar algo consistente, robusto e, principalmente, escalável.
+
+Socket.io é a principal ferramenta usada para fazer esse Projeto funcionar.
+
+\newpage
 
 \section{Device}
 
