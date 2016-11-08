@@ -1,18 +1,7 @@
-<!-- <html>
-    <head>
-        <title>My first Three.js app</title>
-        <style>
-            body { margin: 0; }
-            canvas { width: 100%; height: 100% }
-        </style>
-    </head>
-</html> -->
-
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>three.js webgl - geometry - terrain</title>
+        <title>Data visualizer (three.js webgl)</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
         <style>
@@ -34,7 +23,6 @@
             }
 
             a {
-
                 color: #a06851;
             }
 
@@ -42,19 +30,17 @@
     </head>
     <body>
 
-        <div id="container"><br /><br /><br /><br /><br />Generating world...</div>
-        <div id="info"><a href="http://threejs.org" target="_blank">three.js</a> - webgl terrain demo<br />(left click: forward, right click: backward)</div>
+        <div id="container"><br />Generating example...</div>
 
+        <!-- socket.io and three.js libs -->
         <script src="/socket.io/socket.io.js"></script>
         <script src="js/three.js"></script>
 
-
-        <!-- Three.js aditional lib -->
+        <!-- Three.js aditional libs -->
         <script src="js/controls/FirstPersonControls.js"></script>
         <script src="js/ImprovedNoise.js"></script>
         <script src="js/Detector.js"></script>
         <script src="js/libs/stats.min.js"></script>
-
 
         <!-- My program -->
         <script src="js/global.js"></script>
@@ -64,7 +50,6 @@
         <script src="js/noise_terrain.js"></script>
  -->
         <script src="js/three_cube.js"></script>
-
 
     </body>
 </html>

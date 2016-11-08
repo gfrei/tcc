@@ -1,6 +1,11 @@
 var scene, camera, renderer;
 var cube, sphere;
+var container, stats;
 
+if ( ! Detector.webgl ) {
+    Detector.addGetWebGLMessage();
+    document.getElementById( 'container' ).innerHTML = "";
+}
 
 hasNewColors = false;
 
@@ -47,9 +52,9 @@ function init() {
 
     // New Cube
     // var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    // var material = new THREE.MeshLambertMaterial( { 
-    //     color: 0xffff00, 
-    //     wireframe : true 
+    // var material = new THREE.MeshLambertMaterial( {
+    //     color: 0xffff00,
+    //     wireframe : true
     // } );
     // cube = new THREE.Mesh( geometry, material );
     // scene.add( cube );
@@ -60,15 +65,26 @@ function init() {
     var rings = 16;
 
     var sphereGeo = new THREE.SphereGeometry(radius, segments, rings);
-    var sphereMaterial = new THREE.MeshLambertMaterial( { 
-        color: 0xCC0000, 
-        wireframe : true 
+    var sphereMaterial = new THREE.MeshLambertMaterial( {
+        color: 0xCC0000,
+        wireframe : true
     } );
     cube = new THREE.Mesh( sphereGeo, sphereMaterial );
     scene.add( cube );
 
     //-------------------------------------------
-    
+
+    container = document.getElementById( 'container' );
+
+    container.innerHTML = "";
+
+    container.appendChild( renderer.domElement );
+
+    stats = new Stats();
+    container.appendChild( stats.dom );
+
+    //-------------------------------------------
+
     xRot = 0;
     yRot = 0;
     zRot = 0;
@@ -79,6 +95,8 @@ function init() {
 }
 
 function render() {
+    stats.update();
+
     requestAnimationFrame( render );
 
     updateCubeRotation(xRot, yRot, zRot);
@@ -86,7 +104,7 @@ function render() {
         updateCubeColor(r, g, b);
         hasNewColors = false;
     };
-    
+
     renderer.render(scene, camera);
 };
 

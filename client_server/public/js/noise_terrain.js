@@ -73,9 +73,9 @@ function init() {
         modelGeometry.vertices[ i ].y = data[ i ] * 10;
     }
 
-    modelMesh = new THREE.Mesh( modelGeometry, new THREE.MeshBasicMaterial( { 
+    modelMesh = new THREE.Mesh( modelGeometry, new THREE.MeshBasicMaterial( {
         color : 0x0044ff,
-        wireframe: true 
+        wireframe: true
     }));
     // scene.add( modelMesh );
 
@@ -83,9 +83,9 @@ function init() {
     terrainGeometry = new THREE.PlaneGeometry( geoSize, geoSize, worldWidth - 1, worldDepth - 1 );
     terrainGeometry.rotateX( - Math.PI / 2 );
 
-    terrainMesh = new THREE.Mesh( terrainGeometry, new THREE.MeshBasicMaterial( { 
+    terrainMesh = new THREE.Mesh( terrainGeometry, new THREE.MeshBasicMaterial( {
         color : 0x0044aa,
-        wireframe: true 
+        wireframe: true
     }));
     scene.add( terrainMesh );
 
@@ -176,7 +176,7 @@ function render() {
 
     needToRender = false;
     var delta = clock.getDelta();
-    
+
     for ( var i = 0, l = terrainGeometry.vertices.length; i < l; i ++ ) {
 
         var w = 15;
