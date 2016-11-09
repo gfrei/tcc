@@ -35,30 +35,44 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <link rel="shortcut icon" href="">
-        <title>Hello Fucking World</title>
+        <title>TCC</title>
     </head>
     <body>
         <div class="app">
+
             <h1>Apache Cordova</h1>
-                <button onclick="localCalculation()">[Calc]</button>
-                <button onclick="sendPing()">[Ping]</button>
-                <button onclick="addSpeed(speedX)">__X__</button>
-                <button onclick="addSpeed(speedY)">__Y__</button>
-                <button onclick="addSpeed(speedZ)">__Z__</button>
-                <button onclick="resetSpeed()">____Stop____</button>
             <div id="deviceready" class="blink">
                 <p class="event listening">Connecting to Device</p>
                 <p class="event received">Device is Ready</p>
             </div>
-                <button onclick="toggleAccelerometer(60)">60 fps</button>
-                <button onclick="toggleAccelerometer(30)">30 fps</button>
-                <button onclick="toggleAccelerometer(10)">10 fps</button>
-                <button onclick="toggleAccelerometer(1)">1 fps</button>
-                <button onclick="toggleAccelerometer(0.2)">0.2 fps</button>
-                <button onclick="toggleAccelerometer(0.1)">0.1 fps</button>
+
+            <form id="connect">
+              IP:<br>
+              <input type="text" name="ip" value="192.168.0.17">
+              <br>
+              Port:<br>
+              <input type="text" name="port" value="8000">
+              <br><br>
+              <input id="connect" type="submit" value="Connect">
+            </form>
+
+            <p id="log">log:</p>
+
+            <button class="btn" onclick="sendPing()">[Ping]</button>
+            <button class="btn" onclick="localCalculation()">[Calc]</button>
+            <button class="btn" onclick="addSpeed(speedX)">X</button>
+            <button class="btn" onclick="addSpeed(speedY)">Y</button>
+            <button class="btn" onclick="addSpeed(speedZ)">Z</button>
+            <button class="btn" onclick="resetSpeed()">Stop</button>
+            <button class="btn" onclick="toggleAccelerometer(60)">60 fps</button>
+            <button class="btn" onclick="toggleAccelerometer(30)">30 fps</button>
+            <button class="btn" onclick="toggleAccelerometer(10)">10 fps</button>
+            <button class="btn" onclick="toggleAccelerometer(1)">1 fps</button>
+
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.js"></script>
         <script type="text/javascript" src="http://cdn.socket.io/socket.io-1.0.3.js"></script>
     </body>
 </html>

@@ -33,7 +33,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
+        // app.receivedEvent('deviceready');
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -66,30 +66,22 @@ var speedZ = {'x':0,'y':0,'z':1};
 // Auxiliar functions
 
 function logInServer(message) {
-    socket.emit('device_print', message)
+    socket.emit('device_print', message);
+    var msg = 'Log: ' + message;
+    $('#log').text(msg);
 }
 
 // Unused
-/*
+
 function validateIPaddress(ipaddress) {
-    if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
+    // if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
+    if (/^192\.168?\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
         return (true)
     }
-    alert("You have entered an invalid IP address!")
+    console.log("You have entered an invalid IP address!")
     return (false)
 }
 
-function connectSocket(ipaddress, port) {
-    if(validateIPaddress(ipaddress)) {
-        if(socket != null) {
-            socket.emit('device_disconnected');
-            socket.disconnect();
-            socket = null;
-        }
-        socket = io('http://' + ipaddress + ':' + port);
-    }
-}
-*/
 
 
 
@@ -166,28 +158,45 @@ function localCalculation() {
 // Socket events
 
 function onServerConnect() {
+    app.receivedEvent('deviceready');
     socket.emit('ready', 'device');
 }
 
 function onServerPing(data) {
-    var t0 = data.t0;
-    var t1 = data.t1;
-    var t2 = Date.now();
-
-    logInServer('Ping: ' + (t2 - t0));
-    // logInServer('Device -> Server: ' + (t1 - t0));
-    // logInServer('Server -> Device: ' + (t2 - t1));
+    var dt = Date.now() - data.t0;
+    logInServer('Ping: ' + dt);
 }
 
 
 
+function connectSocket(ipaddress, port) {
+    if(validateIPaddress(ipaddress)) {
+        if(socket != null) {
+            console.log(socket);
+            // socket.emit('device_disconnected');
+            // socket.disconnect();
+            // console.log(socket);
+        }
+        else{
+            socket = io('http://' + ipaddress + ':' + port);
+
+            socket.on('connect', onServerConnect);
+            socket.on('server_ping', onServerPing);
+            console.log(socket);
+        }
+    }
+}
+
 // Device Ready Event
 
 document.addEventListener('deviceready', function() {
-    socket = io('http://192.168.0.17:' + default_port);
 
-    socket.on('connect', onServerConnect);
-    socket.on('server_ping', onServerPing);
+    $('#connect').submit(function (event) {
+        var ip   = this.ip.value;
+        var port = this.port.value;
 
-    window.addEventListener("batterystatus", emitBatteryStatus, false);
+        connectSocket(ip, port);
+
+        return false;
+    });
 });
