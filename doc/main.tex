@@ -34,7 +34,7 @@
 
 %titulo antigo: Aplicação de técnicas de Lean UX no desenvolvimento de um aplicativo
 \pdfinfo{%
-  /Title    (Comunicação cliente-servidor de baixa latência com Mobile)
+  /Title    (Comunicação cliente-servidor bilateral de baixa latência aplicado a Android)
   /Author   (Guilherme Freire Silva)
   /Subject  (Trabalho de Conclusão de Curso)
   /Keywords (TCC, Lean UX)
@@ -50,7 +50,7 @@
 \thispagestyle{empty}
 \begin{center}
     \vspace*{2.3cm}
-    \textbf{\Large{Comunicação cliente-servidor de baixa latência com Mobile}}\\
+    \textbf{\Large{Comunicação cliente-servidor bilateral de baixa latência aplicado a Android}}\\
 
 
     \vspace*{1.2cm}
@@ -101,26 +101,162 @@
 \addcontentsline{toc}{section}{Referências}
 
 \newpage
+\section{Resumo}
+
+
+\newpage
+\section{Abstract}
+
+
+\newpage
+\section{Introdução}
+
+Dispositivos móveis, como smartphones e tablets, estão cada dia mais presentes. Sua tecnologia se atualiza a cada momento e ainda é muito nova, muitas de suas funcionalidades ainda podem ser bastante exploradas.
+
+O mesmo vale para tecnologias para a internet. O ambiente Web está em constante transformação, APIs \footnote{\emph{Application Programming Interface}, conjunto de rotinas e padrões de programação para acesso a um aplicativo de software ou plataforma baseado na Web} e ferramentas são criadas e renovadas a todo momento e podem ser aplicadas a vários contextos de forma relevante e inovadora.
+
+Com esse contexto em mente, o Projeto apresentado foi concebido para unir essas duas pontas de tecnologias em uma Aplicação Web que se comunica com um dispositivo móvel. O conceito básico é ter um Applicativo de smartphone que se conecte a um servidor e passe a enviar e receber informações. O servidor lança uma página Web que recebe esses dados enviados e execute sua funcionalidade.
+
+O conceito de ``funcionalidade" é propositalmente deixado em aberto pois esse fluxo de dados encapsula uma grande variedade de funcionalidades. É possível, por exemplo, executar um jogo na página Web que utiliza o smartphone como um controle, ou manter um banco de dados no Servidor e fazer buscas utilizando o smartphone. Estes exemplos e outros são aprofundados na seção de Casos de Uso (TODO seção de Casos de Uso).
+
+O Projeto tem como objetivo então abrir e esse canal de comunicação bilateral entre páginas Web e smartphones, além de facilitar o desenvolvimento de aplicações voltadas a essa estrutura.
+
+
+% \newpage
+% \subsection{Motivação}
+
+% Precisa de uma? (TODO)
+
+\newpage
+\subsection{Objetivos}
+
+- Desenvolver um aplicativo para smartphones
+
+- Construir uma comunicação entre o aplicativo e o servidor
+
+- Encontrar uma forma eficiente de comunicação entre ambos
+
+- Desenvolver uma aplicação Web como Caso de Uso
 
 
 
-\section{Motivação}
+\newpage
+\section{Desenvolvimento}
 
-Conhecer o desenvolvimento de um aplicativo para Android,
-Entender como se dá a comunicação Cliente-Servidor,
-Fazer uma transmissão de dados eficiente o aplicativo e o servidor.
-
+Nessa seção, é apresentado o código que implementa o Projeto. O foco está somente na estrutura e algoritmos. Explicações sobre as ferramentas usadas são fornecidas em outras seções (TODO).
 
 
+\subsection{Aplicativo Android}
+
+O aplicativo foi desenvolvido com a proposta de servir como base para o desenvolvimento de aplicativos maiores. Ele possui os elementos básicos definidos na proposta desse Projeto.
+
+Sua interface possui alguns tipos de interação: % TODO verificar se não mudou nada
+
+- Um formulário para fazer a conexão com o servidor, dados IP e porta. Há um feedback visual que indica se ela foi bem sucedida.
+
+- Um campo "Log" que exibe o resultado de algumas interações do usuário, ou mensagens enviadas do servidor.
+
+- Um conjunto de botões que emitem ações pontuais ao servidor, como calcular o Ping \footnote{tempo necessário para uma mensagem ser enviada ao servidor e voltar dele} ou enviar um conjunto de dados.
+
+- Um outro conjunto de botões que ligam ou desligam um fluxo contínuo de mensagens. Essas mensagens emitidas contêm os dados do acelerômetro do aparelho.
+
+Essas funcionalidades implementadas já cobrem muitas interações desejadas no desenvolvimento de qualquer tipo de aplicativo.
 
 
-\section{MAPA GERAL DO QUE TA COM TESENO}
+O aplicativo foi implementado usando o framework Cordova. Ele porta páginas Web para várias plataformas, então seu desenvolvimento é feito em JavaScript, HTML e CSS. Mais detalhes na seção X (TODO).
 
-TODOs:
-> Explicar o ganho de utilizar JS.
-  > Explicar node.js
-> Estrutura Cliente-Servidor
-  > Network Socket > Websocket > Socket.io
+
+
+\subsubsection{Código da Interface}
+A parte visual do aplicativo está no arquivo index.html:
+
+%(TODO MyTest/index.html here)
+
+- A divisão ``deviceready" (TODO linha X) exibe o estado da conexão.
+> Caso o dispositivo não tenha se conectado ainda, ele exibe ``Connect Device".
+> Ao obter uma conexão bem sucessida com o servidor, ele muda para ``Device is Connected".
+
+- O formulário ``connect" (TODO: linha X) faz a conexão do dispositivo com o servidor.
+> Ele possui um campo para o IP e um para a Porta do servidor.
+> Ao apertar o botão ``Connect", ele tenta fazer a conexão.
+
+- O parágrafo ``log" (TODO linha X) exibe dados vindos do servidor.
+
+- Os botões(TODO linha X a Y) executam diversas funções do código de enviar através de eventos para o servidor.
+
+- Os scripts (TODO linha X a Y) importam as bibliotecas cordova, jquery e socket.io, e a parte lógica do aplicativo, encontrado em ``js/index.js".
+
+
+\subsubsection{Código da parte lógica}
+
+A parte lógica do aplicativo está no arquivo index.html:
+
+%(TODO MyTest/index.html here)
+
+
+Para inicializar o aplicativo:
+
+A variável "app" (TODO linha X) é uma classe padrão do Cordova com funções para inicializar o aplicativo. Ele é inicializado na linha X (TODO).
+
+
+
+Para fazer a conexão com o servidor:
+
+Na linha X (TODO), uma função é adicionada ao evento "deviceready" que o Cordova emite quando tudo acaba de ser inicializado. Quando o evento ocorre, a ação do botão "Connect" é alterada para tentar conectar-se ao servidor, através da função "connectSocket".
+
+Essa função connectSocket recebe o IP e Porta vindos do formulário do botão. Se o IP for válido (a função "validateIPaddress" faz essa verificação com expresões regulares), ela fazer uma conexão entre o dispositivo e o servidor definido por esses IP e porta. Se a conexão já está feita, ele a disconecta.
+
+Funções:
+
+
+Nome: log
+Argumentos: message (uma mensagem)
+Execução: Emite um evento "device_print" ao servidor com "message". Exibe "message" na tela.
+
+Nome: validateIPadress
+Argumentos: ipaddress (endereço de IP)
+Execução: retorna se o ipaddress é válido.
+
+Nome: toggleAccelerometer
+Argumentos: period (período da frequência de envios)
+Execução: pega os valores do acelerômetro do smartphone e chama a função
+
+Nome:
+Argumentos:
+Execução:
+
+
+
+\newpage
+\subsection{Servidor}
+
+O servidor é lançado utilizando-se Node.js. O arquivo package.json define seus parâmetros:
+
+%(TODO package.json here)
+
+Ele define principalmente que as dependencias do servidor são 'express' e 'socket.io'.
+
+O código do servidor é o index.js:
+
+%(TODO index.json here)
+
+% TODO express
+
+O servidor emite ao browser a página public/index.html:
+
+%(TODO public/index.hml here)
+
+
+\newpage
+\subsection{Comunicação}
+
+
+
+
+\newpage
+\subsection{Aplicação Web}
+
+
 
 
 
@@ -156,7 +292,6 @@ Este modelo é suficiente para páginas Web, pois o cliente pede páginas estát
 
 Um exemplo de comportamento impossível com essas restrições é dar um feedback instantâneo para o usuário na hora que ele está preenchendo um cadastro em algum site, como informar se o email inserido já foi usado, ou se a senha possui os parâmetros mínimos necessários de segurança.
 
-(TODO falar de Flash?)
 (TODO verificar se) A conexão só dura durante o processo de requisição entre ambos, ela é fechada uma vez que a requisição é satisfeita.
 
 % Apresento Ajax
@@ -193,6 +328,22 @@ Essa técnica já foi descrita acima no exemplo do Chat. Ela consiste em fazer o
 \subsection{Long-Polling}
 
 No Long-Polling, o cliente manda uma requisição e o servidor a mantém aberta durante um determinado período de tempo. Se uma atualização chegar durante esse período, a resposta é enviada ao cliente com esses dados novos. Se o tempo acabar sem que haja mudanças, o servidor envia uma resposta para encerrar a requisição aberta. Essa técnica apresenta melhoras em relação ao Polling, porém, se existe um fluxo alto de atualizações no servidor, ela não oferece nenhuma melhora substancial em relação a ele. Nessa situação aliás, o Long-Polling pode ser pior, pois pode ficar instável em um loop contínuo de Polls imediatos.
+
+
+% https://jfarcand.wordpress.com/2007/05/15/new-adventures-in-comet-polling-long-polling-or-http-streaming-with-ajax-which-one-to-choose/
+% Use long polling when your AJAX application doesn’t need to be updated every second. Why? Because getting server push every second (or few seconds) is mostly doing the same as polling. I would for use use long polling for AJAX applications that get updated every 30 seconds or more. Again I don’t have any performance data (yet!) to prove this blind statement.
+% Use Http streaming when your AJAX application requires frequent updates. To be coherent with myself, it means AJAX application that needs to be updated every few seconds. I would avoid using Http streaming if the server normally push data every 5 minutes as an example. I would instead use long polling as the price of re-opening the connection is probably lower than keeping the connection opened for such a long time, as you are wasting a resource. Again, a blank statement only based on my experience. But stay tuned for performance data associated with each technique😉.
+
+
+% https://tools.ietf.org/id/draft-loreto-http-bidirectional-07.html#timeouts
+
+% 5.5.  Timeouts
+
+% The HTTP long polling mechanism allows the server to respond to a request only when a particular event, status, or timeout has occurred. In order to minimize as much as possible both latency in server-client message delivery and the processing/network resources needed, the long polling request timeout ought to be set to a high value.
+
+% However, the timeout value has to be chosen carefully; indeed, problems can occur if this value is set too high (e.g., the client might receive a 408 Request Timeout answer from the server or a 504 Gateway Timeout answer from a proxy). The default timeout value in a browser is 300 seconds, but most network infrastructures include proxies and servers whose timeout is not that long.
+
+% Several experiments have shown success with timeouts as high as 120 seconds, but generally 30 seconds is a safer value. Therefore vendors of network equipment wishing to be compatible with the HTTP long polling mechanism are advised to implement a timeout substantially greater than 30 seconds (where "substantially" means several times more than the medium network transit time).
 
 
 \subsection{Streaming}
@@ -337,7 +488,7 @@ https://www.websocket.org/echo.html
 \end{small}
 
 
-Essa página executa um código simples. Ela cria um WebSocket conectado à "ws://echo.websocket.org/".
+Essa página executa um código simples. Ela cria um WebSocket conectado à ``ws://echo.websocket.org/".
 
 O evento de conexão (onOpen) ativa uma função que escreve na tela e manda uma string para o outro WebSocket.
 
@@ -474,7 +625,7 @@ Em conclusão, WebSocket é a solução ideal para problemas apresentados anteri
 Mas existe um problema nesse meio de desenvolvimento Web, que é o fato de que a todo momento a infraestrutura é alterada. Novos protocolos são criados, outros são atualizados, antigos deixam de funcionar corretamente. Esse é um problema inerente ao meio e que afeta a todos.
 
 % https://pt.wikipedia.org/wiki/SPDY
-Para ilustrar esse fato, vamos tomar como exemplo o protocolo SPDY (pronunciado "speedy"), desenvolvido principalmente pela Google. (TODO rodapé: Ele não é um protocolo padrão, porém é bastante promissor e é está sendo utilizado para o desenvolvimento do protocolo HTTP 2.0)
+Para ilustrar esse fato, vamos tomar como exemplo o protocolo SPDY (pronunciado ``speedy"), desenvolvido principalmente pela Google. (TODO rodapé: Ele não é um protocolo padrão, porém é bastante promissor e é está sendo utilizado para o desenvolvimento do protocolo HTTP 2.0)
 
 Em linhas gerais, esse protocolo busca velocidade e se baseia no fato de que, se uma conexão é estabelecida com o servidor e o cliente começa a enviar muitas requisições HTTP, essas requisições vão incluir informações repetidas, comuns àquela sessão. Ele define então que, ao invés de enviar essas informações desnecessárias repetidamente durante a sessão, o servidor passa a salvar em um dicionário os usuários conectados e utilizar essas informações salvas. Por conta disso, fazer requisições passa a ser mais rápido e consumir menos recursos. (TODO rodapé: note a semelhança com WebSockets)
 
@@ -602,36 +753,6 @@ Socket.io é a principal ferramenta usada para fazer esse Projeto funcionar.
 
 \newpage
 
-
-\section{Implementação}
-
-Nessa seção, é apresentado o código que implementa o Projeto. O foco está somente na estrutura e algoritmos. Explicações sobre as ferramentas usadas são fornecidas em outras seções (TODO).
-
-\subsection{Servidor}
-
-O servidor é lançado utilizando-se Node.js. O arquivo package.json define seus parâmetros:
-
-%(TODO package.json here)
-
-Ele define principalmente que as dependencias do servidor são 'express' e 'socket.io'.
-
-O código do servidor é o index.js:
-
-%(TODO index.json here)
-
-% TODO express
-
-O servidor emite ao browser a página public/index.html:
-
-%(TODO public/index.hml here)
-
-
-\subsection{Cliente Android}
-
-
-
-
-
 \section{Device}
 
 
@@ -661,11 +782,6 @@ Estruturação de um código Web (JavaScript, CSS, HTML5)
 Server:
   Usa socket.io para fazer a comunicação com os clients.
   > Usa node.js para ~something~
-
-
-
-
-
 
 
 
@@ -702,8 +818,11 @@ Browser:
 
 \section{Parte Subjetiva}
 
-Parte Subjetiva:
 
+\subsection{Desafios e frustrações}
+\subsection{A contribuição do curso de Computação}
+\subsection{Próximo Passos}
+\subsection{Agradecimentos}
 
 
 
@@ -721,23 +840,41 @@ Sem uma montagem muito bem executada, o dispositivo ficaria muito frágil;
 É possível conseguir muitas leituras de sensores utilizando um smartphone.
 
 
-  Com os argumentos apresentados, a decisão foi criar um aplicativo para Android com o mesmo propósito. Todos os argumentos apresentados são resolvidos com essa solução. A implementação é extremamente mais simples; os sensores são muito mais precisos; a estrutura física já está pronta e é um objeto que já está presente em todo o mundo (o produto final atinge grande parte da população); e, por fim, é muito viável a adição ou remoção de funcionalidades, além de muito mais suporte para a plataforma.
+Com os argumentos apresentados, a decisão foi criar um aplicativo para Android com o mesmo propósito. Todos os argumentos apresentados são resolvidos com essa solução. A implementação é extremamente mais simples; os sensores são muito mais precisos; a estrutura física já está pronta e é um objeto que já está presente em todo o mundo (o produto final atinge grande parte da população); e, por fim, é muito viável a adição ou remoção de funcionalidades, além de muito mais suporte para a plataforma.
 
 
-  Uma vez que a decisão de utilizar um smartphone, foi necessário saber como implementar um aplicativo que tenha acesso aos sensores.
-  A primeira ideia foi utilizar serviço MIT App Inventor.
+Uma vez que a decisão de utilizar um smartphone, foi necessário saber como implementar um aplicativo que tenha acesso aos sensores.
+A primeira ideia foi utilizar serviço MIT App Inventor.
 
 
-MIT App Inventor:
-  É um serviço disponibilizado pelo MIT para a criação de aplicativos. Ele é extremamente didático e inclusivo, sua interface não é dada por linhas de código, e sim por blocos lógicos que se encaixam e formam um algoritmo (na prática, é bastante ruim não poder escrever linhas de código livremente). Sua API possui interface para o uso de sensores, além de outras funcionalidades que não foram exploradas neste TCC, como acesso à ferramenta de reconhecimento de voz e ferramentas sociais, como email, mensagem e Twitter. O serviço é bom, porém possui várias restrições, então é difícil de ser usado.
+
+
+
+
+
+\section{Tecnologias utilizadas}
+
+\subsection{Node.js}
+
+
+
+
+
+\section{Tecnologias citadas}
+
+
+
+
+
+\subsection{MIT App Inventor}
+
+É um serviço disponibilizado pelo MIT para a criação de aplicativos. Ele é extremamente didático e inclusivo, sua interface não é dada por linhas de código, e sim por blocos lógicos que se encaixam e formam um algoritmo (na prática, é bastante ruim não poder escrever linhas de código livremente). Sua API possui interface para o uso de sensores, além de outras funcionalidades que não foram exploradas neste TCC, como acesso à ferramenta de reconhecimento de voz e ferramentas sociais, como email, mensagem e Twitter. O serviço é bom, porém possui várias restrições, então é difícil de ser usado.
 
 
 Com certa dificuldade um primeiro aplicativo de teste foi feito, para pegar valores do giroscópio. O próximo passo seria criar um servidor e estabelecer uma conexão entre ambos, porém as opções de conectividade do App Inventor também são muito restritas, então, dada a dificuldade prevista, eu achei melhor deixar essa plataforma de lado no momento e procurar outras alternativas para a criação de um app.
 
 
-A ferramenta escolhida foi o Kivy.
-
-\section{Kivy}
+\subsection{Kivy}
 
 É um framework Open Source de Python. Seu objetivo é o desenvolvimento rápido de aplicações multiplataforma que fazem o uso de interfaces inovadoras, como telas com Multitouch e sensores de movimento. Sua API, por exemplo, lida com eventos de mouse, teclado e toques de tela. Ele também possui um foco na criação de apps com NUI (Natural User Interface).
   NUI é uma metodologia de interface cuja proposta é ser invisível ao usuário, e apresentar uma experiência natural e intuitiva. Seu principal foco é evitar grandes barreiras durante o aprendizado. Através de decisões de design, o usuário tem um entendimento do software sem grandes dificuldades, à medida que a complexidade da interação aumenta.
@@ -746,19 +883,8 @@ A ferramenta escolhida foi o Kivy.
 
 
 
+\subsection{Cordova}
 
-
-
-
-
-
-
-
-
-
-\section{Cordova}
-
-Cordova:
 O Apache Cordova é um framework open-source para desenvolvimento mobile. Ele permite o uso de tecnologias Web, como HTML5, CSS3 e JavaScript. Seu desenvolvimento é multiplataforma, então há uma API de alto nível para acessar módulos desejados, como sensores, arquivos e rede. Isso implica em uma interface abstrata para o uso das features, de forma que código desenvolvido será executado em todas as plataformas oferecidas e o desenvolvedor não precisa se preocupar com os detalhes de cada uma na hora da implementação.
 
 
@@ -771,13 +897,18 @@ Há um conjunto principal de Plugins, chamado de Core, que é mantido pelo próp
 Há também Plugins desenvolvidos por terceiros (em geral pela própria comunidade ativa) que trazem relações com outras funcionalidades, que podem ser exclusivas de uma plataforma. Enquanto no Core há apenas umas poucas dezenas, a lista de Plugins criada pela comunidade oferece centenas com as mais diversas funcionalidades, como um para compras dentro do App e um para enviar notificações para dispositivos vestíveis (Smartwatches, por exemplo). A criação de um Plugin é simples e incentivada, no site do Cordova há um tutorial.
 
 
-  O método de desenvolvimento descrito até agora, focado em várias plataformas, é um dentre dois possíveis Workflows disponíveis no Cordova e seu nome é “Cross-platform” (CLI). Ele deve ser usado se o aplicativo desenvolvido pretende abranger a maior variedade de Sistemas Operacionais mobile, com pouca ou nenhuma ênfase em um desenvolvimento em uma plataforma específica.
-  O segundo Workflow é chamado “Platform-centered”, e deve ser usado se o projeto é focado para uma única plataforma e se pretende modificá-la em baixo nível.
+O método de desenvolvimento descrito até agora, focado em várias plataformas, é um dentre dois possíveis Workflows disponíveis no Cordova e seu nome é “Cross-platform” (CLI). Ele deve ser usado se o aplicativo desenvolvido pretende abranger a maior variedade de Sistemas Operacionais mobile, com pouca ou nenhuma ênfase em um desenvolvimento em uma plataforma específica.
+O segundo Workflow é chamado “Platform-centered”, e deve ser usado se o projeto é focado para uma única plataforma e se pretende modificá-la em baixo nível.
 
 
-  A arquitetura interna está descrita no diagrama:
+A arquitetura interna está descrita no diagrama:
 
 % TODO adicionar imagem
+
+
+
+
+
 
 
 % TODO Apendice: falar do SPDY (protocolo tipo http)

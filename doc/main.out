@@ -1,21 +1,32 @@
 \BOOKMARK [1][]{section*.3}{Refer\352ncias}{}% 1
-\BOOKMARK [1][]{section.1}{Motiva\347\343o}{}% 2
-\BOOKMARK [1][]{section.2}{MAPA GERAL DO QUE TA COM TESENO}{}% 3
-\BOOKMARK [1][]{section.3}{Comunica\347\343o Web e Aplica\347\365es Web}{}% 4
-\BOOKMARK [1][]{section.4}{Necessidade de Comunica\347\343o Bilateral}{}% 5
-\BOOKMARK [2][]{subsection.4.1}{Polling}{section.4}% 6
-\BOOKMARK [2][]{subsection.4.2}{Long-Polling}{section.4}% 7
-\BOOKMARK [2][]{subsection.4.3}{Streaming}{section.4}% 8
-\BOOKMARK [1][]{section.5}{Sockets}{}% 9
-\BOOKMARK [1][]{section.6}{Websockets}{}% 10
-\BOOKMARK [2][]{subsection.6.1}{Teste de efici\352ncia de Websockets}{section.6}% 11
-\BOOKMARK [1][]{section.7}{Socket.io}{}% 12
-\BOOKMARK [1][]{section.8}{Implementa\347\343o}{}% 13
-\BOOKMARK [2][]{subsection.8.1}{Servidor}{section.8}% 14
-\BOOKMARK [1][]{section.9}{Device}{}% 15
-\BOOKMARK [1][]{section.10}{Server}{}% 16
-\BOOKMARK [1][]{section.11}{Browser}{}% 17
-\BOOKMARK [1][]{section.12}{Parte Subjetiva}{}% 18
-\BOOKMARK [1][]{section.13}{Kivy}{}% 19
-\BOOKMARK [1][]{section.14}{Cordova}{}% 20
-\BOOKMARK [1][]{section.15}{Bibliografia}{}% 21
+\BOOKMARK [1][]{section.1}{Resumo}{}% 2
+\BOOKMARK [1][]{section.2}{Abstract}{}% 3
+\BOOKMARK [1][]{section.3}{Introdu\347\343o}{}% 4
+\BOOKMARK [2][]{subsection.3.1}{Objetivos}{section.3}% 5
+\BOOKMARK [1][]{section.4}{Desenvolvimento}{}% 6
+\BOOKMARK [2][]{subsection.4.1}{Aplicativo Android}{section.4}% 7
+\BOOKMARK [2][]{subsection.4.2}{Servidor}{section.4}% 8
+\BOOKMARK [2][]{subsection.4.3}{Comunica\347\343o}{section.4}% 9
+\BOOKMARK [2][]{subsection.4.4}{Aplica\347\343o Web}{section.4}% 10
+\BOOKMARK [1][]{section.5}{Comunica\347\343o Web e Aplica\347\365es Web}{}% 11
+\BOOKMARK [1][]{section.6}{Necessidade de Comunica\347\343o Bilateral}{}% 12
+\BOOKMARK [2][]{subsection.6.1}{Polling}{section.6}% 13
+\BOOKMARK [2][]{subsection.6.2}{Long-Polling}{section.6}% 14
+\BOOKMARK [2][]{subsection.6.3}{Streaming}{section.6}% 15
+\BOOKMARK [1][]{section.7}{Sockets}{}% 16
+\BOOKMARK [1][]{section.8}{Websockets}{}% 17
+\BOOKMARK [2][]{subsection.8.1}{Teste de efici\352ncia de Websockets}{section.8}% 18
+\BOOKMARK [1][]{section.9}{Socket.io}{}% 19
+\BOOKMARK [1][]{section.10}{Device}{}% 20
+\BOOKMARK [1][]{section.11}{Server}{}% 21
+\BOOKMARK [1][]{section.12}{Browser}{}% 22
+\BOOKMARK [1][]{section.13}{Parte Subjetiva}{}% 23
+\BOOKMARK [2][]{subsection.13.1}{Desafios e frustra\347\365es}{section.13}% 24
+\BOOKMARK [2][]{subsection.13.2}{A contribui\347\343o do curso de Computa\347\343o}{section.13}% 25
+\BOOKMARK [2][]{subsection.13.3}{Pr\363ximo Passos}{section.13}% 26
+\BOOKMARK [2][]{subsection.13.4}{Agradecimentos}{section.13}% 27
+\BOOKMARK [1][]{section.14}{Tecnologias citadas}{}% 28
+\BOOKMARK [2][]{subsection.14.1}{MIT App Inventor}{section.14}% 29
+\BOOKMARK [2][]{subsection.14.2}{Kivy}{section.14}% 30
+\BOOKMARK [2][]{subsection.14.3}{Cordova}{section.14}% 31
+\BOOKMARK [1][]{section.15}{Bibliografia}{}% 32

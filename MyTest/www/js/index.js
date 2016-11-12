@@ -65,23 +65,20 @@ var speedZ = {'x':0,'y':0,'z':1};
 
 // Auxiliar functions
 
-function logInServer(message) {
+function log(message) {
     socket.emit('device_print', message);
     var msg = 'Log: ' + message;
     $('#log').text(msg);
 }
-
-// Unused
 
 function validateIPaddress(ipaddress) {
     // if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
     if (/^192\.168?\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
         return (true)
     }
-    console.log("You have entered an invalid IP address!")
+    log("You have entered an invalid IP address!")
     return (false)
 }
-
 
 
 
@@ -119,7 +116,7 @@ function sendAcceration(acceleration) {
 }
 
 function sendAccError() {
-    logInServer('Accelerometer error.');
+    log('Accelerometer error.');
 }
 
 function emitBatteryStatus(status) {
@@ -150,7 +147,7 @@ function localCalculation() {
 
     var t1 = Date.now();
     socket.emit('request_calculation');
-    logInServer('Finished device calculation in ' + (t1 - t0));
+    log('Finished device calculation in ' + (t1 - t0));
 }
 
 
@@ -164,25 +161,22 @@ function onServerConnect() {
 
 function onServerPing(data) {
     var dt = Date.now() - data.t0;
-    logInServer('Ping: ' + dt);
+    log('Ping: ' + dt);
 }
 
 
 
 function connectSocket(ipaddress, port) {
     if(validateIPaddress(ipaddress)) {
-        if(socket != null) {
-            console.log(socket);
-            // socket.emit('device_disconnected');
-            // socket.disconnect();
-            // console.log(socket);
+        if(socket !== null && socket !== undefined) {
+            socket.emit('device_disconnected');
+            socket.disconnect();
         }
         else{
             socket = io('http://' + ipaddress + ':' + port);
 
             socket.on('connect', onServerConnect);
             socket.on('server_ping', onServerPing);
-            console.log(socket);
         }
     }
 }
