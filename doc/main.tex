@@ -117,7 +117,7 @@ O mesmo vale para tecnologias para a internet. O ambiente Web está em constante
 
 Com esse contexto em mente, o Projeto apresentado foi concebido para unir essas duas pontas de tecnologias em uma Aplicação Web que se comunica com um dispositivo móvel. O conceito básico é ter um Applicativo de smartphone que se conecte a um servidor e passe a enviar e receber informações. O servidor lança uma página Web que recebe esses dados enviados e execute sua funcionalidade.
 
-O conceito de ``funcionalidade" é propositalmente deixado em aberto pois esse fluxo de dados encapsula uma grande variedade de funcionalidades. É possível, por exemplo, executar um jogo na página Web que utiliza o smartphone como um controle, ou manter um banco de dados no Servidor e fazer buscas utilizando o smartphone. Estes exemplos e outros são aprofundados na seção de Casos de Uso (TODO seção de Casos de Uso).
+O conceito de “funcionalidade" é propositalmente deixado em aberto pois esse fluxo de dados encapsula uma grande variedade de funcionalidades. É possível, por exemplo, executar um jogo na página Web que utiliza o smartphone como um controle, ou manter um banco de dados no Servidor e fazer buscas utilizando o smartphone. Estes exemplos e outros são aprofundados na seção de Casos de Uso (TODO seção de Casos de Uso).
 
 O Projeto tem como objetivo então abrir e esse canal de comunicação bilateral entre páginas Web e smartphones, além de facilitar o desenvolvimento de aplicações voltadas a essa estrutura.
 
@@ -130,41 +130,141 @@ O Projeto tem como objetivo então abrir e esse canal de comunicação bilateral
 \newpage
 \subsection{Objetivos}
 
-- Desenvolver um aplicativo para smartphones
+- Desenvolver um aplicativo para smartphones.
 
-- Construir uma comunicação entre o aplicativo e o servidor
+- Construir uma comunicação entre o aplicativo e o servidor.
 
-- Encontrar uma forma eficiente de comunicação entre ambos
+- Encontrar uma forma eficiente de comunicação entre ambos.
 
-- Desenvolver uma aplicação Web como Caso de Uso
+- Desenvolver uma aplicação Web como Caso de Uso.
 
 
 
 \newpage
 \section{Desenvolvimento}
 
-Nessa seção, é apresentado o código que implementa o Projeto. O foco está somente na estrutura e algoritmos. Explicações sobre as ferramentas usadas são fornecidas em outras seções (TODO).
+Nessa seção, é apresentado o que implementa o Projeto. O código será exibido e explicado, além das tecnologias necessárias.
+
+
+\subsection{Comunicação}
+
+A comunicação é a parte mais importante deste Projeto. O modelo cliente-servidor(TODO ref) foi usado, mas foi necessário levar alguns pontos em consideração. O cliente de smartphone e o cliente Web precisam se comunicar com o servidor da melhor forma possível. O protocolo de comunicação é o fator que mais pode limitar as possibilidades previstas. Para não haver problemas, a comunicação precisa de:
+
+- Baixa latência. No caso de o cliente Web executar um jogo, o tempo entre um comando enviado do smartphone e a reação da página precisa ser o menor possível. Caso contrário a experiência é danificada e pode até ser impossibilitada, se o jogo for construído com base em respostas rápidas.
+
+- Cabeçalho mínimo de mensagens. Se o fluxo de mensagens for alto, esse cabeçalho pode consumir muita banda da conexão, além de exigir muitos recursos, tanto do servidor como dos clientes. É necessário que ele possua a menor quantidade de informações desnecessárias. Caso a mensagem tenha muito conteúdo, ele fará pouca diferença, mas se ela for pequena, como um texto ou um conjunto de valores, o cabeçalho representa um aumento significativo no tamanho total, podendo ser até maior do que o próprio conteúdo.
+
+- Conexão bilateral. Informações podem se originar de qualquer um dos clientes ou do servidor, então é necessário que o processo em questão possa enviar as informações a qualquer momento. No caso de um cliente precisar ser atualizado caso haja dados novos, é inviável que precise consultar o servidor a todo momento.
+
+- Permitir multiplas conexões simultâneas. Não é necessário, mas permite uma liberdade ainda maior. É previsto somente que o servidor se conecte a um cliente Web e de smartphone, mas, se o servidor aceitar a conexão com vários clientes do mesmo tipo, o desenvolvimento deles pode tirar proveito disso. Um smartphone pode enviar e receber informações de outros, como em um Chat, por exemplo.
+
+Com esses requerimentos em vista, o tecnologia usada foi o Framework de JavaScript Socket.io, que implementa o protocolo WebSocket.
+
+
+\subsubsection{Protocolo WebSocket}
+
+% https://www.websocket.org/aboutwebsocket.html
+
+WebSocket é um protocolo que lida com Sockets (TODO ref) de uma conexão que foi criado para permitir a comunicação bilateral entre cliente e servidor. Ele permite mais liberdade para criar novos protocolos e maneiras de se transferir dados.
+
+Sua interface é bastante simples, seu objetivo é o envio e recebimento de mensagens entre o cliente e o servidor. Para o protocolo, não existe essa diferenciação entre os dois, ambos são apenas dois processos conectados. Essa hierarquia cliente-servidor deixa de existir e não há mais uma separação de funções entre ambos. A comunicação é dada por envio de mensagens e ocorrência de eventos. Esses processos podem enviar mensagens a qualquer momento e estão ouvindo um ao outro.
+
+O protocolo foi pensado para funcionar bem com a infraestrutura Web já existente. Como parte desse paradigma, sua especificação determina que uma conexão é estabelecida inicialmente com o protocolo HTTP (TODO ref), garantindo retrocompatibilidade.
+
+A conexão é feita da seguinte forma. Após inciada a conexão HTTP, o cliente envia uma requisição ao servidor indicando que deseja trocar de protocolos, de HTTP para WebSocket. Se o servidor entende esse protocolo, ele envia uma resposta para permitir a troca. Nesse momento a conexão HTTP é interrompida e a conexão WebSocket toma o seu lugar. Esse processo é chamado de {WebSocket Handshake} (TODO form).
+
+A estrutura da mensagem em WebSocket é mínima. O corpo da mensagem, os dados a serem enviados, só possui dois formatos, texto ou binário. O cabeçalho contém um identificador de tipo do formato, que tem um campo para o tamanho da mensagem e nada mais. A mensagem completa é só o conteúdo mais seu tamanho. Como a conexão não muda em momento algum, todas as informações contidas no cabeçalho de requisição e resposta HTTP são invariantes e, portanto, não precisam ser reenviadas.
+
+Um dos processos conectados, em um momento arbitrário, envia uma mensagem ao outro, talvez porque dados tenham sido atualizados ou o usuário tenha feito alguma ação em específico. Uma vez que a mensagem é enviada, esse processo volta ao que estava fazendo, sem a necessidade de esperar uma resposta (com a exceção talvez de qualquer confirmação sobre a entrega). Esse comportamento é chamado de assíncrono, pois não necessita de uma resposta para continuar com sua execução.
+
+O outro processo vê a chegada dessa nova mensagem como um evento. Quando esse evento acontece, ele executa um comportamento específico (\emph{callback}) com os dados recebidos, como alteração de informações exibidos ou um cálculo com os valores novos. Por isso é dito que Websocket é orientado a eventos.
+
+%(TODO bulletpoints)
+Existem quatro tipos de eventos e seus \emph{callbacks} são definidos na criação do WebSocket. Esses eventos são:
+
+- \emph{onopen}: ocorre quando a conexão é feita;
+
+- \emph{onclose}: ocorre quando a conexão é fechada;
+
+- \emph{onmessage}: ocorre quando uma mensagem do outro WebSocket chega;
+
+- \emph{onerror}: ocorre se há algum erro na conexão.
+
+% (TODO linkar exemplo)
+
+\subsubsection{Socket.io}
+
+Socket.io é a API de WebSocket para JavaScript utilizada. Ele cuida de todos os detalhes de funcionamento do protocolo internamente, deixando uma interface simples ao usuário.
+
+Para uma conexão ser estabelecida, tanto o cliente quanto o servidor precisam estar executando Socket.io. Sua implementação tenta primeiramente fazer a conexão usando WebSocket, mas se o servidor não suporta esse protocolo, ele recua (faz \emph{fallback}) para outras tecnologias, como \emph{AJAX long-polling}, \emph{AJAX multipart streaming}, \emph{IFrame}, \emph{JSONP polling}, entre outros (todos utilizando a mesma interface). Esse \emph{fallback} abrange uma quantidade muito maior de servidores, permitindo um uso não tão restrito dessa API.
+
+Além da implementação básica do protocolo WebSocket, ele também adiciona outras funcionalidades muito importantes para o desenvolvimento de uma aplicação maior e mais robusta. As que foram utilizadas no Projeto foram:
+
+
+- É possível conectar múltiplos sockets em uma mesma porta. Internamente, ele faz uma multiplexação das várias conexões abertas em uma mesma porta, mas os processos entendem que tem um socket dedicado a eles. Utilizando WebSockets, cada socket precisa de uma porta exclusiva para fazer a conexão.
+
+A possibilidade de vários sockets em uma mesma aplicação permite uma modularização muito maior, pois não é necessário que um módulo saiba se tem uma conexão dedicada ou se está compartilhando com mais dezenas de outros sockets.
+
+- Ele permite a criação arbritrária de eventos. Com WebSocket, o desenvolvedor fica preso aos quatro eventos pré definidos: onopen, onclose, onmessage e onerror. Internamente, os quatro são eventos de mensagem, disparados em momentos e situações específicas. O que o Socket.io faz é dar a liberdade de definir quaisquer eventos desejados.
+
+Essa criação de eventos funciona assim: na hora de enviar uma mensagem, o processo emissor define também o nome do evento que está sendo enviado. O processo receptor define o evento que vai ouvir e a subrotina que vai ser executada na ocorrência desse evento.
+
+Um ponto negativo dessa definição de eventos é que o cabeçalho da mensagem é um pouco maior, pois o de WebSockets é mínimo ao extremo, mas esse tamanho ainda é ínfimo e o overhead causado é desprezível.
+
+Essas funcionalidades aumentam o grau de liberdade e permitem um escopo maior na hora de criar uma aplicação robusta. %Imagine um sistema grande, onde dados são recebidos de múltiplas fontes, cálculos são feitos sobre eles, e o resultado pode ativar vários comportamentos de um outro processo. Algo assim exigiria um código complexo com WebSockets, mas com Socket.io é simples e direto.
+
+Exemplos de uso de Socket.io estão presentes no próprio código do servidor e dos clientes implementados.
+
 
 
 \subsection{Aplicativo Android}
 
-O aplicativo foi desenvolvido com a proposta de servir como base para o desenvolvimento de aplicativos maiores. Ele possui os elementos básicos definidos na proposta desse Projeto.
+O aplicativo foi desenvolvido com a proposta de servir como base para o desenvolvimento de aplicativos maiores. Ele possui os elementos básicos definidos na proposta desse Projeto. Ele foi implementado usando o \emph{framework} Cordova.
 
-Sua interface possui alguns tipos de interação: % TODO verificar se não mudou nada
+\subsubsection{Cordova}
+
+O Apache Cordova é um \emph{framework} \emph{open-source} para a criação de aplicativos para \emph{mobile}. Seu desenvolvimento é dado com o uso de tecnologias Web, como HTML5, CSS3 e JavaScript.
+
+Ele é multiplataforma, permite o desenvolvimento para sistemas como Android, iOS ou navegadores. Por tal motivo, oferece uma API de alto nível para acessar os módulos desejados tais como de sensores, arquivos e rede. A interface para o uso dessas funcionalidades é abstrata, de forma que código desenvolvido é executável em todas as plataformas oferecidas e o desenvolvedor não precisa se preocupar com os detalhes de cada uma na hora da implementação.
+
+O aplicativo implementado é uma página Web. Há um arquivo principal “index.html" que referencia os recursos necessários, como CSS, JavaScript, imagens e arquivos de mídia. A parte lógica é feita em JavaScript, e a renderização em HTML5 e CSS3. Para ser portado para uma plataforma específica, o HTML é enviado para a classe \emph{“Wrapper”} dessa plataforma, na qual estão definidos os detalhes de implementação. Essa classe também tem incorporada um browser nativo, o \emph{WebView}, que executará o programa Web dentro do dispositivo.
+
+A comunicação entre o aplicativo e os componentes nativos de cada plataforma é dada a partir de Plugins instalados.
+
+Cada Plugin é uma biblioteca adicional que permite ao \emph{WebView} se comunicar com a plataforma nativa na qual está rodando. Eles provêm acesso a funcionalidades que normalmente não estão disponíveis em aplicativos Web. Essas ferramentas são disponibilizadas para o desenvolvedor através de uma expansão da API inicial, que serve de interface e toma para si os detalhes da implementação em cada plataforma, simplificando o uso para o desenvolvedor.
+
+Há um conjunto principal de Plugins, chamado de \emph{Core}, que é mantido pelo próprio Cordova. Nele estão contidos os que acessam as principais funcionalidades de um dispositivo mobile, como acesso ao acelerômetro, câmera, bateria e geolocalização.
+
+Há também Plugins desenvolvidos por terceiros (em geral pela própria comunidade) que trazem relações com outras funcionalidades, talvez exclusivas de uma plataforma. Enquanto no \emph{Core} há apenas umas poucas dezenas, a lista de Plugins criada pela comunidade oferece centenas com as mais diversas funcionalidades, como um para compras dentro do App e um para enviar notificações para dispositivos vestíveis (Smartwatches, por exemplo). A criação de um Plugin é simples e incentivada, no site do Cordova há um tutorial.
+
+O método de desenvolvimento descrito até agora, focado em várias plataformas, é um dentre dois possíveis \emph{Workflows} disponíveis no Cordova e seu nome é \emph{“Cross-platform”} (CLI). Ele deve ser usado se o aplicativo desenvolvido pretende abranger a maior variedade de Sistemas Operacionais mobile, com pouca ou nenhuma ênfase em um desenvolvimento em uma plataforma específica.
+
+O segundo \emph{Workflow} é chamado \emph{“Platform-centered”}, e deve ser usado se o projeto é focado para uma única plataforma e se pretende modificá-la em baixo nível.
+
+A arquitetura interna está descrita no diagrama:
+
+% TODO adicionar imagem
+
+
+\subsubsection{Implementação}
+
+O aplicativo implementado possui o básico de interação, ele conecta-se com o servidor, exibe informações recebidas na tela, utiliza alguns botões para mandar informações e faz o uso do acelerômetro do dispositivo.
+
+Essa é uma imagem de sua interface:
+
+% TODO SS do aplicativo
+
+As interações da interace são: % TODO verificar se não mudou nada
 
 - Um formulário para fazer a conexão com o servidor, dados IP e porta. Há um feedback visual que indica se ela foi bem sucedida.
 
-- Um campo "Log" que exibe o resultado de algumas interações do usuário, ou mensagens enviadas do servidor.
+- Um campo “Log" que exibe o resultado de algumas interações do usuário, ou mensagens enviadas do servidor.
 
-- Um conjunto de botões que emitem ações pontuais ao servidor, como calcular o Ping \footnote{tempo necessário para uma mensagem ser enviada ao servidor e voltar dele} ou enviar um conjunto de dados.
+- Um conjunto de botões que emitem ações pontuais ao servidor, como calcular o \emph{Ping} \footnote{tempo necessário para uma mensagem ser enviada ao servidor e voltar dele} ou enviar um conjunto de dados.
 
 - Um outro conjunto de botões que ligam ou desligam um fluxo contínuo de mensagens. Essas mensagens emitidas contêm os dados do acelerômetro do aparelho.
 
 Essas funcionalidades implementadas já cobrem muitas interações desejadas no desenvolvimento de qualquer tipo de aplicativo.
-
-
-O aplicativo foi implementado usando o framework Cordova. Ele porta páginas Web para várias plataformas, então seu desenvolvimento é feito em JavaScript, HTML e CSS. Mais detalhes na seção X (TODO).
-
 
 
 \subsubsection{Código da Interface}
@@ -172,19 +272,25 @@ A parte visual do aplicativo está no arquivo index.html:
 
 %(TODO MyTest/index.html here)
 
-- A divisão ``deviceready" (TODO linha X) exibe o estado da conexão.
-> Caso o dispositivo não tenha se conectado ainda, ele exibe ``Connect Device".
-> Ao obter uma conexão bem sucessida com o servidor, ele muda para ``Device is Connected".
+- A divisão “deviceready" (TODO linha X) exibe o estado da conexão.
 
-- O formulário ``connect" (TODO: linha X) faz a conexão do dispositivo com o servidor.
+> Caso o dispositivo não tenha se conectado ainda, ele exibe “Connect Device".
+
+> Ao obter uma conexão bem sucessida com o servidor, ele muda para “Device is Connected".
+
+
+- O formulário “connect" (TODO: linha X) faz a conexão do dispositivo com o servidor.
+
 > Ele possui um campo para o IP e um para a Porta do servidor.
-> Ao apertar o botão ``Connect", ele tenta fazer a conexão.
 
-- O parágrafo ``log" (TODO linha X) exibe dados vindos do servidor.
+> Ao apertar o botão “Connect", ele tenta fazer a conexão.
+
+
+- O parágrafo “log" (TODO linha X) exibe dados vindos do servidor.
 
 - Os botões(TODO linha X a Y) executam diversas funções do código de enviar através de eventos para o servidor.
 
-- Os scripts (TODO linha X a Y) importam as bibliotecas cordova, jquery e socket.io, e a parte lógica do aplicativo, encontrado em ``js/index.js".
+- Os scripts (TODO linha X a Y) importam as bibliotecas cordova, jquery e socket.io, e a parte lógica do aplicativo, encontrado em “js/index.js".
 
 
 \subsubsection{Código da parte lógica}
@@ -196,35 +302,30 @@ A parte lógica do aplicativo está no arquivo index.html:
 
 Para inicializar o aplicativo:
 
-A variável "app" (TODO linha X) é uma classe padrão do Cordova com funções para inicializar o aplicativo. Ele é inicializado na linha X (TODO).
-
+A variável “app" (TODO linha X) é uma classe padrão do Cordova com funções para inicializar o aplicativo. Ele é inicializado na linha X (TODO).
 
 
 Para fazer a conexão com o servidor:
 
-Na linha X (TODO), uma função é adicionada ao evento "deviceready" que o Cordova emite quando tudo acaba de ser inicializado. Quando o evento ocorre, a ação do botão "Connect" é alterada para tentar conectar-se ao servidor, através da função "connectSocket".
+Na linha X (TODO), uma função é adicionada ao evento “deviceready" que o Cordova emite quando tudo acaba de ser inicializado. Quando o evento ocorre, a ação do botão “Connect" é alterada para tentar conectar-se ao servidor, através da função “connectSocket".
 
-Essa função connectSocket recebe o IP e Porta vindos do formulário do botão. Se o IP for válido (a função "validateIPaddress" faz essa verificação com expresões regulares), ela fazer uma conexão entre o dispositivo e o servidor definido por esses IP e porta. Se a conexão já está feita, ele a disconecta.
-
-Funções:
+Essa função connectSocket recebe o IP e Porta vindos do formulário do botão. Se o IP for válido (a função “validateIPaddress" faz essa verificação com expresões regulares), ela fazer uma conexão entre o dispositivo e o servidor definido por esses IP e porta. Se a conexão já está feita, ele a disconecta.
 
 
-Nome: log
-Argumentos: message (uma mensagem)
-Execução: Emite um evento "device_print" ao servidor com "message". Exibe "message" na tela.
+Eventos que o servidor ativa:
 
-Nome: validateIPadress
-Argumentos: ipaddress (endereço de IP)
-Execução: retorna se o ipaddress é válido.
+Na inicialização do Socket, dois eventos são definidos, “connect", que chama a função “onServerConnect" e “server\_ping", que chama “onServerPing".
 
-Nome: toggleAccelerometer
-Argumentos: period (período da frequência de envios)
-Execução: pega os valores do acelerômetro do smartphone e chama a função
+“onServerConnect" emite ao socket um evento “ready" para o servidor para informar o seu tipo e atualiza informações exibidas.
 
-Nome:
-Argumentos:
-Execução:
+“onServerPing" calcula o ping que foi enviado.
 
+
+Eventos enviados ao servidor:
+
+As funções “addSpeed", “resetSpeed", “sendAcceleration", “sendPing" e “localCalculation" enviam mensagens ao servidor com dados obtidos do input do usuário ou leitura do smartphone.
+
+A função “toggleAccelerometer" ativa um loop que manda leituras do acelerômetro em intervalos regulares.
 
 
 \newpage
@@ -247,8 +348,6 @@ O servidor emite ao browser a página public/index.html:
 %(TODO public/index.hml here)
 
 
-\newpage
-\subsection{Comunicação}
 
 
 
@@ -386,28 +485,28 @@ Agora o cliente e o servidor podem se comunicar com leitura ou escrita nesses no
 
 \section{Websockets}
 
-https://www.websocket.org/aboutwebsocket.html
+% https://www.websocket.org/aboutwebsocket.html
 
-WebSocket é o protocolo que lida com os Sockets de uma conexão que foi criada para permitir a comunicação bilateral entre o cliente e o servidor. Ele dá ao programador mais liberdade para criar novos protocolos e novas maneiras de se transferir dados, em ambas as direções.
+% WebSocket é o protocolo que lida com os Sockets de uma conexão que foi criada para permitir a comunicação bilateral entre o cliente e o servidor. Ele dá ao programador mais liberdade para criar novos protocolos e novas maneiras de se transferir dados, em ambas as direções.
 
-A interface em si é bastante simples, seu objetivo é o envio e recebimento de mensagens entre o cliente e o servidor. Na realidade, para o protocolo, não existe essa diferenciação entre os dois, eles são apenas dois processos conectados. Essa hierarquia deixa de existir e não há mais uma separação de funções entre ambos. A comunicação é dada por envio de mensagens e ocorrência de eventos. Esses processos podem enviar mensagens a qualquer momento e estão ouvindo um ao outro.
+% A interface em si é bastante simples, seu objetivo é o envio e recebimento de mensagens entre o cliente e o servidor. Na realidade, para o protocolo, não existe essa diferenciação entre os dois, eles são apenas dois processos conectados. Essa hierarquia deixa de existir e não há mais uma separação de funções entre ambos. A comunicação é dada por envio de mensagens e ocorrência de eventos. Esses processos podem enviar mensagens a qualquer momento e estão ouvindo um ao outro.
 
-O protocolo foi pensado para funcionar bem com a infraestrutura Web já existente. Como parte desse paradigma, sua especificação determina que uma conexão é estabelecida inicialmente com o protocolo HTTP, garantindo retrocompatibilidade.
+% O protocolo foi pensado para funcionar bem com a infraestrutura Web já existente. Como parte desse paradigma, sua especificação determina que uma conexão é estabelecida inicialmente com o protocolo HTTP, garantindo retrocompatibilidade.
 
-A conexão WebSocket é feita da seguinte forma. Após inciada a conexão HTTP, o browser envia uma requisição ao servidor indicando que deseja trocar de protocolos, de HTTP para WebSocket. Se o servidor entende esse protocolo, ele envia uma resposta para permitir a troca. Nesse momento a conexão HTTP é interrompida e a conexão WebSocket toma o seu lugar. Esse processo é chamado de WebSocket Handshake.
+% A conexão WebSocket é feita da seguinte forma. Após inciada a conexão HTTP, o browser envia uma requisição ao servidor indicando que deseja trocar de protocolos, de HTTP para WebSocket. Se o servidor entende esse protocolo, ele envia uma resposta para permitir a troca. Nesse momento a conexão HTTP é interrompida e a conexão WebSocket toma o seu lugar. Esse processo é chamado de WebSocket Handshake.
 
-A estrutura da mensagem em WebSocket é mínima. O corpo da mensagem, os dados a serem enviados, só possui dois formatos, texto ou binário. O cabeçalho contém um identificador de tipo do formato, que tem um campo para o tamanho da mensagem e nada mais. A mensagem completa é só o conteúdo mais o seu tamanho. Como a conexão não muda em momento algum, todas as informações contidas no cabeçalho de requisição e resposta HTTP são invariantes e, portanto, não precisam ser reenviadas.
+% A estrutura da mensagem em WebSocket é mínima. O corpo da mensagem, os dados a serem enviados, só possui dois formatos, texto ou binário. O cabeçalho contém um identificador de tipo do formato, que tem um campo para o tamanho da mensagem e nada mais. A mensagem completa é só o conteúdo mais o seu tamanho. Como a conexão não muda em momento algum, todas as informações contidas no cabeçalho de requisição e resposta HTTP são invariantes e, portanto, não precisam ser reenviadas.
 
-Um desses processos, em um momento arbitrário, envia uma mensagem ao outro, talvez porque dados tenham sido atualizados ou o usuário tenha feito alguma ação em específico. Uma vez que a mensagem é enviada, esse processo volta ao que estava fazendo, sem a necessidade de esperar uma resposta (com a exceção talvez de qualquer confirmação sobre a entrega). Esse comportamento é chamado de assíncrono, pois não necessita de uma resposta para continuar com sua execução.
+% Um desses processos, em um momento arbitrário, envia uma mensagem ao outro, talvez porque dados tenham sido atualizados ou o usuário tenha feito alguma ação em específico. Uma vez que a mensagem é enviada, esse processo volta ao que estava fazendo, sem a necessidade de esperar uma resposta (com a exceção talvez de qualquer confirmação sobre a entrega). Esse comportamento é chamado de assíncrono, pois não necessita de uma resposta para continuar com sua execução.
 
-O outro processo vê a chegada dessa nova mensagem como um evento. Quando esse evento acontece, ele executa um comportamento específico com os dados recebidos, como alteração de informações exibidos ou um cálculo com os valores novos. Por isso é dito que Websocket é voltado a eventos.
+% O outro processo vê a chegada dessa nova mensagem como um evento. Quando esse evento acontece, ele executa um comportamento específico com os dados recebidos, como alteração de informações exibidos ou um cálculo com os valores novos. Por isso é dito que Websocket é voltado a eventos.
 
-%(TODO bulletpoints)
-Existem 4 tipos de eventos e o comportamento que eles executam é definido quando o Websocket é criado. Esses eventos são:
-- onopen: executado quando a conexão é feita,
-- onclose: executado quando a conexão é fechada,
-- onmessage: executado quando uma mensagem do outro WebSocket chega,
-- onerror: executado se há algum erro na conexão.
+% %(TODO bulletpoints)
+% Existem 4 tipos de eventos e o comportamento que eles executam é definido quando o Websocket é criado. Esses eventos são:
+% - onopen: executado quando a conexão é feita,
+% - onclose: executado quando a conexão é fechada,
+% - onmessage: executado quando uma mensagem do outro WebSocket chega,
+% - onerror: executado se há algum erro na conexão.
 
 
 Para ilustrar melhor esse comportamento de conexão, mensagens e eventos, abaixo há um exemplo em HTML de uma página que utiliza WebSockets.
@@ -488,7 +587,7 @@ https://www.websocket.org/echo.html
 \end{small}
 
 
-Essa página executa um código simples. Ela cria um WebSocket conectado à ``ws://echo.websocket.org/".
+Essa página executa um código simples. Ela cria um WebSocket conectado à “ws://echo.websocket.org/".
 
 O evento de conexão (onOpen) ativa uma função que escreve na tela e manda uma string para o outro WebSocket.
 
@@ -625,7 +724,7 @@ Em conclusão, WebSocket é a solução ideal para problemas apresentados anteri
 Mas existe um problema nesse meio de desenvolvimento Web, que é o fato de que a todo momento a infraestrutura é alterada. Novos protocolos são criados, outros são atualizados, antigos deixam de funcionar corretamente. Esse é um problema inerente ao meio e que afeta a todos.
 
 % https://pt.wikipedia.org/wiki/SPDY
-Para ilustrar esse fato, vamos tomar como exemplo o protocolo SPDY (pronunciado ``speedy"), desenvolvido principalmente pela Google. (TODO rodapé: Ele não é um protocolo padrão, porém é bastante promissor e é está sendo utilizado para o desenvolvimento do protocolo HTTP 2.0)
+Para ilustrar esse fato, vamos tomar como exemplo o protocolo SPDY (pronunciado “speedy"), desenvolvido principalmente pela Google. (TODO rodapé: Ele não é um protocolo padrão, porém é bastante promissor e é está sendo utilizado para o desenvolvimento do protocolo HTTP 2.0)
 
 Em linhas gerais, esse protocolo busca velocidade e se baseia no fato de que, se uma conexão é estabelecida com o servidor e o cliente começa a enviar muitas requisições HTTP, essas requisições vão incluir informações repetidas, comuns àquela sessão. Ele define então que, ao invés de enviar essas informações desnecessárias repetidamente durante a sessão, o servidor passa a salvar em um dicionário os usuários conectados e utilizar essas informações salvas. Por conta disso, fazer requisições passa a ser mais rápido e consumir menos recursos. (TODO rodapé: note a semelhança com WebSockets)
 
@@ -640,24 +739,24 @@ Uma das maneiras de se contornar essa dificuldade é utillizar outras APIs que c
 % https://davidwalsh.name/websocket
 
 
-Socket.io é uma API de WebSocket para JavaScript, que é utilizada nesse Projeto. Ele busca cuidar de todos os detalhes de funcionamento do protocolo internamente, deixando uma interface simples ao usuário.
+% Socket.io é uma API de WebSocket para JavaScript, que é utilizada nesse Projeto. Ele busca cuidar de todos os detalhes de funcionamento do protocolo internamente, deixando uma interface simples ao usuário.
 
-Para uma conexão ser estabelecida, tanto o cliente quanto o servidor precisam estar executando Socket.io. Sua implementação tenta primeiramente fazer a conexão usando WebSocket, mas se o servidor não suporta esse protocolo, ele recua (faz fallback) para outras tecnologias, como AJAX long-polling, AJAX multipart streaming, IFrame, JSONP polling, entre outros (todos utilizando a mesma interface). Esse fallback abrange uma quantidade muito maior de servidores, permitindo um uso não tão restrito dessa API.
+% Para uma conexão ser estabelecida, tanto o cliente quanto o servidor precisam estar executando Socket.io. Sua implementação tenta primeiramente fazer a conexão usando WebSocket, mas se o servidor não suporta esse protocolo, ele recua (faz fallback) para outras tecnologias, como AJAX long-polling, AJAX multipart streaming, IFrame, JSONP polling, entre outros (todos utilizando a mesma interface). Esse fallback abrange uma quantidade muito maior de servidores, permitindo um uso não tão restrito dessa API.
 
-Além da implementação básica do protocolo WebSocket, ele também outras funcionalidades muito importantes para o desenvolvimento de uma aplicação maior e mais robusta.
+% Além da implementação básica do protocolo WebSocket, ele também outras funcionalidades muito importantes para o desenvolvimento de uma aplicação maior e mais robusta.
 
 
-É possível conectar múltiplos sockets em uma mesma porta. Internamente, ele faz uma multiplexação das várias conexões abertas em uma mesma porta, mas os processos entendem que tem um socket dedicado a eles. Utilizando WebSockets, cada socket precisa de uma porta exclusiva para fazer a conexão.
+% É possível conectar múltiplos sockets em uma mesma porta. Internamente, ele faz uma multiplexação das várias conexões abertas em uma mesma porta, mas os processos entendem que tem um socket dedicado a eles. Utilizando WebSockets, cada socket precisa de uma porta exclusiva para fazer a conexão.
 
-A possibilidade de vários sockets em uma mesma aplicação permite uma modularização muito maior, pois não é necessário que um módulo saiba se tem uma conexão dedicada ou se está compartilhando com mais dezenas de outros sockets.
+% A possibilidade de vários sockets em uma mesma aplicação permite uma modularização muito maior, pois não é necessário que um módulo saiba se tem uma conexão dedicada ou se está compartilhando com mais dezenas de outros sockets.
 
-Ele permite também a criação arbritrária de eventos. Com WebSocket, o desenvolvedor fica preso aos quatro eventos pré definidos: onopen, onclose, onmessage e onerror. Internamente, os quatro são eventos de mensagem, disparados em momentos e situações específicas. O que o Socket.io faz é dar a liberdade de definir quaisquer eventos desejados.
+% Ele permite também a criação arbritrária de eventos. Com WebSocket, o desenvolvedor fica preso aos quatro eventos pré definidos: onopen, onclose, onmessage e onerror. Internamente, os quatro são eventos de mensagem, disparados em momentos e situações específicas. O que o Socket.io faz é dar a liberdade de definir quaisquer eventos desejados.
 
-Essa criação de eventos funciona assim: na hora de enviar uma mensagem, o processo emissor define também o nome do evento que está sendo enviado. O processo receptor define o evento que vai ouvir e a subrotina que vai ser executada na ocorrência desse evento.
+% Essa criação de eventos funciona assim: na hora de enviar uma mensagem, o processo emissor define também o nome do evento que está sendo enviado. O processo receptor define o evento que vai ouvir e a subrotina que vai ser executada na ocorrência desse evento.
 
-Um ponto negativo dessa definição de eventos é que o cabeçalho da mensagem é um pouco maior, pois o de WebSockets é mínimo ao extremo, mas esse tamanho ainda é ínfimo e o overhead causado é desprezível.
+% Um ponto negativo dessa definição de eventos é que o cabeçalho da mensagem é um pouco maior, pois o de WebSockets é mínimo ao extremo, mas esse tamanho ainda é ínfimo e o overhead causado é desprezível.
 
-Essas funcionalidades aumentam muito o grau de liberdade e permitem um escopo muito maior na hora de criar uma aplicação robusta. Imagine um sistema grande, onde dados são recebidos de múltiplas fontes, cálculos são feitos sobre eles, e o resultado pode ativar vários comportamentos de um outro processo. Algo assim exigiria um código complexo com WebSockets, mas com Socket.io é simples e direto.
+% Essas funcionalidades aumentam muito o grau de liberdade e permitem um escopo muito maior na hora de criar uma aplicação robusta. Imagine um sistema grande, onde dados são recebidos de múltiplas fontes, cálculos são feitos sobre eles, e o resultado pode ativar vários comportamentos de um outro processo. Algo assim exigiria um código complexo com WebSockets, mas com Socket.io é simples e direto.
 
 
 Abaixo, é exibido o código de um chat simples como exemplo. O código está completo, nada foi omitido para explicitar a simplicidade de se fazer uma aplicação com Socket.io.
@@ -904,10 +1003,6 @@ O segundo Workflow é chamado “Platform-centered”, e deve ser usado se o pro
 A arquitetura interna está descrita no diagrama:
 
 % TODO adicionar imagem
-
-
-
-
 
 
 

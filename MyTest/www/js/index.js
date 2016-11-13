@@ -88,11 +88,11 @@ function toggleAccelerometer(period) {
     var freq = ~~(1000 / period);
     if (watchID == null) {
         watchID = navigator.accelerometer.watchAcceleration(
-            sendAcceration,
+            sendAcceleration,
             sendAccError,
             { frequency: freq }
         );
-        navigator.accelerometer.getCurrentAcceleration(sendAcceration, sendAccError);
+        navigator.accelerometer.getCurrentAcceleration(sendAcceleration, sendAccError);
     }
     else {
         navigator.accelerometer.clearWatch(watchID);
@@ -111,21 +111,12 @@ function resetSpeed() {
     socket.emit('device_reset_speed');
 }
 
-function sendAcceration(acceleration) {
+function sendAcceleration(acceleration) {
     socket.emit('device_acceleration', acceleration)
 }
 
 function sendAccError() {
     log('Accelerometer error.');
-}
-
-function emitBatteryStatus(status) {
-    var data = {
-        level : status.level,
-        isPlugged : status.isPlugged
-    }
-
-    socket.emit('device_battery_changed', data)
 }
 
 function sendPing() {
