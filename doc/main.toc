@@ -1,0 +1,44 @@
+\select@language {brazil}
+\contentsline {section}{Refer\IeC {\^e}ncias}{1}{section*.3}
+\contentsline {section}{\numberline {1}Resumo}{1}{section.1}
+\contentsline {section}{\numberline {2}Abstract}{2}{section.2}
+\contentsline {section}{\numberline {3}Introdu\IeC {\c c}\IeC {\~a}o}{3}{section.3}
+\contentsline {subsection}{\numberline {3.1}Objetivos}{4}{subsection.3.1}
+\contentsline {section}{\numberline {4}Desenvolvimento}{5}{section.4}
+\contentsline {subsection}{\numberline {4.1}Comunica\IeC {\c c}\IeC {\~a}o}{5}{subsection.4.1}
+\contentsline {subsubsection}{\numberline {4.1.1}Protocolo WebSocket}{6}{subsubsection.4.1.1}
+\contentsline {subsubsection}{\numberline {4.1.2}Socket.io}{7}{subsubsection.4.1.2}
+\contentsline {subsection}{\numberline {4.2}Aplicativo Android}{8}{subsection.4.2}
+\contentsline {subsubsection}{\numberline {4.2.1}Cordova}{8}{subsubsection.4.2.1}
+\contentsline {subsubsection}{\numberline {4.2.2}Implementa\IeC {\c c}\IeC {\~a}o}{9}{subsubsection.4.2.2}
+\contentsline {subsubsection}{\numberline {4.2.3}C\IeC {\'o}digo da Interface}{10}{subsubsection.4.2.3}
+\contentsline {subsubsection}{\numberline {4.2.4}C\IeC {\'o}digo da parte l\IeC {\'o}gica}{10}{subsubsection.4.2.4}
+\contentsline {subsection}{\numberline {4.3}Servidor}{12}{subsection.4.3}
+\contentsline {subsubsection}{\numberline {4.3.1}Node.js}{12}{subsubsection.4.3.1}
+\contentsline {subsubsection}{\numberline {4.3.2}ExpressJS}{12}{subsubsection.4.3.2}
+\contentsline {subsubsection}{\numberline {4.3.3}Implementa\IeC {\c c}\IeC {\~a}o}{12}{subsubsection.4.3.3}
+\contentsline {subsection}{\numberline {4.4}Aplica\IeC {\c c}\IeC {\~a}o Web}{12}{subsection.4.4}
+\contentsline {section}{\numberline {5}Comunica\IeC {\c c}\IeC {\~a}o Web e Aplica\IeC {\c c}\IeC {\~o}es Web}{12}{section.5}
+\contentsline {section}{\numberline {6}Necessidade de Comunica\IeC {\c c}\IeC {\~a}o Bilateral}{15}{section.6}
+\contentsline {subsection}{\numberline {6.1}Polling}{15}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2}Long-Polling}{15}{subsection.6.2}
+\contentsline {subsection}{\numberline {6.3}Streaming}{16}{subsection.6.3}
+\contentsline {section}{\numberline {7}Sockets}{16}{section.7}
+\contentsline {section}{\numberline {8}Websockets}{17}{section.8}
+\contentsline {subsection}{\numberline {8.1}Teste de efici\IeC {\^e}ncia de Websockets}{19}{subsection.8.1}
+\contentsline {section}{\numberline {9}Socket.io}{23}{section.9}
+\contentsline {section}{\numberline {10}Device}{26}{section.10}
+\contentsline {section}{\numberline {11}Server}{26}{section.11}
+\contentsline {section}{\numberline {12}Browser}{26}{section.12}
+\contentsline {section}{\numberline {13}Parte Subjetiva}{26}{section.13}
+\contentsline {subsection}{\numberline {13.1}Desafios e frustra\IeC {\c c}\IeC {\~o}es}{26}{subsection.13.1}
+\contentsline {subsection}{\numberline {13.2}A contribui\IeC {\c c}\IeC {\~a}o do curso de Computa\IeC {\c c}\IeC {\~a}o}{26}{subsection.13.2}
+\contentsline {subsection}{\numberline {13.3}Pr\IeC {\'o}ximo Passos}{26}{subsection.13.3}
+\contentsline {subsection}{\numberline {13.4}Agradecimentos}{26}{subsection.13.4}
+\contentsline {section}{\numberline {14}Tecnologias utilizadas}{27}{section.14}
+\contentsline {subsection}{\numberline {14.1}Node.js}{27}{subsection.14.1}
+\contentsline {section}{\numberline {15}Tecnologias citadas}{27}{section.15}
+\contentsline {subsection}{\numberline {15.1}MIT App Inventor}{27}{subsection.15.1}
+\contentsline {subsection}{\numberline {15.2}Kivy}{28}{subsection.15.2}
+\contentsline {subsection}{\numberline {15.3}Cordova}{28}{subsection.15.3}
+\contentsline {section}{\numberline {16}Bibliografia}{29}{section.16}

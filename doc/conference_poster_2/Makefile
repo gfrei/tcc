@@ -3,7 +3,7 @@ compile = pdflatex -shell-escape $(file).tex
 
 all:
 	make clean; \
-	$(compile); $(compile);
+	$(compile);
 
 .PHONY: clean
 clean:

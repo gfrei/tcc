@@ -25,6 +25,7 @@
 
 \usetheme{I6pd2} % Use the I6pd2 theme supplied with this template
 
+\usepackage[utf8]{inputenc}
 \usepackage[brazil]{babel}
 
 \usepackage{amsmath,amsthm,amssymb,latexsym} % For including math equations, theorems, symbols, etc
@@ -46,17 +47,20 @@
 
 \title{\huge Comunicação cliente-servidor bilateral de baixa latência aplicado a Android} % Poster title
 
-\author{Guilherme Freire Silva} % Author(s)
+\author{Guilherme Freire Silva, Marco Dimas Gubitoso (Orientador)} % Author(s)
 
-\institute{Department and University Name} % Institution(s)
+\institute{IME-USP - Instituto de Matemática e Estatística da Universidade de São Paulo, Departamento de Ciência da Computação }
+% \institute{Department and University Name} % Institution(s)
 
 %----------------------------------------------------------------------------------------
 %	FOOTER TEXT
 %----------------------------------------------------------------------------------------
 
-\newcommand{\leftfoot}{http://www.LaTeXTemplates.com} % Left footer text
+% \newcommand{\leftfoot}{http://www.LaTeXTemplates.com} % Left footer text
+\newcommand{\leftfoot}{} % Left footer text
 
-\newcommand{\rightfoot}{john@smith.com} % Right footer text
+% \newcommand{\rightfoot}{john@smith.com} % Right footer text
+\newcommand{\rightfoot}{} % Right footer text
 
 %----------------------------------------------------------------------------------------
 
@@ -73,116 +77,103 @@
 \begin{column}{.465\textwidth} % The first column
 
 %----------------------------------------------------------------------------------------
-%	OBJECTIVES
+%	Introdução
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Objectives}
+\begin{block}{Introdução}
+
+\begin{itemize}
+\item Dispositivos móveis, como smartphones e tables, são uma tecnologia muito nova e em constante desenvolvimento. Possuem bastante espaço para inovação, além de estarem fortemente presentes no dia a dia. Um aspecto pouco explorado deles é seu uso como parte de um sistema interativo Web, ou seja, um sistema no qual eles enviam e recebem informações de um servidor, para os mais variados fins.
+
+\item Essa arquitetura permite, por exemplo, executar um jogo em uma página Web que utiliza o smartphone como um controle, ou manter um banco de dados no servidor e fazer buscas utilizando o smartphone.
+
+\end{itemize}
+
+\end{block}
+
+%----------------------------------------------------------------------------------------
+%	Objetivos
+%----------------------------------------------------------------------------------------
+
+\begin{block}{Objetivos}
 
 \begin{enumerate}
-\item Donec fringilla, velit id lobortis commodo, eros dui consectetur mi, ut interdum lorem dui sed mauris.
-\item Nulla ac nulla rhoncus est bibendum ullamcorper:
-\item Quisque vestibulum, nisl sit amet gravida ultricies dis parturient montes, nascetur ridiculus musobortis commodo, eros dui consectetur mi.
+\item Desenvolver um aplicativo para smartphones.
+\item Criar um servidor que se comunique com ele.
+\item Desenvolver uma aplicação Web que receba e utilize dados vindos do smartphone.
+\item Encontrar uma forma eficiente de comunicação entre eles.
 \end{enumerate}
 
 \end{block}
 
 %----------------------------------------------------------------------------------------
-%	INTRODUCTION
+%	Aplicativo Mobile
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Introduction}
-
-\begin{itemize}
-\item Donec fringilla, velit id lobortis commodo, eros dui consectetur mi, ut interdum lorem dui sed mauris. Duis id sem nunc, a pharetra odio. Phasellus posuere \alert{semper massa}, id bibendum ligula tristique at. Integer sit amet vulputate turpis. Sed erat lacus, faucibus at viverra et, mattis nec sem. Cras faucibus \alert{scelerisque} cursus. Opet volutpat ligula. Duis semper lorem eget dui dignissim porttitor. Nulla facilisi. In ullamcorper lorem quis dolor iaculis nec egestas enim ultricies. Cras ut mauris elit, ut lacinia dui. Proin in ante et libero hendrerit iaculis. Nulla eu erat a urna laoreet auctor id a turpis. Nam mollis tristique neque eu luctus. Suspendisse rutrum congue nisi sed convallis. Aenean id neque dolor.
-\end{itemize}
-
-\end{block}
-
-%----------------------------------------------------------------------------------------
-%	MATERIALS
-%----------------------------------------------------------------------------------------
-
-\begin{block}{Materials}
+\begin{block}{Aplicativo Mobile}
 
 \begin{columns} % Subdivide the first main column
 \begin{column}{.54\textwidth} % The first subdivided column within the first main column
+
 \begin{itemize}
-\item Vestibulum nisl, quis euismod velit eros in ligula.
+\item Criado com o Framework Cordova.
 \begin{itemize}
-\item Cras rhoncus quam et augue convallis in elementum urna tincidunt.
+\item Multiplataforma, incluindo versão Web.
 \end{itemize}
-\item Proin ut vestibulum augue.
+\item Conecta-se com o servidor através de um IP:Porta.
 \begin{itemize}
-\item Donec dapibus sagittis neque eu ultrices.
+\item Recebe e envia dados utilizando Sockets.
 \end{itemize}
 \end{itemize}
+
+\begin{itemize}
+\item Sobre sua interface e utilização.
+\begin{itemize}
+\item O formulário no início faz a conexão com o servidor, fornecidos o endereço de IP e a Porta.
+\item Os botões azuis enviam mensagens pontuais ao servidor.
+\item Os botões cinzas ligam ou desligam um fluxo de mensagens com dados do acelerômetro para o servidor.
+\item O Log exibe mensagens vindas do servidor e outros feedbacks.
+\end{itemize}
+\end{itemize}
+
 \end{column}
 
 \begin{column}{.43\textwidth} % The second subdivided column within the first main column
 \centering
 \begin{figure}
-\includegraphics[width=0.8\linewidth]{placeholder.jpg}
-\caption{Figure caption}
+\includegraphics[width=0.8\linewidth]{Cordova.png}
+\caption{Aplicativo Cordova}
 \end{figure}
 \end{column}
 \end{columns} % End of the subdivision
 
-\begin{itemize}
-\item Curabitur sapien ligula, faucibus in feugiat quis, vestibulum a turpis.
-\begin{itemize}
-\item Phasellus quis nunc neque. Suspendisse mauris diam, suscipit non gravida in, placerat id enim. Ut nec ipsum in lectus ultrices sagittis.
-\item Ut nec ipsum in lectus ultrices sagittis.
-\item Phasellus quis nunc neque.
-\end{itemize}
-\end{itemize}
 
 \end{block}
 
 %----------------------------------------------------------------------------------------
-%	METHODS
+%	Comunicação
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Methods}
+\begin{block}{Comunicação utilizando Socket.io}
 
 \begin{itemize}
-\item Maecenas Vel Nisl Elit
+\item Implementa o protocolo WebSocket.
 \begin{itemize}
-\item Suspendisse potenti. Fusce a est eget turpis rhoncus varius sed sed dui. Cras justo nibh, bibendum a cursus eget, consequat et dui. Maecenas vel nisl elit, sed dignissim dolor.
-\item In hac habitasse platea dictumst.
+\item WebSocket lida com os sockets de uma conexão. Ele permite a comunicação bilateral por meio de uma interface simples.
 \end{itemize}
 
-\item Viewpoint Matching Constraints
+\item Características do Socket.io:
 \begin{itemize}
-\item Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-\item Proin in nisi diam.
-\item Nam ultricies pellentesque nunc, ultrices volutpat nisl ultrices a.
+\item Orientado a eventos. Cada mensagem que chega é recebida como um evento. Se o processo escuta esse evento, ele executará uma função com os parâmetros recebidos.
+\item Definição arbitrária de eventos. O código define quais eventos escuta e qual o evento que é enviado.
+\item Assíncrono. Uma vez enviada a mensagem, o processo continua sua execução, sem precisar esperar um evento de resposta do outro processo.
+\item Conexão bilateral. Pode enviar e receber mensagens livremente.
+\item Baixa latência. O protocolo facilita ao máximo o envio e recebimento de mensagens.
+\item Baixo \emph{overhead}. Possui um cabeçalho mínimo. Diferente de outros protocolos, ele possui somente o tipo de evento e o tamanho da mensagem enviada.
+\item Permite multiplas conexões simultâneas. Através de multiplexação, permite que vários Sockets estejam conectados ao servidor através de uma única porta.
+\item Se o servidor não permitir o uso de WebSockets, recorre a outras técnicas menos eficientes de comunicação bilateral, com a mesma interface.
 \end{itemize}
 
-\item Volutpat
-\begin{itemize}
-\item Duis semper lorem eget dui dignissim porttitor.
-\item Nulla facilisi. In ullamcorper lorem quis dolor.
-\end{itemize}
-\end{itemize}
-
-\end{block}
-
-%----------------------------------------------------------------------------------------
-%	MATHEMATICAL SECTION
-%----------------------------------------------------------------------------------------
-
-\begin{block}{Mathematical Section}
-
-\begin{itemize}
-\item Maecenas Ultricies Feugiat Velit Non Mattis.
-\begin{itemize}
-\item Duis ante erat, bibendum nec tempus nec, interdum quis est. Nulla at mollis tortor. Phasellus quis leo dolor, aliquam laoreet orci $X$ Donec dapibus sagittis neque eu nec, interdum quis est. $Y_n, n=1,\cdots,N$ ndum nec tempus nec, interd
-\begin{align*}
-X \rightarrow r(X) & = \arg \max_{c} \Big\{ \max_n \big\{ \sum_{x_i \in X} \delta(x_i,Y_{n,c})\big\} \Big\}
-\end{align*}
-\item Cras faucibus scelerisque cursus. Proin ut vestibulum augue. $\delta(x_i,Y_{n,c})$
-\end{itemize}
-\item Fusce tempus arcu id ligula varius dictum. Donec ut nisl dui, ac consectetur elit. In nec enim porta augue venenatis sollicitudin. Phasellus quis nunc neque. Suspendisse mauris diam, suscipit non gravida in, placerat id enim. Ut nec ipsum in lectus ultrices sagittis.
 \end{itemize}
 
 \end{block}
@@ -196,70 +187,86 @@ X \rightarrow r(X) & = \arg \max_{c} \Big\{ \max_n \big\{ \sum_{x_i \in X} \delt
 \begin{column}{.465\textwidth} % The second column
 
 %----------------------------------------------------------------------------------------
-%	RESULTS
+%	Server
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Results: Table}
+\begin{block}{Servidor}
 
 \begin{itemize}
-\item Ased Aliquet Luctus Lectus
+\item Escrito em JavaScript com ajuda de Node.js e ExpressJS.
+\item Fornece a página HTML que executa o código da aplicação.
+\item Com a utilização de Socket.io, aceita a conexão com o smartphone.
+\begin{itemize}
+\item Permite a conexão com múltiplos dispositivos simultaneamente.
+\end{itemize}
+\item Recebe eventos do smartphone e o responde ou repassa esses dados à página Web.
 \end{itemize}
 
-\begin{table}
-\begin{tabular}{l l l}
-\toprule
-\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
-\midrule
-Treatment 1 & 0.0003262 & 0.562 \\
-Treatment 2 & 0.0015681 & 0.910 \\
-Treatment 3 & 0.0009271 & 0.296 \\
-\bottomrule
-\end{tabular}
-\caption{Table caption}
-\end{table}
+\end{block}
+
+%----------------------------------------------------------------------------------------
+%	Página Web
+%----------------------------------------------------------------------------------------
+
+\begin{block}{Exemplo simples de Aplicação Web - Esfera Interativa}
+
+\begin{columns} % Subdivide the first main column
+\begin{column}{.54\textwidth} % The first subdivided column within the first main column
 
 \begin{itemize}
-\item Sollicitudin Vel Orci
-\item Maecenas Ultricies Feugiat Velit Non Mattis.
+\item Utiliza a biblioteca 3D para JavaScript THREE.js.
+\begin{itemize}
+\item Utiliza a GPU do usuário para renderizar o cenário 3D.
+\end{itemize}
+\item Mantém um socket aberto para a conexão com o servidor.
+\item Inicia-se estática, mas recebe eventos para aumentar e reduzir sua velocidade nos eixos X, Y e Z.
+\item Pode receber um outro evento, que chega a intervalos constantes e define sua velocidade de acordo com o acelerômetro do smartphone.
+\begin{itemize}
+\item Esse evento explicita a baixa lantência alcançada com o uso de Socket.io para a comunicação, pois é um feedback quase instantâneo à movimentação do dispositivo pelo usuário.
+\end{itemize}
 \end{itemize}
 
-\begin{table}
-\begin{tabular}{l l l}
-\toprule
-\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
-\midrule
-Treatment 1 & 0.0003262 & 0.562 \\
-Treatment 2 & 0.0015681 & 0.910 \\
-Treatment 3 & 0.0009271 & 0.296 \\
-\bottomrule
-\end{tabular}
-\caption{Table caption}
-\end{table}
+% \begin{itemize}
+% \item Sobre sua interface e utilização.
+% \begin{itemize}
+% \item O formulário no início faz a conexão com o servidor, fornecidos o endereço de IP e a Porta.
+% \end{itemize}
+% \end{itemize}
+
+\end{column}
+
+\begin{column}{.43\textwidth} % The second subdivided column within the first main column
+\centering
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{sphere.png}
+\caption{Esfera interativa}
+\end{figure}
+\end{column}
+\end{columns} % End of the subdivision
 
 \end{block}
 
 %------------------------------------------------
 
-\begin{block}{Results: Figure}
+% \begin{block}{Results: Figure}
 
-\begin{figure}
-\includegraphics[width=0.8\linewidth]{placeholder.jpg}
-\caption{Figure caption}
-\end{figure}
+% \begin{figure}
+% \includegraphics[width=0.8\linewidth]{placeholder.jpg}
+% \caption{Figure caption}
+% \end{figure}
 
-\end{block}
+% \end{block}
 
 %----------------------------------------------------------------------------------------
 %	CONCLUSION
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Conclusion}
+\begin{block}{Conclusão}
 
 \begin{itemize}
-\item Opet volutpat ligula. Duis semper lorem eget dui dignissim porttitor. Nulla facilisi. In ullamcorper lorem quis dolor iaculis nec egestas enim ultricies. Cras ut mauris elit, ut lacinia dui. Proin in ante et libero hendrerit iaculis.
-\item Nulla eu erat a urna laoreet auctor id a turpis. Nam mollis tristique neque eu luctus. Suspendisse rutrum congue nisi sed convallis.
-\item Aenean id neque dolor.
-\item Opet volutpat ligula. Duis semper lorem eget dui dignissim porttitor. Nulla facilisi. In ullamcorper lorem quis dolor iaculis nec egestas enim ultricies. Cras ut mauris elit, ut lacinia dui. Proin in ante et libero hendrerit iaculis.
+\item O projeto proposto se mostrou plenamente possível e viável, com a utilização das ferramentas certas.
+\item As aplicações desenvolvidas e apresentadas possuem os elementos básicos para a criação de sistemas muito maiores a mais robustos.
+\item Em resumo, foi criado um arcabouço para a comunicação bilateral entre múltiplos clientes e um servidor, esses clientes podendo ser executados em smartphones, tirando proveito de suas funcionalidades exclusivas.
 \end{itemize}
 
 \end{block}
@@ -268,11 +275,38 @@ Treatment 3 & 0.0009271 & 0.296 \\
 %	REFERENCES
 %----------------------------------------------------------------------------------------
 
-\begin{block}{References}
+\begin{block}{Referências}
 
-\nocite{*} % Insert publications even if they are not cited in the poster
-\small{\bibliographystyle{unsrt}
-\bibliography{sample}}
+\begin{thebibliography}{99}
+
+\bibitem{ac} Socket.io,
+\textit{http://socket.io/}
+
+\bibitem{ac} WebSocket,
+\textit{http://websocket.org/}
+
+\bibitem{ac} Apache Cordova,
+\textit{https://cordova.apache.org/}
+
+\bibitem{ac} Node.JS,
+\textit{https://nodejs.org/en/}
+
+\bibitem{tj} THREE.js,
+\textit{https://threejs.org/}
+
+\end{thebibliography}
+\end{block}
+
+
+%----------------------------------------------------------------------------------------
+%	IMAGEM
+%----------------------------------------------------------------------------------------
+
+\begin{block}{}
+
+\begin{figure}
+\includegraphics[width=0.3\linewidth]{logoIME.png}
+\end{figure}
 
 \end{block}
 
@@ -280,29 +314,29 @@ Treatment 3 & 0.0009271 & 0.296 \\
 %	ACKNOWLEDGEMENTS
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Acknowledgments}
+% \begin{block}{Acknowledgments}
 
-\begin{itemize}
-\item Nam mollis tristique neque eu luctus. Suspendisse rutrum congue nisi sed convallis. Aenean id neque dolor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-\end{itemize}
+% \begin{itemize}
+% \item Nam mollis tristique neque eu luctus. Suspendisse rutrum congue nisi sed convallis. Aenean id neque dolor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+% \end{itemize}
 
-\end{block}
+% \end{block}
 
 %----------------------------------------------------------------------------------------
 %	CONTACT INFORMATION
 %----------------------------------------------------------------------------------------
 
-\setbeamercolor{block title}{fg=black,bg=orange!70} % Change the block title color
+% \setbeamercolor{block title}{fg=black,bg=orange!70} % Change the block title color
 
-\begin{block}{Contact Information}
+% \begin{block}{Contact Information}
 
-\begin{itemize}
-\item Web: \href{http://www.university.edu/smithlab}{http://www.university.edu/smithlab}
-\item Email: \href{mailto:john@smith.com}{john@smith.com}
-\item Phone: +1 (000) 111 1111
-\end{itemize}
+% \begin{itemize}
+% \item Web: \href{http://www.university.edu/smithlab}{http://www.university.edu/smithlab}
+% \item Email: \href{mailto:john@smith.com}{john@smith.com}
+% \item Phone: +1 (000) 111 1111
+% \end{itemize}
 
-\end{block}
+% \end{block}
 
 %----------------------------------------------------------------------------------------
 
