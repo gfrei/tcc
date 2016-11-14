@@ -331,30 +331,37 @@ A função “toggleAccelerometer" ativa um loop que manda leituras do acelerôm
 \newpage
 \subsection{Servidor}
 
-O servidor é lançado utilizando-se Node.js. O arquivo package.json define seus parâmetros:
+O servidor é implementado com Javascript, com o auxilio de Node.js e ExpressJS
+
+\subsubsection{Node.js}
+% https://www.youtube.com/watch?v=pU9Q6oiQNd0
+% https://nodejs.org/en/
+
+Node.js é uma coisa louca e terá um capítulo separado. Eu acho.
+
+\subsubsection{ExpressJS}
+% http://www.tutorialspoint.com/expressjs/index.htm
+
+\subsubsection{Implementação}
+
+O projeto do Servidor tem suas configurações definidas no arquivo package.json:
 
 %(TODO package.json here)
 
-Ele define principalmente que as dependencias do servidor são 'express' e 'socket.io'.
+A configuração mais importante para a reprodução é a de dependencias, na qual estão definidas “express" e “socket.io".
 
-O código do servidor é o index.js:
+O código que cria o servidor está em index.js:
 
-%(TODO index.json here)
+%(TODO index.js here)
 
-% TODO express
+
+
+\subsection{Aplicação Web}
+
 
 O servidor emite ao browser a página public/index.html:
 
-%(TODO public/index.hml here)
-
-
-
-
-
-
-\newpage
-\subsection{Aplicação Web}
-
+%(TODO public/index.html here)
 
 
 

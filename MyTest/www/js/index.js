@@ -33,7 +33,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        // app.receivedEvent('deviceready');
+        app.receivedEvent('deviceready');
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -72,8 +72,8 @@ function log(message) {
 }
 
 function validateIPaddress(ipaddress) {
-    // if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
-    if (/^192\.168?\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
+    if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
+    // if (/^192\.168?\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
         return (true)
     }
     log("You have entered an invalid IP address!")
@@ -146,6 +146,7 @@ function localCalculation() {
 // Socket events
 
 function onServerConnect() {
+    $('#status').text("Connected");
     app.receivedEvent('deviceready');
     socket.emit('ready', 'device');
 }
@@ -155,6 +156,10 @@ function onServerPing(data) {
     log('Ping: ' + dt);
 }
 
+function onServerLog(msg) {
+    $('#log').text(msg);
+}
+
 
 
 function connectSocket(ipaddress, port) {
@@ -162,12 +167,14 @@ function connectSocket(ipaddress, port) {
         if(socket !== null && socket !== undefined) {
             socket.emit('device_disconnected');
             socket.disconnect();
+            $('#status').text("Disconnected");
         }
         else{
             socket = io('http://' + ipaddress + ':' + port);
 
             socket.on('connect', onServerConnect);
             socket.on('server_ping', onServerPing);
+            socket.on('device_log', onServerLog);
         }
     }
 }

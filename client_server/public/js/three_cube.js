@@ -60,7 +60,7 @@ function init() {
     // scene.add( cube );
 
     // New Sphere
-    var radius = 0.6;
+    var radius = 2;
     var segments = 16;
     var rings = 16;
 

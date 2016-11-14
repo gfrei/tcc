@@ -63,6 +63,7 @@ io.on('connection', function (socket) {
 
     socket.on('device_reset_speed', function () {
         console.log('device_reset_speed');
+        socket.emit('device_log', 'server: reset speed');
         send_to_browser_socket('reset', {})
     });
 

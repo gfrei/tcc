@@ -40,10 +40,10 @@
     <body>
         <div class="app">
 
-            <h1>Apache Cordova</h1>
+            <h1 id="status">Disconnected</h1>
             <div id="deviceready" class="blink">
-                <p class="event listening">Connect Device</p>
-                <p class="event received">Device is Connected</p>
+                <p class="event listening">Loading Device</p>
+                <p class="event received">Device is Ready</p>
             </div>
 
             <form id="connect">
@@ -64,10 +64,11 @@
             <button class="btn" onclick="addSpeed(speedY)">Y</button>
             <button class="btn" onclick="addSpeed(speedZ)">Z</button>
             <button class="btn" onclick="resetSpeed()">Stop</button>
-            <button class="btn" onclick="toggleAccelerometer(60)">60 fps</button>
-            <button class="btn" onclick="toggleAccelerometer(30)">30 fps</button>
-            <button class="btn" onclick="toggleAccelerometer(10)">10 fps</button>
-            <button class="btn" onclick="toggleAccelerometer(1)">1 fps</button>
+
+            <button class="btn2" onclick="toggleAccelerometer(60)">60 fps</button>
+            <button class="btn2" onclick="toggleAccelerometer(30)">30 fps</button>
+            <button class="btn2" onclick="toggleAccelerometer(10)">10 fps</button>
+            <button class="btn2" onclick="toggleAccelerometer(1)">1 fps</button>
 
         </div>
         <script type="text/javascript" src="cordova.js"></script>
