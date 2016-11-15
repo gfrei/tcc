@@ -25,6 +25,9 @@
 
 %  \fontsize{60}{62}\usefont{OT1}{cmr}{m}{n}{\selectfont}
 
+ \usepackage{listings}
+ \usepackage{fancyvrb}
+
 \title{Trabalho de Conclusão de Curso}
 \author{Guilherme Freire Silva}
 \date{\today}
@@ -226,26 +229,9 @@ O aplicativo foi desenvolvido com a proposta de servir como base para o desenvol
 
 O Apache Cordova é um \emph{framework} \emph{open-source} para a criação de aplicativos para \emph{mobile}. Seu desenvolvimento é dado com o uso de tecnologias Web, como HTML5, CSS3 e JavaScript.
 
-Ele é multiplataforma, permite o desenvolvimento para sistemas como Android, iOS ou navegadores. Por tal motivo, oferece uma API de alto nível para acessar os módulos desejados tais como de sensores, arquivos e rede. A interface para o uso dessas funcionalidades é abstrata, de forma que código desenvolvido é executável em todas as plataformas oferecidas e o desenvolvedor não precisa se preocupar com os detalhes de cada uma na hora da implementação.
+Ele é multiplataforma, permite o desenvolvimento para sistemas como Android, iOS ou navegadores. Oferece uma API de alto nível para acessar os módulos desejados, como de sensores, arquivos e rede.
 
-O aplicativo implementado é uma página Web. Há um arquivo principal “index.html" que referencia os recursos necessários, como CSS, JavaScript, imagens e arquivos de mídia. A parte lógica é feita em JavaScript, e a renderização em HTML5 e CSS3. Para ser portado para uma plataforma específica, o HTML é enviado para a classe \emph{“Wrapper”} dessa plataforma, na qual estão definidos os detalhes de implementação. Essa classe também tem incorporada um browser nativo, o \emph{WebView}, que executará o programa Web dentro do dispositivo.
-
-A comunicação entre o aplicativo e os componentes nativos de cada plataforma é dada a partir de Plugins instalados.
-
-Cada Plugin é uma biblioteca adicional que permite ao \emph{WebView} se comunicar com a plataforma nativa na qual está rodando. Eles provêm acesso a funcionalidades que normalmente não estão disponíveis em aplicativos Web. Essas ferramentas são disponibilizadas para o desenvolvedor através de uma expansão da API inicial, que serve de interface e toma para si os detalhes da implementação em cada plataforma, simplificando o uso para o desenvolvedor.
-
-Há um conjunto principal de Plugins, chamado de \emph{Core}, que é mantido pelo próprio Cordova. Nele estão contidos os que acessam as principais funcionalidades de um dispositivo mobile, como acesso ao acelerômetro, câmera, bateria e geolocalização.
-
-Há também Plugins desenvolvidos por terceiros (em geral pela própria comunidade) que trazem relações com outras funcionalidades, talvez exclusivas de uma plataforma. Enquanto no \emph{Core} há apenas umas poucas dezenas, a lista de Plugins criada pela comunidade oferece centenas com as mais diversas funcionalidades, como um para compras dentro do App e um para enviar notificações para dispositivos vestíveis (Smartwatches, por exemplo). A criação de um Plugin é simples e incentivada, no site do Cordova há um tutorial.
-
-O método de desenvolvimento descrito até agora, focado em várias plataformas, é um dentre dois possíveis \emph{Workflows} disponíveis no Cordova e seu nome é \emph{“Cross-platform”} (CLI). Ele deve ser usado se o aplicativo desenvolvido pretende abranger a maior variedade de Sistemas Operacionais mobile, com pouca ou nenhuma ênfase em um desenvolvimento em uma plataforma específica.
-
-O segundo \emph{Workflow} é chamado \emph{“Platform-centered”}, e deve ser usado se o projeto é focado para uma única plataforma e se pretende modificá-la em baixo nível.
-
-A arquitetura interna está descrita no diagrama:
-
-% TODO adicionar imagem
-
+O aplicativo implementado é uma página Web, possui exatamente a estrutura. Há um arquivo principal “index.html" que referencia os recursos necessários, como CSS, JavaScript, imagens e arquivos de mídia. A parte lógica é feita em JavaScript, e a renderização em HTML5 e CSS3. Para ser portado para uma plataforma específica, o HTML é enviado para a classe \emph{“Wrapper”} dessa plataforma, onde estão definidos os detalhes de implementação. Essa classe também tem incorporada um browser nativo, o \emph{WebView}, que executará o programa Web dentro do dispositivo.
 
 \subsubsection{Implementação}
 
@@ -329,47 +315,377 @@ As funções “addSpeed", “resetSpeed", “sendAcceleration", “sendPing" e 
 A função “toggleAccelerometer" ativa um loop que manda leituras do acelerômetro em intervalos regulares.
 
 
+
+
+\subsection{Aplicação Web como Caso de Uso}
+
+A Aplicação Web criada para exemplificar o uso do sistema proposto pelo Projeto foi projetada com a ideia de servir de base para o desenvolvimento de um jogo.
+
+A primeira decisão de design foi fazer o \emph{browser} executar uma computação gráfica. Para tal, foi utilizada a biblioteca THREE.JS.
+
+
+\subsubsection{THREE.JS}
+% https://en.wikipedia.org/wiki/WebGL
+
+% https://en.wikipedia.org/wiki/Three.js
+% https://www.npmjs.com/package/three
+
+THREE.JS é uma biblioteca de JavaScript para a criação e execução de gráficos 3D em navegadores, de maneira leve e otimizada. Ele permite ao \emph{browser} renderizar gráficos sem a necessidade de plugins, e utilizar a GPU(TODO explicar GPU) do usuário para os cálculos de física e processamento de imagens. Essas funcionalidades são herdadas de WebGL, uma outra API de computação gráfica em JavaScript para \emph{browsers}.
+
+Sua interface é simples de se usar, ela lida internamente com os detalhes técnicos de implementação de baixo nível, deixando o desenvolvimento menos carregado, uma vez que processamento gráfico é uma área complexa da computação.
+
+THREE.JS é completa o bastante para a criação de cenários 3D completos, com objetos, luzes e texturas. Por utilizar a GPU para o processamento, a performance não é comprometida por suas funcionalidades.
+
+Abaixo está uma lista de funcionalidades que possui. Por possuir muitos termos inglês sem tradução em português, a lista de forma literal da sua página na Wikipédia:
+% https://en.wikipedia.org/wiki/Three.js
+
+% TODO list
+Three.js includes the following features:
+
+- Effects: Anaglyph, cross-eyed and parallax barrier.
+
+- Scenes: add and remove objects at run-time; fog
+
+- Cameras: perspective and orthographic; controllers: trackball, FPS, path and more
+
+- Animation: armatures, forward kinematics, inverse kinematics, morph and keyframe
+
+- Lights: ambient, direction, point and spot lights; shadows: cast and receive
+
+- Materials: Lambert, Phong, smooth shading, textures and more
+
+- Shaders: access to full OpenGL Shading Language (GLSL) capabilities: lens flare, depth pass and extensive post-processing library
+
+- Objects: meshes, particles, sprites, lines, ribbons, bones and more - all with Level of detail
+
+- Geometry: plane, cube, sphere, torus, 3D text and more; modifiers: lathe, extrude and tube
+
+- Data loaders: binary, image, JSON and scene
+
+- Utilities: full set of time and 3D math functions including frustum, matrix, quaternion, UVs and more
+
+- Export and import: utilities to create Three.js-compatible JSON files from within: Blender, openCTM, FBX, Max, and OBJ
+
+- Support: API documentation is under construction, public forum and wiki in full operation
+
+- Examples: Over 150 files of coding examples plus fonts, models, textures, sounds and other support files
+
+- Debugging: Stats.js, WebGL Inspector, Three.js Inspector
+
+
+
+\subsubsection{Implementação}
+
+Esse projeto explora somente o básico de THREE.js para a criação de um ambiente 3D.
+
+É criada uma esfera no  centro da tela que recebe valores de \emph{devices} vindos do servidor. Esses valores podem mudar a velocidade de rotação nos eixos X, Y e Z, e a sua cor.
+
+Este código é mais extenso, então algumas partes serão omitidas.
+
+O primeiro arquivo, global.js, declara variáveis globais, usadas em mais de um módulo:
+
+
+\begin{small}
+\begin{Verbatim}[frame=single]
+var socket;
+
+var xRot, yRot, zRot;
+var r, g, b;
+var hasNewColors;
+\end{Verbatim}
+\end{small}
+
+As variáveis declaradas definem o seguinte:
+
+- O socket da conexão;
+
+- As velocidades de rotação xRot, yRot e zRot;
+
+- A cor RGB da esfera;
+
+- Uma \emph{flag} que aponta se a cor precisa ser atualizada.
+
+
+O arquivo socket\_events.js, define os eventos escutados e seus \emph{callbacks}:
+
+\begin{small}
+\begin{Verbatim}[frame=single]
+socket = io();
+
+function rotate (data) {
+    xRot += data.x;
+    yRot += data.y;
+    zRot += data.z;
+}
+
+function reset_rotation () {
+    xRot = 0;
+    yRot = 0;
+    zRot = 0;
+}
+
+function update_rotation_and_colors (data) {
+    var cap = 9;
+    var x = Math.min(data.x, cap);
+    var y = Math.min(data.y, cap);
+    var z = Math.max(2, Math.min(data.z, cap));
+
+    var weight = 5;
+
+    xRot = y / 50;
+    yRot = x / 50;
+
+    r = (weight * r + (z / cap)) / (weight + 1);
+    g = (weight * g + (z / cap)) / (weight + 1);
+    b = (weight * b + (z / cap)) / (weight + 1);
+
+    hasNewColors = true;
+}
+
+// Socket Events
+
+socket.on('connect', function() {
+    socket.emit('ready', 'browser');
+});
+
+socket.on('move', function (data) {
+    rotate(data);
+});
+
+socket.on('reset', function () {
+    reset_rotation();
+});
+
+socket.on('update_acceleration', function (data) {
+    update_rotation_and_colors(data);
+})
+\end{Verbatim}
+\end{small}
+
+Há 4 eventos de Sockets:
+
+- \emph{'connect'}: Ao se conectar, emite um evento \emph{'ready'} com seu tipo.
+
+- \emph{'move'}: Recebe valores X, Y e Z, e os associa à velocidade de rotação da esfera em cada um desses eixos. Essa associação é incremental, a velocidade aumenta a cada evento.
+
+- \emph{'reset'}: Zera as velocidades de rotação da esfera.
+
+- \emph{'update\_acceleration'}: Recebe valores X, Y, Z que definem a velocidade de rotação total da esfera (não incremental). Também altera sua cor incrementalmente, de acordo com alguns cálculos com as variáveis.
+
+
+Por fim, o arquivo three\_sphere.js cria cria todos os elementos gráficos e os renderiza.
+
+\begin{small}
+\begin{Verbatim}[frame=single]
+
+var scene, camera, renderer;
+var sphere, sphere;
+
+hasNewColors = false;
+
+function updateSphereRotation(xRot, yRot, zRot) {
+    sphere.rotation.x += xRot;
+    sphere.rotation.y += yRot;
+    sphere.rotation.z += zRot;
+}
+
+function updateSphereColor(r, g, b) {
+    sphere.material.color.r = r;
+    sphere.material.color.g = g;
+    sphere.material.color.b = b;
+}
+
+
+function init() {
+
+    scene = new THREE.Scene();
+
+    var view_angle = window.innerWidth/window.innerHeight
+    camera = new THREE.PerspectiveCamera( 75, view_angle, 0.1, 1000 );
+    camera.position.z = 5;
+    scene.add(camera);
+
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
+
+    //-------------------------------------------
+
+    // create a point light
+    var pointLight = new THREE.PointLight(0xFFFFFF);
+
+    // set its position
+    pointLight.position.x = 10;
+    pointLight.position.y = 50;
+    pointLight.position.z = 130;
+
+    // add to the scene
+    scene.add(pointLight);
+
+    //-------------------------------------------
+
+    // New Sphere
+    var radius = 2;
+    var segments = 16;
+    var rings = 16;
+
+    var sphereGeo = new THREE.SphereGeometry(radius, segments, rings);
+    var sphereMaterial = new THREE.MeshLambertMaterial( {
+        color: 0xCC0000,
+        wireframe : true
+    } );
+    sphere = new THREE.Mesh( sphereGeo, sphereMaterial );
+    scene.add( sphere );
+
+    //-------------------------------------------
+
+    xRot = 0;
+    yRot = 0;
+    zRot = 0;
+
+    r = 1;
+    g = 1;
+    b = 0;
+}
+
+function render() {
+    requestAnimationFrame( render );
+
+    updateSphereRotation(xRot, yRot, zRot);
+    if (hasNewColors) {
+        updateSphereColor(r, g, b);
+        hasNewColors = false;
+    };
+
+    renderer.render(scene, camera);
+};
+
+init();
+render();
+\end{Verbatim}
+\end{small}
+
+- init() cria os elementos do cenário: a cena, a camera, o renderizador, a iluminação e a esfera, além de inicializar as variáveis.
+
+- render() atualiza a posição da esfera de acordo com sua velocidade (com updateSphereRotation()), sua cor (com updateSphereColor()), caso haja mudanças, e renderiza a cena. Essa função é chamada a cada \emph{frame}, o que garante que a esfera seja animada.
+
+
+
 \newpage
 \subsection{Servidor}
 
 O servidor é implementado com Javascript, com o auxilio de Node.js e ExpressJS
 
-\subsubsection{Node.js}
+\subsubsection{Node.js e ExpressJS}
 % https://www.youtube.com/watch?v=pU9Q6oiQNd0
 % https://nodejs.org/en/
+% https://www.tutorialspoint.com//nodejs/nodejs_introduction.htm
 
-Node.js é uma coisa louca e terá um capítulo separado. Eu acho.
+% http://tableless.com.br/o-que-nodejs-primeiros-passos-com-node-js/
+Node.js é uma plataforma para desenvolvimento de aplicações \emph{server-side} (executadas no servidor) baseadas em rede utilizando JavaScript e o V8 JavaScript Engine \footnote{É o interpretador de JavaScript \emph{open source} implementado pelo Google em C++ e utilizado pelo Chrome.}. Com Node.js é possível criar aplicações Web utilizando apenas código em JavaScript.
 
-\subsubsection{ExpressJS}
+Ao se levar em conta o modo em que o código em JavaScript pode ser estruturado e as demandas de aplicações Web, Node.js abre uma gama de novas possibilidades para desenvolvimento Web.
+
+
 % http://www.tutorialspoint.com/expressjs/index.htm
+Express é um \emph{framework} mínimo e flexível para Node.js que oferece um conjunto robusto de funcionalidades. Sua API é simples, mas oferece o conjunto de ferramentas essenciais para o desenvolvimento de para páginas e aplicações Web e Mobile, e programas \emph{backend}. Ela lida com detalhes de baixo nível como protocolos e processos. Além da sua funcionalidade básica, existem módulos disponíveis para adicionar novas funcionalidades, que são diretamente aplicados ao Express.
+
+Para essa implementação, Node.js e Express trabalham em conjunto para criar um servidor local e criar a página da Aplicação Web desenvolvida.
 
 \subsubsection{Implementação}
 
-O projeto do Servidor tem suas configurações definidas no arquivo package.json:
+O servidor criado para o Projeto tem suas configurações definidas no arquivo package.json. Esse arquivo permite a restauração e reprodução do servidor em outros locais.
 
 %(TODO package.json here)
 
 A configuração mais importante para a reprodução é a de dependencias, na qual estão definidas “express" e “socket.io".
+
+Para a leitura do código, é importante ter em mente que o servidor faz uma distinção entre sockets de \emph{browser}, que executam a aplicação Web, e sockets de \emph{device}, que executam o aplicativo do Cordova.
 
 O código que cria o servidor está em index.js:
 
 %(TODO index.js here)
 
 
+O servidor é criado utiliznado o ExpressJS, ouvindo na porta definida e utilizando recursos encontrados na pasta “/public"
 
-\subsection{Aplicação Web}
+Quando uma conexão é iniciada, o socket criado é atribuído de eventos e seus respectivos \emph{callbacks}. Os eventos são:
+
+\emph{ready}: Ocorre logo após a conexão ser iniciada. O cliente envia qual o seu tipo, e o servidor o insere em um dicionário de \emph{devices} ou de \emph{browsers}, indexado pelo \emph{id} desse socket.
+
+\emph{device\_ping}: É a metade do caminho do \emph{Ping} lançado pelo \emph{device}. Essa função emite um evento \emph{server\_ping} de volta ao \emph{device}, com o \emph{timestamp} recebido e o atual.
+
+\emph{device\_add\_speed}: Recebe um conjunto de valores X, Y e Z, e os emite para todos os \emph{browsers}, com o evento \emph{'move'}.
+
+\emph{device\_reset\_speed}: Emite um evento \emph{'device\_log'} para o \emph{device} logar na sua tela, e emite um evento \emph{'reset'} aos \emph{browsers} sem dados. Esse evento é usado para parar a rotação da esfera.
+
+\emph{device\_print}: É uma função de \emph{debug}. Somente imprime no console os dados recebidos.
+
+\emph{device\_acceleration}: Recebe os dados do acelerômetro do \emph{device} e os emite aos \emph{browsers} com um evento \emph{'update\_acceleration'}.
+
+\emph{echo\_move}: Recebe do \emph{browser} um valor de aceleração X, Y e Z, e emite de volta pelo evento \emph{'move'}.
+
+Há uma função auxiliar \emph{'emit\_to\_browser\_socket(event, data)'} que emite o evento \emph{'event'} com a mensagem \emph{'data'} para todos os sockets de \emph{'browsers'}.
 
 
-O servidor emite ao browser a página public/index.html:
-
-%(TODO public/index.html here)
 
 
 
 
 
 
-\section{Comunicação Web e Aplicações Web}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% FIM DA SESSÃO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+
+
+\section{Estudo Aprofundado da Tecnologia}
+
+\subsection{Desenvolvendo Aplicativos com Apache Cordova}
+
+
+% TODO melhorar
+
+O Apache Cordova é um \emph{framework} \emph{open-source} para a criação de aplicativos para \emph{mobile}. Seu desenvolvimento é dado com o uso de tecnologias Web, como HTML5, CSS3 e JavaScript.
+
+Ele é multiplataforma, permite o desenvolvimento para sistemas como Android, iOS ou navegadores. Por tal motivo, oferece uma API de alto nível para acessar os módulos desejados, tais como de sensores, arquivos e rede. A interface para o uso dessas funcionalidades é abstrata, de forma que código desenvolvido é executável em todas as plataformas oferecidas e o desenvolvedor não precisa se preocupar com os detalhes de cada uma na hora da implementação.
+
+O aplicativo implementado é uma exatamente página Web, a estrutura é a mesma. Há um arquivo principal “index.html" que referencia os recursos necessários, como CSS, JavaScript, imagens e arquivos de mídia. A parte lógica é feita em JavaScript, e a renderização em HTML5 e CSS3. Para ser portado para uma plataforma específica, o HTML é enviado para a classe \emph{“Wrapper”} dessa plataforma, onde estão definidos os detalhes de implementação. Essa classe também tem incorporada um browser nativo, o \emph{WebView}, que executará o programa Web dentro do dispositivo.
+
+A comunicação entre o aplicativo e os componentes nativos de cada plataforma é dada a partir de Plugins instalados. Cada Plugin é uma biblioteca adicional que permite ao \emph{WebView} interagir com funcionalidades da plataforma nativa na qual está rodando. Eles provêm acesso a essas funcionalidades normalmente não disponíveis em aplicativos Web. Essas ferramentas são disponibilizadas para o desenvolvedor através de uma expansão da API inicial, que toma para si os detalhes da implementação em cada plataforma, simplificando o desenvolvimento.
+
+Há um conjunto principal de Plugins, chamado de \emph{Core}, que é mantido pelo próprio Cordova. Nele estão contidos os que acessam as principais funcionalidades de um dispositivo mobile, como acesso ao acelerômetro, câmera, bateria e geolocalização.
+
+Há também Plugins desenvolvidos por terceiros (em geral pela própria comunidade) que trazem relações com outras funcionalidades, talvez exclusivas de uma plataforma. Enquanto no \emph{Core} há apenas umas poucas dezenas, a lista de Plugins criada pela comunidade oferece centenas com as mais diversas funcionalidades, como um para compras dentro do App e um para enviar notificações para dispositivos vestíveis (Smartwatches, por exemplo). A criação de um Plugin é simples e incentivada, no site do Cordova há um tutorial.
+
+O método de desenvolvimento descrito até agora, focado em várias plataformas, é um dentre dois possíveis \emph{Workflows} disponíveis no Cordova e seu nome é \emph{“Cross-platform”} (CLI). Ele deve ser usado se o aplicativo desenvolvido pretende alcançar a maior variedade de Sistemas Operacionais \emph{mobile}, com pouca ou nenhuma ênfase no desenvolvimento em uma plataforma específica.
+
+O segundo \emph{Workflow} é chamado \emph{“Platform-centered”}, e deve ser usado se o projeto é focado para uma única plataforma e se pretende modificá-la em baixo nível.
+
+A arquitetura interna está descrita no diagrama:
+
+% TODO adicionar imagem
+
+\subsection{Comunicação Web e Aplicações Web}
 
 A comunicação de dados entre computadores através da Internet é algo muito comum, e necessita de uma arquitetura de rede adequada para ocorrer.
 
@@ -523,7 +839,7 @@ Para ilustrar melhor esse comportamento de conexão, mensagens e eventos, abaixo
 https://www.websocket.org/echo.html
 
 \begin{small}
-\begin{verbatim}
+\begin{Verbatim}[frame=single]
   <!DOCTYPE html>
   <meta charset="utf-8" />
   <title>WebSocket Test</title>
@@ -591,7 +907,7 @@ https://www.websocket.org/echo.html
 
   <div id="output"></div>
 
-\end{verbatim}
+\end{Verbatim}
 \end{small}
 
 
@@ -643,7 +959,7 @@ Tudo parece certo, mas ao se olhar o funcionamento, é revelado que há problema
 % TODO formatação
 Exemplo 1 — cabeçalho de requisição HTTP
 \begin{small}
-\begin{verbatim}
+\begin{Verbatim}[frame=single]
  GET /PollingStock//PollingStock HTTP/1.1
  Host: localhost:8080
  User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.5)
@@ -664,19 +980,19 @@ Exemplo 1 — cabeçalho de requisição HTTP
  showInheritedEvent=false;
  showInheritedStyle=false;
  showInheritedEffect=false
-\end{verbatim}
+\end{Verbatim}
 \end{small}
 
 Exemplo 2 — cabeçalho de resposta HTTP
 \begin{small}
-\begin{verbatim}
+\begin{Verbatim}[frame=single]
 HTTP/1.x 200 OK
 X-Powered-By: Servlet/2.5
 Server: Sun Java System Application Server 9.1_02
 Content-Type: text/html;charset=UTF-8
 Content-Length: 21
 Date: Sat, 07 Nov 2009 00:32:46 GMT
-\end{verbatim}
+\end{Verbatim}
 \end{small}
 
 % Just for fun, I counted all the characters. The total HTTP request and response header information overhead contains 871 bytes and that does not even include any data! Of course, this is just an example and you can have less than 871 bytes of header data, but I have also seen cases where the header data exceeded 2000 bytes. In this example application, the data for a typical stock topic message is only about 20 characters long. As you can see, it is effectively drowned out by the excessive header information, which was not even required in the first place!
@@ -774,7 +1090,7 @@ Abaixo, é exibido o código de um chat simples como exemplo. O código está co
 No cliente:
 %(TODO definição de sintaxe?)
 \begin{small}
-\begin{verbatim}
+\begin{Verbatim}[frame=single]
 <!doctype html>
 <html>
   <head>
@@ -810,7 +1126,7 @@ No cliente:
     </script>
   </body>
 </html>
-\end{verbatim}
+\end{Verbatim}
 \end{small}
 
 %(TODO formatação)
@@ -826,7 +1142,7 @@ No cliente:
 No servidor:
 
 \begin{small}
-\begin{verbatim}
+\begin{Verbatim}[frame=single]
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -844,7 +1160,7 @@ io.on('connection', function(socket){
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
-\end{verbatim}
+\end{Verbatim}
 \end{small}
 
 %(TODO formatação)
@@ -859,69 +1175,6 @@ Por fim, é possível dizer que resolve os problemas apresentados. Ele torna pos
 Socket.io é a principal ferramenta usada para fazer esse Projeto funcionar.
 
 \newpage
-
-\section{Device}
-
-
-Device:
-  O aplicativo é criado usando o Cordova.
-    Cordova é uma IDE (?) que faz o porte de programas em JavaScript para várias plataformas, como Android e iOS.
-
-
-    > Tiveram mil problemas até o Cordova ser escolhido.
-
-
-  O device se conecta ao servidor utilizando Socket.io
-
-
-
-
-Estruturação de um código Web (JavaScript, CSS, HTML5)
-
-
-
-
-
-
-
-\section{Server}
-
-Server:
-  Usa socket.io para fazer a comunicação com os clients.
-  > Usa node.js para ~something~
-
-
-
-
-\section{Browser}
-
-Browser:
-  Primeiro client, lançado pelo server;
-  Recebe dados por Socket;
-  Não envia dados;
-
-
-  Visualização de dados;
-    Visualização 3D:
-      Usa Three.js (Biblioteca 3D para js);
-      Usa os dados recebidos para alteração de objetos 3D.
-
-
-      Foram feitas duas páginas de Three.js:
-        1) Um simples objeto é rotacionado e tem sua cor alterada de acordo com dados recebidos.
-
-
-        2) É a aplicação de um algoritmo de ruído para geração procedural de terreno em um grid. Utiliza os dados recebidos para alterar os parâmetros do algoritmo.
-          No teste inicial ele altera em tempo real o grid, de forma que o envio constante de dados cria um movimento também constante.
-
-
-          > Talvez possa fazer um teste de performance, e rodar o algoritmo em um grid muito maior.
-
-
-
-
-
-
 
 \section{Parte Subjetiva}
 
@@ -956,17 +1209,6 @@ A primeira ideia foi utilizar serviço MIT App Inventor.
 
 
 
-
-
-
-\section{Tecnologias utilizadas}
-
-\subsection{Node.js}
-
-
-
-
-
 \section{Tecnologias citadas}
 
 
@@ -987,30 +1229,6 @@ Com certa dificuldade um primeiro aplicativo de teste foi feito, para pegar valo
   NUI é uma metodologia de interface cuja proposta é ser invisível ao usuário, e apresentar uma experiência natural e intuitiva. Seu principal foco é evitar grandes barreiras durante o aprendizado. Através de decisões de design, o usuário tem um entendimento do software sem grandes dificuldades, à medida que a complexidade da interação aumenta.
 
 [TODO] Para exemplificar a facilidade de desenvolvimento de lógica e de uma interface gráfica, abaixo tem o código para se criar um jogo de Pong.
-
-
-
-\subsection{Cordova}
-
-O Apache Cordova é um framework open-source para desenvolvimento mobile. Ele permite o uso de tecnologias Web, como HTML5, CSS3 e JavaScript. Seu desenvolvimento é multiplataforma, então há uma API de alto nível para acessar módulos desejados, como sensores, arquivos e rede. Isso implica em uma interface abstrata para o uso das features, de forma que código desenvolvido será executado em todas as plataformas oferecidas e o desenvolvedor não precisa se preocupar com os detalhes de cada uma na hora da implementação.
-
-
-A aplicação é implementada como uma página Web em um arquivo ‘index.html’ que referencia os recursos necessários, como CSS, JavaScript, imagens e arquivos de mídia. A parte lógica é feita em JavaScript, e a renderização em HTML5 e CSS3. O HTML é enviado para a classe “Wrapper” específica da plataforma escolhida, na qual estão definidos os detalhes de implementação. Ela também tem incorporada um browser nativo, o WebView, que executará o programa Web.
-
-
-Para a comunicação entre o aplicativo e os componentes nativos de cada plataforma, é necessária a instalação de Plugins.
-Cada Plugin é uma biblioteca adicional que permite ao WebView se comunicar com a plataforma nativa na qual está rodando. Eles provêm acesso a funcionalidades que normalmente não estão disponíveis em aplicações Web. Essas ferramentas são disponibilizadas para o desenvolvedor através de uma expansão da API inicial, que serve de interface e toma para si os detalhes da implementação em cada plataforma, simplificando o uso para o desenvolvedor.
-Há um conjunto principal de Plugins, chamado de Core, que é mantido pelo próprio Cordova. Nele estão contidos os que acessam as principais funcionalidades de um dispositivo mobile, como acesso ao acelerômetro, câmera, bateria e geolocalização.
-Há também Plugins desenvolvidos por terceiros (em geral pela própria comunidade ativa) que trazem relações com outras funcionalidades, que podem ser exclusivas de uma plataforma. Enquanto no Core há apenas umas poucas dezenas, a lista de Plugins criada pela comunidade oferece centenas com as mais diversas funcionalidades, como um para compras dentro do App e um para enviar notificações para dispositivos vestíveis (Smartwatches, por exemplo). A criação de um Plugin é simples e incentivada, no site do Cordova há um tutorial.
-
-
-O método de desenvolvimento descrito até agora, focado em várias plataformas, é um dentre dois possíveis Workflows disponíveis no Cordova e seu nome é “Cross-platform” (CLI). Ele deve ser usado se o aplicativo desenvolvido pretende abranger a maior variedade de Sistemas Operacionais mobile, com pouca ou nenhuma ênfase em um desenvolvimento em uma plataforma específica.
-O segundo Workflow é chamado “Platform-centered”, e deve ser usado se o projeto é focado para uma única plataforma e se pretende modificá-la em baixo nível.
-
-
-A arquitetura interna está descrita no diagrama:
-
-% TODO adicionar imagem
 
 
 

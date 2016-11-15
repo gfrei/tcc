@@ -1,5 +1,5 @@
 var scene, camera, renderer;
-var cube, sphere;
+var sphere, sphere;
 var container, stats;
 
 if ( ! Detector.webgl ) {
@@ -9,16 +9,16 @@ if ( ! Detector.webgl ) {
 
 hasNewColors = false;
 
-function updateCubeRotation(xRot, yRot, zRot) {
-    cube.rotation.x += xRot;
-    cube.rotation.y += yRot;
-    cube.rotation.z += zRot;
+function updateSphereRotation(xRot, yRot, zRot) {
+    sphere.rotation.x += xRot;
+    sphere.rotation.y += yRot;
+    sphere.rotation.z += zRot;
 }
 
-function updateCubeColor(r, g, b) {
-    cube.material.color.r = r;
-    cube.material.color.g = g;
-    cube.material.color.b = b;
+function updateSphereColor(r, g, b) {
+    sphere.material.color.r = r;
+    sphere.material.color.g = g;
+    sphere.material.color.b = b;
 }
 
 
@@ -50,15 +50,6 @@ function init() {
 
     //-------------------------------------------
 
-    // New Cube
-    // var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    // var material = new THREE.MeshLambertMaterial( {
-    //     color: 0xffff00,
-    //     wireframe : true
-    // } );
-    // cube = new THREE.Mesh( geometry, material );
-    // scene.add( cube );
-
     // New Sphere
     var radius = 2;
     var segments = 16;
@@ -69,8 +60,8 @@ function init() {
         color: 0xCC0000,
         wireframe : true
     } );
-    cube = new THREE.Mesh( sphereGeo, sphereMaterial );
-    scene.add( cube );
+    sphere = new THREE.Mesh( sphereGeo, sphereMaterial );
+    scene.add( sphere );
 
     //-------------------------------------------
 
@@ -99,9 +90,9 @@ function render() {
 
     requestAnimationFrame( render );
 
-    updateCubeRotation(xRot, yRot, zRot);
+    updateSphereRotation(xRot, yRot, zRot);
     if (hasNewColors) {
-        updateCubeColor(r, g, b);
+        updateSphereColor(r, g, b);
         hasNewColors = false;
     };
 
