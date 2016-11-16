@@ -576,7 +576,7 @@ render();
 
 O servidor é implementado com Javascript, com o auxilio de Node.js e ExpressJS
 
-\subsubsection{Node.js e ExpressJS}
+\subsubsection{Node.js e ExpressJS para criar um servidor}
 % https://www.youtube.com/watch?v=pU9Q6oiQNd0
 % https://nodejs.org/en/
 % https://www.tutorialspoint.com//nodejs/nodejs_introduction.htm
@@ -685,6 +685,38 @@ A arquitetura interna está descrita no diagrama:
 
 % TODO adicionar imagem
 
+
+
+
+\subsection{Utilizando Node.js e ExpressJS}
+
+*Something Something*
+
+% https://www.tutorialspoint.com//nodejs/nodejs_introduction.htm
+Alguns atributos chave de Node.js são:
+
+% Asynchronous and Event Driven − All APIs of Node.js library are asynchronous, that is, non-blocking. It essentially means a Node.js based server never waits for an API to return data. The server moves to the next API after calling it and a notification mechanism of Events of Node.js helps the server to get a response from the previous API call.
+- Assíncrono e Orientado a Eventos - Todas as APIs da biblioteca de Node.js são assíncronas, o que garante que são não bloqueantes. Isso essencialmente significa que um servidor baseado em Node.js não espera por dados de retorno da chamada da API, ele somente continua com sua execução para a próxima chamada de API. Os dados de retorno chegam ao servidor atráves de um mecanismo de notificações, os Eventos de Node.js. % Cada evento ativa um callback para os dados serem tratados.
+
+
+% Very Fast − Being built on Google Chrome's V8 JavaScript Engine, Node.js library is very fast in code execution.
+- Muito rápido - Por ser construído com base no V8 JavaScript Engine do Google Chrome, a biblioteca de Node.js é muito veloz em execução de código.
+
+% Single Threaded but Highly Scalable − Node.js uses a single threaded model with event looping. Event mechanism helps the server to respond in a non-blocking way and makes the server highly scalable as opposed to traditional servers which create limited threads to handle requests. Node.js uses a single threaded program and the same program can provide service to a much larger number of requests than traditional servers like Apache HTTP Server.
+- Possui \emph{thread} única porém é muito escalável - Node.js possui um modelo de laço de Eventos com a utilização de uma única \emph{thread}. O mecanismo de Eventos ajuda o servidor enviar respostas de forma não bloqueante e faz o seridor altamente escalável em comparação ao modelo tradicional de servidores que criam um número limitado de \emph{threads} para lidar com requisições dos clientes. Node.js usa um programa de \emph{thread} única e esse mesmo programa pode providenciar serviço a um número muito maior de requisições do que um servidor tradicional, como o Apache HTTP.
+
+% No Buffering − Node.js applications never buffer any data. These applications simply output the data in chunks.
+- Sem \emph{Buffering} - Aplicações em Node.js nunca armazenam nenhum dado em \emph{buffers}. Essas apliações simplesmente enviam dados em blocos.
+
+% License − Node.js is released under the MIT license.
+- Licenciado - Node.js está sob uma licença MIT.
+
+
+
+
+
+
+
 \subsection{Comunicação Web e Aplicações Web}
 
 A comunicação de dados entre computadores através da Internet é algo muito comum, e necessita de uma arquitetura de rede adequada para ocorrer.
@@ -736,19 +768,19 @@ Um exemplo claro disso é uma aplicação de Chat. Não é possível ter um padr
 A necessidade de vários tratamentos para uma aplicação relativamente simples funcionar deixa claro que há necessidade de mais ferramentas para o desenvolvimento de aplicações Web.
 
 
-\section{Necessidade de Comunicação Bilateral}
+\subsubsection{Necessidade de Comunicação Bilateral}
 
 
 % Maneiras de simular CommBi
 
 Um dos fatores mais limitantes era que a comunicação cliente-servidor não era bilateral. Não era possível para o Servidor mandar dados espontaneamente, sem que o Cliente tivesse feito uma requisição antes. Para contornar esse problema foram criadas técnicas para simular essa comunicação bilateral: Polling, Long-Polling e Streaming.
 
-\subsection{Polling}
+\subsubsection{Polling}
 
 Essa técnica já foi descrita acima no exemplo do Chat. Ela consiste em fazer o cliente mandar requisições em intervalos regulares de tempo e receber a resposta logo em seguida. Ela foi a primeira tentativa de se contornar o problema, principalmente por ser a implementação mais simples e direta. Essa solução é boa quando se sabe o tempo de atualização de dados no servidor, pois então é possível sincronizar os tempos de requisição e atualização. Porém esse é somente um dos cenários possíveis, dados em tempo real não costumam ser tão previsíveis, então é inevitável que uma parcela dessas requisições seja desnecessária e muitas conexões sejam abertas e fechadas sem necessidade, em momentos de baixo fluxo de atualização do servidor.
 
 
-\subsection{Long-Polling}
+\subsubsection{Long-Polling}
 
 No Long-Polling, o cliente manda uma requisição e o servidor a mantém aberta durante um determinado período de tempo. Se uma atualização chegar durante esse período, a resposta é enviada ao cliente com esses dados novos. Se o tempo acabar sem que haja mudanças, o servidor envia uma resposta para encerrar a requisição aberta. Essa técnica apresenta melhoras em relação ao Polling, porém, se existe um fluxo alto de atualizações no servidor, ela não oferece nenhuma melhora substancial em relação a ele. Nessa situação aliás, o Long-Polling pode ser pior, pois pode ficar instável em um loop contínuo de Polls imediatos.
 
@@ -769,7 +801,7 @@ No Long-Polling, o cliente manda uma requisição e o servidor a mantém aberta 
 % Several experiments have shown success with timeouts as high as 120 seconds, but generally 30 seconds is a safer value. Therefore vendors of network equipment wishing to be compatible with the HTTP long polling mechanism are advised to implement a timeout substantially greater than 30 seconds (where "substantially" means several times more than the medium network transit time).
 
 
-\subsection{Streaming}
+\subsubsection{Streaming}
 
 Com a técnica de streaming, o cliente manda uma requisição, e o servidor manda e mantém uma resposta aberta, que é atualizada continuamente, sem ter um momento certo para ser fechada (um intervalo de tempo pode ser definido, mas normalmente a conexão é mantida indefinidamente). Essa resposta é atualizada sempre que há novos dados no servidor, mas ele nunca manda um sinal para completar a resposta e encerrar a conexão. O ponto negativo dessa técnica é que, como o streaming ainda é encapsulado no HTTP, é possível que firewalls e servidores proxy possam escolher armazenar a resposta em um buffer, o que aumenta muito a latência da mensagem.
 
@@ -781,7 +813,7 @@ Por fim, todas essas técnicas envolvem requisições e respostas com um cabeça
 Por todos esses fatos, ficou claro que era necessário ter uma conexão bilateral de verdade. Para que essa conexão fosse possível, era necessário ter um controle maior da transferência de dados era necessário. Dentro do protocolo TCP(TODO verificar informação), esse controle é feito por meio dos Sockets, mas, até então, eles eram indisponíveis ao desenvolvimento Web, não havia interface de interação.
 
 
-\section{Sockets}
+\subsubsection{Sockets}
 
 No modelo cliente-servidor uma conexão é dada por dois pontos finais, um no Cliente e um no Servidor. Essa é a conexão de baixo nível definida pelo protocolo TCP. Cada um desses pontos finais serve para mandar e receber os dados em relação ao outro lado da conexão e eles são nomeados como Soquetes de Rede (Sockets). Cada Socket é definido por um endereço de IP e uma Porta (por exemplo, 192.168.0.1:8000), independente se está no Cliente ou no Servidor, e a conexão TCP é definida de maneira única por seus dois Sockets.
 
@@ -807,7 +839,7 @@ Agora o cliente e o servidor podem se comunicar com leitura ou escrita nesses no
 
 
 
-\section{Websockets}
+\subsubsection{Websockets}
 
 % https://www.websocket.org/aboutwebsocket.html
 
@@ -923,7 +955,7 @@ O evento de encerramento de conexão e de erro (onClose e onError) só escrevem 
 
 
 
-\subsection{Teste de eficiência de Websockets}
+\subsubsection{Teste de eficiência de Websockets}
 
 
 No experimento a seguir, é mostrado a diferença de tráfego de dados e latência entre Websocket e Polling para requisitar dados em tempo real. Ele foi retirado do site https://www.websocket.org/quantum.html , e é somente transcrito aqui, em tradução livre:
@@ -1059,7 +1091,7 @@ O WebSocket (assim como outros protocolos e ferramentas) necessitam de  atualiza
 Uma das maneiras de se contornar essa dificuldade é utillizar outras APIs que cuidam desses detalhes internamente.
 
 
-\section{Socket.io}
+\subsubsection{Socket.io}
 % https://davidwalsh.name/websocket
 
 
@@ -1176,18 +1208,7 @@ Socket.io é a principal ferramenta usada para fazer esse Projeto funcionar.
 
 \newpage
 
-\section{Parte Subjetiva}
-
-
-\subsection{Desafios e frustrações}
-\subsection{A contribuição do curso de Computação}
-\subsection{Próximo Passos}
-\subsection{Agradecimentos}
-
-
-
-Evolução do Projeto:
-
+\section{Evolução do Projeto}
 
 Esse projeto utiliza várias tecnologias que eu nunca tive contato.
 
@@ -1205,6 +1226,7 @@ Com os argumentos apresentados, a decisão foi criar um aplicativo para Android 
 
 Uma vez que a decisão de utilizar um smartphone, foi necessário saber como implementar um aplicativo que tenha acesso aos sensores.
 A primeira ideia foi utilizar serviço MIT App Inventor.
+
 
 
 
@@ -1229,6 +1251,17 @@ Com certa dificuldade um primeiro aplicativo de teste foi feito, para pegar valo
   NUI é uma metodologia de interface cuja proposta é ser invisível ao usuário, e apresentar uma experiência natural e intuitiva. Seu principal foco é evitar grandes barreiras durante o aprendizado. Através de decisões de design, o usuário tem um entendimento do software sem grandes dificuldades, à medida que a complexidade da interação aumenta.
 
 [TODO] Para exemplificar a facilidade de desenvolvimento de lógica e de uma interface gráfica, abaixo tem o código para se criar um jogo de Pong.
+
+
+
+\section{Parte Subjetiva}
+
+
+\subsection{Desafios e frustrações}
+\subsection{A contribuição do curso de Computação}
+\subsection{Próximo Passos}
+\subsection{Agradecimentos}
+
 
 
 

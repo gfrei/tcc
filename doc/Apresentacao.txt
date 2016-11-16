@@ -1,0 +1,61 @@
+Objetivos
+	Criar um ecossistema online:
+		- Um aplicativo Android que mande e receba dados de um servidor.
+		- Uma aplicação Web que utilize dados externos em sua execução.
+		- Um servidor que se conecte a dispostivos Android e que lance essa aplicação Web.
+
+	Propositalmente vago para servir de arcabouço para um desenvolvimento maior e mais robusto.
+
+
+
+Desafios
+	- Desenvolver um aplicativo Android.
+	- Desenvolver uma aplicação Web interativa.
+	- Criar um servidor para a comunicação com esses clientes.
+
+	- \emph{Encontrar uma forma de comunicação completa e eficiente.}
+
+
+
+Comunicação utilizando Socket.io
+
+	- Implementa o protocolo WebSocket.
+
+				> Protocolo WebSocket.
+					- Lida diretamente com os sockets de uma conexão.
+					- Conexão bilateral: Cliente <-> Servidor.
+					- Assíncrono e Orientado a Eventos.
+					- Cabeçalho mínimo de mensagens.
+
+
+	- Definição arbitrária de eventos.
+	- Múltiplas conexões simultâneas.
+
+
+
+Aplicativo Android
+	[imagem]
+	- Criado com o Apache Cordova.
+		- Desenvolvimento igual ao de uma página Web.
+
+	- Formulário para conectar-se ao servidor.
+	- Botões azuis para eventos pontuais.
+	- Botões cinzas para eventos contínuos.
+	- LOG: exibe mensagens do servidor.
+
+
+
+Aplicação Web
+	[imagem]
+	Esfera Interativa, rotaciona e altera sua cor.
+		- Utiliza a biblioteca THREE.js para 3D.
+		- Recebe valores { X , Y , Z } de velocidade do servidor.
+		- Explicita a baixa latência de Sockets.
+
+
+
+Servidor
+	Escrito em JavaScript.
+	Utiliza Socket.io para conexões.
+	- Permite que múltiplos clientes se conectem.
+	- Faz a comunicação entre o aplicativo Android e a página Web.
