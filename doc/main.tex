@@ -199,9 +199,9 @@ Dispositivos móveis, como smartphones e tablets, estão cada dia mais presentes
 
 O mesmo vale para tecnologias para a internet. O ambiente Web está em constante transformação, APIs \footnote{\emph{Application Programming Interface}, conjunto de rotinas e padrões de programação para acesso a um aplicativo de software ou plataforma baseado na Web} e ferramentas são criadas e renovadas a todo momento e podem ser aplicadas a vários contextos de forma relevante e inovadora.
 
-Com esse contexto em mente, o Projeto apresentado foi concebido para unir essas duas pontas de tecnologias em uma Aplicação Web que se comunica com um dispositivo móvel. O conceito básico é ter um Applicativo de smartphone que se conecte a um servidor e passe a enviar e receber informações. O servidor lança uma página Web que recebe esses dados enviados e execute sua funcionalidade.
+Com esse contexto em mente, o Projeto apresentado foi concebido para unir essas duas pontas de tecnologias em uma Aplicação Web que se comunica com um dispositivo móvel. O conceito básico é ter um Applicativo de smartphone que se conecte a um servidor e passe a enviar e receber informações. O servidor lança uma página Web que recebe esses dados enviados e executa sua funcionalidade.
 
-O conceito de “funcionalidade" é propositalmente deixado em aberto pois esse fluxo de dados encapsula uma grande variedade de funcionalidades. É possível, por exemplo, executar um jogo na página Web que utiliza o smartphone como um controle, ou manter um banco de dados no Servidor e fazer buscas utilizando o smartphone. Estes exemplos e outros são aprofundados na seção de Casos de Uso (TODO seção de Casos de Uso).
+O conceito de “funcionalidade" é propositalmente deixado em aberto pois esse fluxo de dados encapsula uma grande variedade de funcionalidades. É possível, por exemplo, executar um jogo na página Web que utiliza o smartphone como um controle, ou manter um banco de dados no Servidor e fazer buscas utilizando o smartphone.
 
 O Projeto tem como objetivo então abrir e esse canal de comunicação bilateral entre páginas Web e smartphones, além de facilitar o desenvolvimento de aplicações voltadas a essa estrutura.
 
@@ -214,15 +214,18 @@ O Projeto tem como objetivo então abrir e esse canal de comunicação bilateral
 \newpage
 \subsection{Objetivos}
 
-- Desenvolver um aplicativo para smartphones.
 
-- Criar um servidor.
+\begin{itemize}
+    \item Desenvolver um aplicativo para smartphones.
 
-- Construir uma comunicação entre ambos.
+    \item Criar um servidor.
 
-- Encontrar uma forma eficiente de comunicação.
+    \item Construir uma comunicação entre ambos.
 
-- Desenvolver uma página Web como Caso de Uso.
+    \item Encontrar uma forma eficiente de comunicação.
+
+    \item Desenvolver uma página Web como Caso de Uso.
+\end{itemize}
 
 
 
@@ -234,16 +237,16 @@ Nessa seção, é apresentada a implementação do Projeto. O código será exib
 
 \subsection{Comunicação}
 
-A comunicação é a parte mais importante deste Projeto. O modelo cliente-servidor(TODO ref) foi usado, mas foi necessário levar alguns pontos em consideração. O cliente de smartphone e o cliente Web precisam se comunicar com o servidor da melhor forma possível. O protocolo de comunicação é o fator que mais pode limitar as possibilidades previstas. Para não haver problemas, a comunicação precisa de:
+A comunicação é a parte mais importante deste Projeto. O modelo cliente-servidor foi usado, mas foi necessário levar alguns pontos em consideração. O cliente de smartphone e o cliente Web precisam se comunicar com o servidor da melhor forma possível. O protocolo de comunicação é o fator que mais pode limitar as possibilidades previstas. Para não haver problemas, a comunicação precisa de:
 \begin{itemize}
 
-\item Baixa latência. No caso de o cliente Web executar um jogo, o tempo entre um comando enviado do smartphone e a reação da página precisa ser o menor possível. Caso contrário, a experiência é danificada e pode até ser impossibilitada, se o jogo for construído com base em respostas rápidas.
+    \item \textbf{Baixa latência.} No caso de o cliente Web executar um jogo, o tempo entre um comando enviado do smartphone e a reação da página precisa ser o menor possível. Caso contrário, a experiência é danificada e pode até ser impossibilitada, se o jogo for construído com base em respostas rápidas.
 
-\item Cabeçalho mínimo de mensagens. Se o fluxo de mensagens for alto, esse cabeçalho pode consumir muita banda da conexão, além de exigir muitos recursos, tanto do servidor como dos clientes. É necessário que ele possua a menor quantidade de informações desnecessárias. Caso a mensagem tenha muito conteúdo, ele fará pouca diferença, mas se ela for pequena, como um texto ou um conjunto de valores, o cabeçalho representa um aumento significativo no tamanho total, podendo ser até maior do que o próprio conteúdo.
+    \item \textbf{Cabeçalho mínimo de mensagens.} Se o fluxo de mensagens for alto, esse cabeçalho pode consumir muita banda da conexão, além de exigir muitos recursos, tanto do servidor como dos clientes. É necessário que ele possua a menor quantidade de informações desnecessárias. Caso a mensagem tenha muito conteúdo, ele fará pouca diferença, mas se ela for pequena, como um texto ou um conjunto de valores, o cabeçalho representa um aumento significativo no tamanho total, podendo ser até maior do que o próprio conteúdo.
 
-\item Conexão bilateral. Informações podem se originar de qualquer um dos clientes ou do servidor, então é necessário que o processo em questão possa enviar as informações a qualquer momento. No caso de um cliente precisar ser atualizado caso haja dados novos, é inviável que precise consultar o servidor a todo momento.
+    \item \textbf{Conexão bilateral.} Informações podem se originar de qualquer um dos clientes ou do servidor, então é necessário que o processo em questão possa enviar as informações a qualquer momento. No caso de um cliente precisar ser atualizado caso haja dados novos, é inviável que precise consultar o servidor a todo momento.
 
-\item Permitir multiplas conexões simultâneas. Não é necessário, mas permite uma liberdade ainda maior. No projeto é previsto somente que o servidor se conecte a um cliente Web e de smartphone, mas, se o servidor aceitar a conexão com vários clientes do mesmo tipo, o desenvolvimento deles pode tirar proveito disso. Um smartphone pode enviar e receber informações de outros, como em um Chat, por exemplo.
+    \item \textbf{Permitir multiplas conexões simultâneas.} Não é necessário, mas permite uma liberdade ainda maior. No projeto é previsto somente que o servidor se conecte a um cliente Web e de smartphone, mas, se o servidor aceitar a conexão com vários clientes do mesmo tipo, o desenvolvimento deles pode tirar proveito disso. Um smartphone pode enviar e receber informações de outros, como em um Chat, por exemplo.
 \end{itemize}
 
 Com esses requerimentos em vista, o tecnologia usada foi o Framework de JavaScript Socket.io, que implementa o protocolo WebSocket.
@@ -251,60 +254,29 @@ Com esses requerimentos em vista, o tecnologia usada foi o Framework de JavaScri
 
 \subsubsection{Protocolo WebSocket}
 
-% https://www.websocket.org/aboutwebsocket.html
-
-WebSocket é um protocolo que lida com Sockets (TODO ref) de uma conexão que foi criado para permitir a comunicação bilateral entre cliente e servidor. Ele permite mais liberdade para criar novos protocolos e maneiras de se transferir dados.
-
-Sua interface é bastante simples, seu objetivo é o envio e recebimento de mensagens entre o cliente e o servidor. Para o protocolo, não existe essa diferenciação entre os dois, ambos são apenas dois processos conectados. Essa hierarquia cliente-servidor deixa de existir e não há mais uma separação de funções entre ambos. A comunicação é dada por envio de mensagens e ocorrência de eventos. Esses processos podem enviar mensagens a qualquer momento e estão ouvindo um ao outro.
-
-O protocolo foi pensado para funcionar bem com a infraestrutura Web já existente. Como parte desse paradigma, sua especificação determina que uma conexão é estabelecida inicialmente com o protocolo HTTP (TODO ref), garantindo retrocompatibilidade.
-
-A conexão é feita da seguinte forma. Após inciada a conexão HTTP, o cliente envia uma requisição ao servidor indicando que deseja trocar de protocolos, de HTTP para WebSocket. Se o servidor entende esse protocolo, ele envia uma resposta para permitir a troca. Nesse momento a conexão HTTP é interrompida e a conexão WebSocket toma o seu lugar. Esse processo é chamado de \emph{WebSocket Handshake}.
+WebSocket é um protocolo que permite a comunicação bilateral entre cliente e servidor. Para o protocolo, não existe essa diferenciação entre os dois, o cliente e o servidor são apenas dois processos conectados. A comunicação é dada por envio de mensagens e ocorrência de eventos. Esses processos podem enviar mensagens a qualquer momento e estão ouvindo um ao outro.
 
 A estrutura da mensagem em WebSocket é mínima. O corpo da mensagem, os dados a serem enviados, só possui dois formatos, texto ou binário. O cabeçalho contém um identificador de tipo do formato, que tem um campo para o tamanho da mensagem e nada mais. A mensagem completa é só o conteúdo mais seu tamanho. Como a conexão não muda em momento algum, todas as informações contidas no cabeçalho de requisição e resposta HTTP são invariantes e, portanto, não precisam ser reenviadas.
 
 Um dos processos conectados, em um momento arbitrário, envia uma mensagem ao outro, talvez porque dados tenham sido atualizados ou o usuário tenha feito alguma ação em específico. Uma vez que a mensagem é enviada, esse processo volta ao que estava fazendo, sem a necessidade de esperar alguma resposta do outro processo. Esse comportamento é chamado de assíncrono, pois não um lado não age em sincronia com o outro.
 
-O outro processo vê a chegada dessa nova mensagem como um evento. Quando esse evento acontece, ele executa um comportamento específico (\emph{callback}) com os dados recebidos, como alteração de informações exibidos ou um cálculo com os valores novos. Por isso é dito que Websocket é orientado a eventos.
+O outro processo recebe a nova mensagem através de um evento. Quando esse evento acontece, ele executa um comportamento específico (\emph{callback}) com os dados recebidos, como alteração de informações exibidos ou um cálculo com os valores novos. Por isso é dito que WebSocket é Orientado a Eventos.
 
-Existem quatro tipos de eventos e seus \emph{callbacks} são definidos na criação do WebSocket. Esses eventos são:
-\begin{itemize}
-
-\item\emph{onopen}: ocorre quando a conexão é feita;
-
-\item\emph{onclose}: ocorre quando a conexão é fechada;
-
-\item\emph{onmessage}: ocorre quando uma mensagem do outro WebSocket chega;
-
-\item\emph{onerror}: ocorre se há algum erro na conexão.
-\end{itemize}
-
-% (TODO linkar exemplo)
 
 \subsubsection{Socket.io}
 
-Socket.io é a API de WebSocket para JavaScript utilizada. Ela cuida de todos os detalhes de funcionamento do protocolo internamente, deixando uma interface simples ao usuário.
-
-Para uma conexão ser estabelecida, tanto o cliente quanto o servidor precisam estar executando Socket.io. Sua implementação tenta primeiramente fazer a conexão usando WebSocket, mas se o servidor não suporta esse protocolo, ele recua (faz \emph{fallback}) para outras tecnologias, como \emph{AJAX long-polling}, \emph{AJAX multipart streaming}, \emph{IFrame}, \emph{JSONP polling}, entre outros (todos utilizando a mesma interface). Esse \emph{fallback} permite à API abranger uma quantidade muito maior de servidores, reduzindo possíveis problemas numa implementação em larga escala.
-
-Além da implementação básica do protocolo WebSocket, ele também adiciona outras funcionalidades muito importantes para o desenvolvimento de uma aplicação maior e mais robusta. As que foram utilizadas no Projeto foram:
+Socket.io é a API de WebSocket para JavaScript utilizada. Além da implementação básica do protocolo, ele também adiciona outras funcionalidades importantes para o desenvolvimento de uma aplicação mais robusta. As que foram utilizadas no Projeto foram:
 
 \begin{itemize}
 
-\item A possibilidade de conectar múltiplos sockets em uma mesma porta. Internamente, ele faz uma multiplexação das várias conexões abertas em uma mesma porta, mas os processos entendem que tem um socket dedicado a eles. Utilizando WebSockets, cada socket precisa de uma porta exclusiva para fazer a conexão.
+\item A possibilidade de conectar múltiplos sockets em uma mesma porta. Utilizando WebSockets, cada socket precisa de uma porta exclusiva para fazer a conexão.
 
-A possibilidade de vários sockets em uma mesma aplicação permite uma modularização muito maior, pois não é necessário que um módulo saiba se tem uma conexão dedicada ou se está compartilhando com mais dezenas de outros sockets.
+\item Criação arbritrária de eventos. Com WebSocket, o desenvolvedor fica preso a quatro eventos pré definidos: \emph{onopen}, \emph{onclose}, \emph{onmessage} e \emph{onerror}.
 
-\item A possibilidade de criação arbritrária de eventos. Com WebSocket, o desenvolvedor fica preso aos quatro eventos pré definidos: \emph{onopen}, \emph{onclose}, \emph{onmessage} e \emph{onerror}. Internamente, os quatro são eventos de mensagem, disparados em momentos e situações específicas. O que o Socket.io faz é dar a liberdade de definir quaisquer eventos desejados.
-
-Essa criação de eventos funciona da seguinte forma: na hora de enviar uma mensagem, o processo emissor define também o nome do evento que está sendo enviado. O processo receptor define o evento que vai ouvir e a subrotina que vai ser executada na ocorrência desse evento. Se o evento lançado for ouvido pelo receptor, o \emph{callback} é chamado.
+Essa criação de eventos funciona da seguinte forma: o processo emissor manda a mensagem e o nome do evento que está sendo enviado. O processo receptor define o evento que vai ouvir e a subrotina que vai ser executada na ocorrência desse evento. Se o evento lançado for ouvido pelo receptor, o \emph{callback} é chamado.
 \end{itemize}
 
-Um ponto negativo dessa definição de eventos é que o cabeçalho da mensagem é um pouco maior, pois o de WebSockets é reduzido ao extremo, mas esse tamanho ainda é ínfimo e o overhead causado não se torna um problema.
-
-Essas funcionalidades aumentam o grau de liberdade e permitem um escopo maior na hora de criar uma aplicação robusta. %Imagine um sistema grande, onde dados são recebidos de múltiplas fontes, cálculos são feitos sobre eles, e o resultado pode ativar vários comportamentos de um outro processo. Algo assim exigiria um código complexo com WebSockets, mas com Socket.io é simples e direto.
-
-Exemplos de uso de Socket.io estão presentes no próprio código do servidor e dos clientes implementados.
+O uso de Socket.io está presente no código do servidor e dos clientes Android e Web. Todos esses processos escutam e enviam eventos entre si, e o servidor permite a conexão de múltiplos clientes.
 
 
 
@@ -1168,70 +1140,93 @@ Alguns atributos chave de Node.js são:
 
 \subsection{Comunicação Web e Aplicações Web}
 
+
+O protocolo WebSocket foi utilizado para a comunicação deste Projeto, pois há vários fatores no protocolo HTTP e do modelo cliente-servidor convencional que se tornam empecilhos para as necessidades apresentadas.
+
+Enquanto que, na prática, bastou escolher esse protocolo WebSocket, sua criação representa uma evolução no paradigma de desenvolvimento de páginas Web. A seguir é dado um panorama dos fatores que desencadearam sua criação e o que isso representa.
+
 A comunicação de dados entre computadores através da Internet é algo muito comum, e necessita de uma arquitetura de rede adequada para ocorrer.
 
-(TODO explicar TCP e/ou TCP/IP)
 % cliente-servidor
-A mais utilizada é o modelo cliente-servidor. Neste modelo, existem dois tipos de processos rodando, o Cliente e o Servidor. O Cliente é o processo que roda nos computadores locais, e se conecta ao Servidor. A comunicação é dada quando o Cliente manda uma requisição ao Servidor (esta requisição pode ser por uma página web, um processamento de dados, entre outros). Por sua vez, o servidor recebe esses dados e faz o processamento necessário para completar essa requisição, e em seguida envia uma resposta ao Cliente. A resposta pode pode ser o que foi requisitado ou outro tipo de mensagem, como de erro, caso ocorra uma falha no processamento ou negação de permissão. O Cliente então pode continuar com o seu próprio processo.
+\subsubsection{Modelo cliente-servidor}
+A mais utilizada é o modelo cliente-servidor. Neste modelo, existem dois tipos de processos rodando, o Cliente e o Servidor. O Cliente é o processo que roda nos computadores locais e se conecta ao Servidor. A comunicação é dada quando o Cliente manda uma requisição ao Servidor (esta requisição pode ser por uma página web, um processamento de dados, entre outros). Por sua vez, o Servidor recebe esses dados e faz o processamento necessário para completar essa requisição, e em seguida envia uma resposta ao Cliente. A resposta pode pode ser o que foi requisitado ou outro tipo de mensagem, como de erro, caso ocorra uma falha no processamento ou negação de permissão. O Cliente então pode continuar com o seu próprio processo.
 
 
-(TODO a requisição é um HTTP, explicar HTTP)
+% HTTP
+% https://www.jmarshall.com/easy/http/
+%\subsubsection{Protocolo HTTP}
 
-https://www.jmarshall.com/easy/http/
+O protocolo que acompanha esse modelo é principalmente HTTP (\emph{Hypertext Transfer Protocol}). Ele é usado para a transferência de Recursos entre processos. Recursos são arquivos HTML, imagens, resultados de buscas, entre outros.
+
+Um Cliente HTTP, como um navegador, abre uma conexão e envia uma mensagem de requisição ao Servidor HTTP, que retorna uma mensagem de resposta ao Cliente, normalmente contendo o recurso pedido. Após entregar a resposta, o Servidor encerra a conexão.
+
+Por esse fato é dito que HTTP um protocolo sem estado, pois não mantém informações sobre a conexão entre transações. Ele também implica que cada mensagem HTTP precisa possuir um cabeçalho com informações sobre o contexto, uma vez que o Servidor não guarda nenhum dado.
 
 
-(TODO nota de rodapé)
+
+
+
+% (TODO nota de rodapé)
 % P2P
-A outra grande arquitetura muito utilizada também é a peer-to-peer (P2P). Nessa arquitetura, não há um computador central para funcionar como servidor, cada computador conectado (Peer) na rede realiza funções tanto de cliente como de servidor na aplicação que está sendo executada. Essa aplicação tem suas tarefas organizadas e divididas entre os Peers.
-Essa arquitetura é conhecida principalmente por ser usada para a transferência de arquivos grandes, como músicas e vídeos. Nessa transmissão, os Peers que tem o arquivo são conectados aos que não tem, e começam a transferência de pequenos pacotes de dados. Esses pacotes não precisam vir ordenados e o Peer receptor os armazena localmente. Uma vez que a transferência é completada, ele ordena os pacotes e monta o arquivo final. Uma vantagem dessa arquitetura é que a tranferência não é limitada pela capacidade de banda de Servidor, e Peers podem se conectar e desconectar sem que haja problemas para o receptor, o arquivo são será corrompido por eventuais problemas de conexão. Um ponto negativo é que, sem um Servidor, não há um controle de que tipos de arquivos estão sendo transferidos (o que abre uma porta para pirataria) e não é fácil interromper uma transferência, uma vez que ela pode ser composta de milhares de conexões. Outro ponto é que não é fácil de se conhecer a procedência dos dados recebidos, a segurança não pode ser garantida.
+% A outra grande arquitetura muito utilizada também é a peer-to-peer (P2P). Nessa arquitetura, não há um computador central para funcionar como servidor, cada computador conectado (Peer) na rede realiza funções tanto de cliente como de servidor na aplicação que está sendo executada. Essa aplicação tem suas tarefas organizadas e divididas entre os Peers.
+% Essa arquitetura é conhecida principalmente por ser usada para a transferência de arquivos grandes, como músicas e vídeos. Nessa transmissão, os Peers que tem o arquivo são conectados aos que não tem, e começam a transferência de pequenos pacotes de dados. Esses pacotes não precisam vir ordenados e o Peer receptor os armazena localmente. Uma vez que a transferência é completada, ele ordena os pacotes e monta o arquivo final. Uma vantagem dessa arquitetura é que a tranferência não é limitada pela capacidade de banda de Servidor, e Peers podem se conectar e desconectar sem que haja problemas para o receptor, o arquivo são será corrompido por eventuais problemas de conexão. Um ponto negativo é que, sem um Servidor, não há um controle de que tipos de arquivos estão sendo transferidos (o que abre uma porta para pirataria) e não é fácil interromper uma transferência, uma vez que ela pode ser composta de milhares de conexões. Outro ponto é que não é fácil de se conhecer a procedência dos dados recebidos, a segurança não pode ser garantida.
 
-Esta arquitetura não serve para as necessidades do projeto, a hipótese de uso foi descartada após o estudo de sua estrutura.
+% Esta arquitetura não serve para as necessidades do projeto, a hipótese de uso foi descartada após o estudo de sua estrutura.
 
 %Começo de problemas em usar somente cliente-servidor
-Este modelo é suficiente para páginas Web, pois o cliente pede páginas estáticas e o Servidor as fornece sempre que necessário. Mas essa arquitetura não permite um uso mais dinâmico de websites, pois sua estrutura é muito burocrática. Para fazer uma página mais responsiva, com feedbacks a cada ação do usuário e dados novos, seria necessário que Cliente fizesse uma requisição ao Servidor após o usuário ativar algum gatilho (como preencher um formulário ou levar o cursor a algum ponto específico, por exemplo). Como o protocolo dessa requisição é HTTP, ela possui em seu cabeçalho toda a estrutura de dados para ser processado e enviado de volta, também com um cabeçalho equivalente. Ao receber a página atualizada, o Cliente ainda precisa recarregar a página para atualizar o que for necessário. Há dois problemas claros nessa estrutura:
+O modelo cliente-servidor é suficiente para páginas Web, pois o Cliente pede páginas estáticas e o Servidor as fornece sempre que necessário. Mas essa arquitetura não permite um uso mais dinâmico dessas páginas Web, pois sua estrutura é muito burocrática.
 
-- A necessidade de recarregar a página inteira, mesmo que somente uma pequena parcela dos dados tenha sido alterada. Esse comportamento foi criado em um momento no qual não se tinha a necessidade de alterar pequenas coisas, na página, e que cada HTML vindo do Servidor seria uma página completamente nova. A impossibilidade de atualizar dados individualmente remove qualquer dinamicidade desejada.
+Para fazer uma página mais responsiva, com \emph{feedbacks} a cada ação do usuário e dados novos, seria necessário que o Cliente fizesse uma requisição ao Servidor após cada ação executada (como preencher um formulário ou levar o cursor a algum ponto específico, por exemplo). Cada requisição HTTP dessas carregaria muitas informações em seu cabeçalho. Ao receber a página atualizada, o Cliente ainda precisaria recarregá-la para atualizar o que fosse necessário. Os dois problemas claros nessa estrutura são:
 
-- O overhead gerado pelas pelo cabeçalho das requisições e repostas com o protocolo HTTP. Esse overhead cria uma latência alta e faz com que um envio contante de requisições ao Servidor exija muitos recursos.
+\begin{itemize}
+    \item A necessidade de recarregar a página inteira, mesmo que somente uma pequena parcela dos dados tenha sido alterada. Esse comportamento foi criado em um momento no qual não se tinha a necessidade de alterar pequenas coisas na página, e que cada HTML vindo do Servidor seria uma página completamente nova. A impossibilidade de atualizar dados individualmente remove qualquer dinamicidade desejada.
 
-Um exemplo de comportamento impossível com essas restrições é dar um feedback instantâneo para o usuário na hora que ele está preenchendo um cadastro em algum site, como informar se o email inserido já foi usado, ou se a senha possui os parâmetros mínimos necessários de segurança.
+    \item O \emph{overhead} gerado pelo cabeçalho das mensagens HTTP. Esse \emph{overhead} cria uma latência (tempo de resposta) alta e faz com que um envio contante de requisições ao Servidor exija muitos recursos.
+\end{itemize}
 
-(TODO verificar se) A conexão só dura durante o processo de requisição entre ambos, ela é fechada uma vez que a requisição é satisfeita.
+Um exemplo de comportamento impossível com essas restrições é dar um \emph{feedback} instantâneo para o usuário na hora que ele está preenchendo um cadastro em algum site, como informar se o email inserido já foi usado ou se a senha possui os parâmetros mínimos necessários de segurança.
 
 % Apresento Ajax
-Da discussão gerada à partir desses problemas, surgiu o Ajax (Asynchronous JavaScript e XML). Ajax é uma técnica de desenvolvimento Web usada para fazer requisições ao Servidor para receber dados no background de forma assíncrona, sem precisar recarregar a página inteira. Com ele, é possível receber dados novos e atualizá-los no código sem alterar o resto da página. Isso com essa técnica passa a ser possível atualizar partes de uma página com base em eventos do usuário.
+\subsubsection{AJAX}
+% https://www.tutorialspoint.com/ajax/what_is_ajax.htm
+Da discussão gerada a partir desses problemas surgiu o Ajax (\emph{Asynchronous JavaScript and XML}). Ajax é uma técnica de desenvolvimento Web criada para possibilitar a requisição por dados parciais ao Servidor e recebê-los de forma assíncrona no \emph{background}, sem precisar recarregar a página exibida. Com essa técnica passa a ser possível atualizar partes de uma página com base em eventos do usuário.
 
 % Exemplo de Ajax
-Para ilustrar esse funcionamento com um exemplo simples, basta usar a ferramenta de busca do Google (TODO link). O usuário começa a digitar uma busca e os resultados já começam a aparecer sem a necessidade de atualizar a página, mesmo antes da busca estar completa (TODO imagem). O input do usuário ativa requisições no background para obter e atualizar os resultados exibidos, sem se preocupar se a busca será alterada no futuro. Assim, o usuário recebe um feedback muito mais dinâmico e menos burocrático do que o convencional (digitar a busca completa e ir para uma página de resultados).
+Para ilustrar esse funcionamento com um exemplo simples, basta usar a ferramenta de busca do Google\footnote{google.com}. O usuário começa a digitar uma busca e resultados já aparecem sem a necessidade de atualizar a página, mesmo antes da busca estar completa (TODO imagem). O \emph{input} do usuário ativa requisições no \emph{background} para obter e atualizar os resultados exibidos, sem se preocupar se a busca será alterada no futuro. Assim, o usuário recebe um \emph{feedback} mais dinâmico e menos burocrático do que o convencional (digitar a busca completa e ir para uma página de resultados).
 
 % Final de Ajax
-Com o Ajax, nota-se uma mudança de paradigmas na Web. Onde antes só havia a noção de página Web, agora começa a se formar uma noção de Aplicação Web. Antes, a maior interatividade possível era algo como um fluxo de telas com dados dependentes da tela passada, mas agora ações de usuários passam a ter resultados instantâneos. Sites com um fluxo de dados muito grande e dinâmico passam a ser possíveis, como Facebook (TODO link), no qual é possível fazer comentários, interagir com usuários e visualizar tanto conteúdo quando desejado sem precisar atualizar a página.
+Com o Ajax, nota-se uma mudança de paradigmas na Web. Onde antes só havia a noção de página Web, agora começa a se formar uma noção de Aplicação Web. Antes, a maior interatividade possível era algo como um fluxo de telas com dados dependentes da tela passada, mas agora ações de usuários passam a ter resultados instantâneos. Sites com um fluxo de dados muito grande e dinâmico passam a ser possíveis, como Facebook \footnote{facebook.com}, no qual é possível fazer comentários, interagir com usuários e visualizar tanto conteúdo quando desejado sem precisar atualizar a página.
 
 % Começo da necessidade de comunicação bilateral
-Essa mudança de paradigmas fez com que muitas Aplicações tipicamente executadas em Desktop fossem desenvolvidas para Web, como Chats ou aplicações que exigissem um fluxo de dados muito grande entre o Cliente e o Servidor. O que ficou claro com o tempo é que Ajax não bastava para muitas dessas Aplicações, em específico as que funcionavam em tempo real. Muitas vezes é o Servidor que precisa se comunicar ao Cliente sobre mudança nos dados. O modelo de funcionamento do Ajax não possui esse tipo de interface, então, para fazer aplicações assim funcionarem corretamente, é necessário muito esforço, lutar muito com a linguagem.
+Essa mudança de paradigmas fez com que muitas Aplicações tipicamente executadas em \emph{Desktop} fossem desenvolvidas para Web, como clientes de email ou aplicações que exigissem um fluxo de dados muito grande entre o Cliente e o Servidor. Mas o que ficou claro com o tempo é que Ajax não bastava para muitas dessas Aplicações, em específico as que funcionavam em tempo real. Muitas vezes é o Servidor que precisa se comunicar ao Cliente sobre mudança nos dados. O modelo de funcionamento do Ajax não possui esse tipo de interface, então, para fazer aplicações assim funcionarem corretamente, é necessário muito esforço, lutar contra a linguagem.
 
 % Exemplo da necessidade de comunicação bilateral
-Um exemplo claro disso é uma aplicação de Chat. Não é possível ter um padrão de quando o Servidor tem novas mensagens, então é necessário que o Cliente faça requisições a cada período de tempo. Se esse período for curto, o fluxo de dados intenso pode se tornar um problema. Se o período for longo, vai contra o princípio de ser uma comunicação em tempo real, mensagens vão demorar mais a serem entregues. Além disso, o modelo de comunicação do Ajax enviar e recebe mensagens em paralelo, sem preservar sua ordem. Então, ao se fazer atualizações síncronas, é necessário ainda mais uma verificação para exibir mensagens em ordem cronológica.
+Um exemplo claro disso é uma aplicação de \emph{Chat}. Não é possível ter um padrão de quando o Servidor tem novas mensagens, então é necessário que o Cliente faça requisições a cada período de tempo. Se esse período for curto, o fluxo de dados intenso pode se tornar um problema. Se o período for longo, vai contra o princípio de ser uma comunicação em tempo real, mensagens vão demorar mais a serem entregues. Além disso, o modelo de comunicação do Ajax envia e recebe mensagens em paralelo, sem preservar sua ordem. Então, ao se fazer atualizações síncronas, é necessário ainda um tratamento de ordenação para exibir as mensagens novas.
 
 % Conclusão Ajax e necessidade de CommBi
-A necessidade de vários tratamentos para uma aplicação relativamente simples funcionar deixa claro que há necessidade de mais ferramentas para o desenvolvimento de aplicações Web.
+A necessidade de vários tratamentos para uma aplicação relativamente simples funcionar deixou claro que havia necessidade de mais ferramentas para o desenvolvimento de aplicações Web.
 
 
 \subsubsection{Necessidade de Comunicação Bilateral}
 
-
 % Maneiras de simular CommBi
-
-Um dos fatores mais limitantes era que a comunicação cliente-servidor não era bilateral. Não era possível para o Servidor mandar dados espontaneamente, sem que o Cliente tivesse feito uma requisição antes. Para contornar esse problema foram criadas técnicas para simular essa comunicação bilateral: Polling, Long-Polling e Streaming.
-
-\subsubsection{Polling}
-
-Essa técnica já foi descrita acima no exemplo do Chat. Ela consiste em fazer o cliente mandar requisições em intervalos regulares de tempo e receber a resposta logo em seguida. Ela foi a primeira tentativa de se contornar o problema, principalmente por ser a implementação mais simples e direta. Essa solução é boa quando se sabe o tempo de atualização de dados no servidor, pois então é possível sincronizar os tempos de requisição e atualização. Porém esse é somente um dos cenários possíveis, dados em tempo real não costumam ser tão previsíveis, então é inevitável que uma parcela dessas requisições seja desnecessária e muitas conexões sejam abertas e fechadas sem necessidade, em momentos de baixo fluxo de atualização do servidor.
+Um dos fatores mais limitantes era que a comunicação cliente-servidor não é bilateral. Não é possível para o Servidor mandar dados espontaneamente, sem que o Cliente tenha feito uma requisição antes. Para contornar esse problema foram criadas técnicas para simular essa comunicação bilateral: \emph{Polling}, \emph{Long-Polling} e \emph{Streaming}.
 
 
-\subsubsection{Long-Polling}
+\begin{itemize}
 
-No Long-Polling, o cliente manda uma requisição e o servidor a mantém aberta durante um determinado período de tempo. Se uma atualização chegar durante esse período, a resposta é enviada ao cliente com esses dados novos. Se o tempo acabar sem que haja mudanças, o servidor envia uma resposta para encerrar a requisição aberta. Essa técnica apresenta melhoras em relação ao Polling, porém, se existe um fluxo alto de atualizações no servidor, ela não oferece nenhuma melhora substancial em relação a ele. Nessa situação aliás, o Long-Polling pode ser pior, pois pode ficar instável em um loop contínuo de Polls imediatos.
+    \item \textbf{Polling}
+
+    Essa técnica já foi descrita acima no exemplo do \emph{Chat}. Ela consiste em fazer o Cliente mandar requisições em intervalos regulares e receber a resposta logo em seguida. Ela foi a primeira tentativa de se contornar o problema, principalmente por ter a implementação mais simples e direta.
+
+    Essa solução é boa quando se sabe o tempo de atualização de dados no Servidor, pois é possível sincronizar os tempos de requisição e atualização. Porém esse é somente um dos cenários possíveis. Dados em tempo real não costumam ser tão previsíveis, então é inevitável que uma parcela dessas requisições seja desnecessária e muitas conexões sejam abertas e fechadas sem necessidade, em momentos de baixo fluxo de atualização.
+
+
+    \item \textbf{Long-Polling}
+
+    No \emph{Long-Polling}, o Cliente manda uma requisição e o Servidor a mantém aberta durante um determinado período de tempo. Se uma atualização chegar durante esse período, a resposta é enviada ao Cliente com os dados novos. Se o tempo acabar sem que haja mudanças, o servidor envia uma resposta para encerrar a requisição aberta. A cada resposta recebida, o Cliente envia uma nova requisição para ficar em aberto.
+
+    Essa técnica apresenta melhoras em relação ao \emph{Polling}, porém, se existe um fluxo muito alto de atualizações no Servidor, ela não oferece nenhuma melhora substancial em relação a ele. Nessa situação aliás, o \emph{Long-Polling} pode ser pior, pois pode ficar instável em um loop contínuo de \emph{Polls} imediatos.
 
 
 % https://jfarcand.wordpress.com/2007/05/15/new-adventures-in-comet-polling-long-polling-or-http-streaming-with-ajax-which-one-to-choose/
@@ -1250,68 +1245,86 @@ No Long-Polling, o cliente manda uma requisição e o servidor a mantém aberta 
 % Several experiments have shown success with timeouts as high as 120 seconds, but generally 30 seconds is a safer value. Therefore vendors of network equipment wishing to be compatible with the HTTP long polling mechanism are advised to implement a timeout substantially greater than 30 seconds (where "substantially" means several times more than the medium network transit time).
 
 
-\subsubsection{Streaming}
+    \item \textbf{Streaming}
 
-Com a técnica de streaming, o cliente manda uma requisição, e o servidor manda e mantém uma resposta aberta, que é atualizada continuamente, sem ter um momento certo para ser fechada (um intervalo de tempo pode ser definido, mas normalmente a conexão é mantida indefinidamente). Essa resposta é atualizada sempre que há novos dados no servidor, mas ele nunca manda um sinal para completar a resposta e encerrar a conexão. O ponto negativo dessa técnica é que, como o streaming ainda é encapsulado no HTTP, é possível que firewalls e servidores proxy possam escolher armazenar a resposta em um buffer, o que aumenta muito a latência da mensagem.
+    Com a técnica de \emph{Streaming}, o Cliente manda uma requisição e o Servidor a mantém aberta continuamente. Sempre que dados são atualizados, o Servidos os envia ao Cliente, mas não encerra a conexão.
 
+    O ponto negativo dessa técnica é que, como o \emph{Streaming} ainda é encapsulado por HTTP, é possível que \emph{Firewalls} e servidores \emph{Proxy} possam escolher armazenar a resposta em um \emph{Buffer}, o que aumenta muito a latência da mensagem.
+
+\end{itemize}
 
 % Mais problemas e conclusão
-Por fim, todas essas técnicas envolvem requisições e respostas com um cabeçalho HTTP, que contém muitos dados desnecessários para esse uso, gerando latência. Além disso, uma verdadeira conexão bilateral requer mais do que o fluxo de dados vindo do servidor, é necessário também ter o fluxo originado no cliente. Para fazer uma simulação mais consistente com o desejado, muitas soluções hoje usam duas conexões de fluxo, uma para o cliente e uma para o servidor. A coordenação e manutenção dessas duas conexões paralelas gera um overhead ainda maior em termos de recursos, além do claro aumento de complexidade do código.
+Por fim, todas essas técnicas envolvem mensagens HTTP, que contêm cabeçalhos com muitos dados desnecessários para esse uso, gerando alto consumo de recursos. Além disso, uma verdadeira conexão bilateral requer mais do que o fluxo de dados vindo do servidor, é necessário também ter o fluxo originado no cliente. Para fazer uma simulação mais consistente com o desejado, muitas soluções hoje usam duas conexões de fluxo, uma para o cliente e uma para o servidor. A coordenação e manutenção dessas duas conexões paralelas gera um \emph{overhead} ainda maior em termos de recursos, além do claro aumento de complexidade do código.
 
 % Início de Websockets
-Por todos esses fatos, ficou claro que era necessário ter uma conexão bilateral de verdade. Para que essa conexão fosse possível, era necessário ter um controle maior da transferência de dados era necessário. Dentro do protocolo TCP(TODO verificar informação), esse controle é feito por meio dos Sockets, mas, até então, eles eram indisponíveis ao desenvolvimento Web, não havia interface de interação.
+Por todos esses fatos, ficou claro que era necessário ter uma conexão bilateral de verdade. Para que essa conexão fosse possível, era necessário ter um controle maior da transferência de dados era necessário. Dentro do protocolo TCP, esse controle é feito por meio dos Sockets, mas, até então, eles eram indisponíveis ao desenvolvimento Web, não havia interface de interação.
 
 
 \subsubsection{Sockets}
+% https://docs.oracle.com/javase/tutorial/networking/sockets/definition.html
 
-No modelo cliente-servidor uma conexão é dada por dois pontos finais, um no Cliente e um no Servidor. Essa é a conexão de baixo nível definida pelo protocolo TCP. Cada um desses pontos finais serve para mandar e receber os dados em relação ao outro lado da conexão e eles são nomeados como Soquetes de Rede (Sockets). Cada Socket é definido por um endereço de IP e uma Porta (por exemplo, 192.168.0.1:8000), independente se está no Cliente ou no Servidor, e a conexão TCP é definida de maneira única por seus dois Sockets.
+No modelo cliente-servidor uma conexão é definida por dois pontos finais, um no cliente e um no servidor. Cada um desses pontos finais serve para mandar e receber os dados do outro lado da conexão, e eles são nomeados como Sockets (Soquetes de Rede). Essa a conexão entre Sockets é definida no protocolo TCP\footnote{Protocolo base de transporte na Internet.}. Cada Socket é definido por um endereço de IP e uma Porta (por exemplo, 192.168.0.1:8000), independente de estar no Cliente ou no Servidor, e a conexão TCP pode ser definida de maneira única por seus dois Sockets conectados.
 
 A conexão cliente-servidor, considerando os Sockets, é feita da seguite maneira:
 
-No lado do cliente, Primeiramente ele precisa saber o endereço de IP da máquina onde o servidor roda e a porta que ouve (esses dados definem o socket do servidor). Ele então envia um sinal a esse socket para pedir a conexão. Nesse sinal há um identificador, que contem seu próprio IP e uma porta escolhida na hora, para que o servidor saiba a quem enviar as respostas. É importante ter em mente que o cliente não possui um socket ainda, ele será criado caso a conexão seja bem sucedida.
-No lado do servidor, se não ocorrer nenhum erro, a conexão é aceita. Neste momento, o servidor cria um novo socket com o mesmo IP e porta local do original, para conectá-lo com o cliente. Esse novo socket é necessário para que o servidor possa continuar ouvindo a outras conexões naquela porta com o socket original, enquanto a cópia passa a ser exclusiva ao cliente.
-De volta ao cliente, se a conexão é aceita, o seu socket é criado (com as especificações que foram enviadas no pedido).
+\begin{itemize}
 
-Agora o cliente e o servidor podem se comunicar com leitura ou escrita nesses novos sockets criados.
+    \item No lado do cliente, primeiramente ele precisa saber o endereço de IP da máquina onde o servidor roda e a porta que ouve (esses dados definem o socket do servidor). Ele então envia um sinal a esse socket para pedir a conexão. Nesse sinal há um identificador, que contem seu próprio IP e uma porta escolhida na hora, para que o servidor saiba a quem enviar as respostas. É importante ter em mente que o cliente não possui um socket ainda, ele será criado caso a conexão seja bem sucedida.
 
-% TODO Sei lá se vou falar disso
-% A API básica para manipulação de Sockets :
+    \item No lado do servidor, se não ocorrer nenhum erro, a conexão é aceita. Neste momento, o servidor cria um novo socket com o mesmo IP e porta local do original, para conectá-lo com o cliente. Esse novo socket é necessário para que o servidor possa continuar ouvindo a outras conexões naquela porta com o socket original, enquanto a cópia passa a ser exclusiva ao cliente.
 
-% SOCKET : Cria um ponto final de uma comunicação.
-% BIND : Associa um endereço local a um Socket.
-% LISTEN : Anuncia que aceita conexões, e dá o tamanho da queue.
-% ACCEPT : Aceita um pedido de conexão.
-% CONNECT : Envia um pedido de conexão.
-% SEND : Envia dados através de sua conexão.
-% RECEIVE : Recebe dados vindos de sua conexão.
-% CLOSE : Encerra a conexão.
+    \item De volta ao cliente, se a conexão é aceita, o seu socket é criado (com as especificações que foram enviadas no pedido).
 
+    \item Agora o cliente e o servidor podem se comunicar com leitura ou escrita nesses novos sockets criados.
+\end{itemize}
+
+A API básica para manipulação de Sockets possui as seguintes funções:
+
+\begin{itemize}
+
+    \item \code{SOCKET} : Cria um ponto final de uma comunicação.
+    \item \code{BIND} : Associa um endereço local a um Socket.
+    \item \code{LISTEN} : Anuncia que aceita conexões, e dá o tamanho da \emph{queue}.
+    \item \code{ACCEPT} : Aceita um pedido de conexão.
+    \item \code{CONNECT} : Envia um pedido de conexão.
+    \item \code{SEND} : Envia dados através de sua conexão.
+    \item \code{RECEIVE} : Recebe dados vindos de sua conexão.
+    \item \code{CLOSE} : Encerra a conexão.
+
+\end{itemize}
+
+Essa API não é acessível ao nível de desenvolvimento Web por fazer parte do protocolo TCP.
 
 
 \subsubsection{Websockets}
 
 % https://www.websocket.org/aboutwebsocket.html
 
-% WebSocket é o protocolo que lida com os Sockets de uma conexão que foi criada para permitir a comunicação bilateral entre o cliente e o servidor. Ele dá ao programador mais liberdade para criar novos protocolos e novas maneiras de se transferir dados, em ambas as direções.
+WebSocket é um protocolo que lida com Sockets de uma conexão que foi criado para permitir a comunicação bilateral entre cliente e servidor. Ele permite mais liberdade para criar novos protocolos e maneiras de se transferir dados.
 
-% A interface em si é bastante simples, seu objetivo é o envio e recebimento de mensagens entre o cliente e o servidor. Na realidade, para o protocolo, não existe essa diferenciação entre os dois, eles são apenas dois processos conectados. Essa hierarquia deixa de existir e não há mais uma separação de funções entre ambos. A comunicação é dada por envio de mensagens e ocorrência de eventos. Esses processos podem enviar mensagens a qualquer momento e estão ouvindo um ao outro.
+Sua interface é bastante simples, seu objetivo é o envio e recebimento de mensagens entre o cliente e o servidor. Para o protocolo, não existe essa diferenciação entre os dois, ambos são apenas dois processos conectados. Essa hierarquia cliente-servidor deixa de existir e não há mais uma separação de funções entre ambos. A comunicação é dada por envio de mensagens e ocorrência de eventos. Esses processos podem enviar mensagens a qualquer momento e estão ouvindo um ao outro.
 
-% O protocolo foi pensado para funcionar bem com a infraestrutura Web já existente. Como parte desse paradigma, sua especificação determina que uma conexão é estabelecida inicialmente com o protocolo HTTP, garantindo retrocompatibilidade.
+O protocolo foi pensado para funcionar bem com a infraestrutura Web já existente. Como parte desse paradigma, sua especificação determina que uma conexão é estabelecida inicialmente com o protocolo HTTP, garantindo retrocompatibilidade.
 
-% A conexão WebSocket é feita da seguinte forma. Após inciada a conexão HTTP, o browser envia uma requisição ao servidor indicando que deseja trocar de protocolos, de HTTP para WebSocket. Se o servidor entende esse protocolo, ele envia uma resposta para permitir a troca. Nesse momento a conexão HTTP é interrompida e a conexão WebSocket toma o seu lugar. Esse processo é chamado de WebSocket Handshake.
+A conexão é feita da seguinte forma. Após inciada a conexão HTTP, o cliente envia uma requisição ao servidor indicando que deseja trocar de protocolos, de HTTP para WebSocket. Se o servidor entende esse protocolo, ele envia uma resposta para permitir a troca. Nesse momento a conexão HTTP é interrompida e a conexão WebSocket toma o seu lugar. Esse processo é chamado de \emph{WebSocket Handshake}.
 
-% A estrutura da mensagem em WebSocket é mínima. O corpo da mensagem, os dados a serem enviados, só possui dois formatos, texto ou binário. O cabeçalho contém um identificador de tipo do formato, que tem um campo para o tamanho da mensagem e nada mais. A mensagem completa é só o conteúdo mais o seu tamanho. Como a conexão não muda em momento algum, todas as informações contidas no cabeçalho de requisição e resposta HTTP são invariantes e, portanto, não precisam ser reenviadas.
+A estrutura da mensagem em WebSocket é mínima. O corpo da mensagem, os dados a serem enviados, só possui dois formatos, texto ou binário. O cabeçalho contém um identificador de tipo do formato, que tem um campo para o tamanho da mensagem e nada mais. A mensagem completa é só o conteúdo mais seu tamanho. Como a conexão não muda em momento algum, todas as informações contidas no cabeçalho de requisição e resposta HTTP são invariantes e, portanto, não precisam ser reenviadas.
 
-% Um desses processos, em um momento arbitrário, envia uma mensagem ao outro, talvez porque dados tenham sido atualizados ou o usuário tenha feito alguma ação em específico. Uma vez que a mensagem é enviada, esse processo volta ao que estava fazendo, sem a necessidade de esperar uma resposta (com a exceção talvez de qualquer confirmação sobre a entrega). Esse comportamento é chamado de assíncrono, pois não necessita de uma resposta para continuar com sua execução.
+Um dos processos conectados, em um momento arbitrário, envia uma mensagem ao outro, talvez porque dados tenham sido atualizados ou o usuário tenha feito alguma ação em específico. Uma vez que a mensagem é enviada, esse processo volta ao que estava fazendo, sem a necessidade de esperar alguma resposta do outro processo. Esse comportamento é chamado de assíncrono, pois não um lado não age em sincronia com o outro.
 
-% O outro processo vê a chegada dessa nova mensagem como um evento. Quando esse evento acontece, ele executa um comportamento específico com os dados recebidos, como alteração de informações exibidos ou um cálculo com os valores novos. Por isso é dito que Websocket é voltado a eventos.
+O outro processo vê a chegada dessa nova mensagem como um evento. Quando esse evento acontece, ele executa um comportamento específico (\emph{callback}) com os dados recebidos, como alteração de informações exibidos ou um cálculo com os valores novos. Por isso é dito que WebSocket é orientado a eventos.
 
-% %(TODO bulletpoints)
-% Existem 4 tipos de eventos e o comportamento que eles executam é definido quando o Websocket é criado. Esses eventos são:
-% - onopen: executado quando a conexão é feita,
-% - onclose: executado quando a conexão é fechada,
-% - onmessage: executado quando uma mensagem do outro WebSocket chega,
-% - onerror: executado se há algum erro na conexão.
+Existem quatro tipos de eventos e seus \emph{callbacks} são definidos na criação do WebSocket. Esses eventos são:
+\begin{itemize}
+
+\item\emph{onopen}: ocorre quando a conexão é feita;
+
+\item\emph{onclose}: ocorre quando a conexão é fechada;
+
+\item\emph{onmessage}: ocorre quando uma mensagem do outro WebSocket chega;
+
+\item\emph{onerror}: ocorre se há algum erro na conexão.
+\end{itemize}
 
 
 Para ilustrar melhor esse comportamento de conexão, mensagens e eventos, abaixo há um exemplo em HTML de uma página que utiliza WebSockets.
@@ -1319,8 +1332,7 @@ Para ilustrar melhor esse comportamento de conexão, mensagens e eventos, abaixo
 (TODO link)
 https://www.websocket.org/echo.html
 
-\begin{small}
-\begin{Verbatim}[frame=single]
+\begin{lstlisting}[language=HTML5]
   <!DOCTYPE html>
   <meta charset="utf-8" />
   <title>WebSocket Test</title>
@@ -1388,8 +1400,7 @@ https://www.websocket.org/echo.html
 
   <div id="output"></div>
 
-\end{Verbatim}
-\end{small}
+\end{lstlisting}
 
 
 Essa página executa um código simples. Ela cria um WebSocket conectado à “ws://echo.websocket.org/".
@@ -1407,40 +1418,41 @@ O evento de encerramento de conexão e de erro (onClose e onError) só escrevem 
 \subsubsection{Teste de eficiência de Websockets}
 
 
-No experimento a seguir, é mostrado a diferença de tráfego de dados e latência entre Websocket e Polling para requisitar dados em tempo real. Ele foi retirado do site https://www.websocket.org/quantum.html , e é somente transcrito aqui, em tradução livre:
+No experimento a seguir, é mostrado a diferença de tráfego de dados e latência entre WebSocket e \emph{Polling} para requisitar dados em tempo real.
 
-(TODO REF https://www.websocket.org/quantum.html)
-
+% (TODO REF https://www.websocket.org/quantum.html)
 %----------------------------------------------------
 
-Informações para entender o exemplo:
-RabbitMQ Message Broker: um simples programa que recebe e encaminha mensagens. Nesse exemplo ele está em um servidor, recebe dados de um mercado de ações fictício. (TODO REF: https://www.rabbitmq.com/tutorials/tutorial-one-python.html)
-Java Servlet: uma classe Java usada para estender as funcionalidades de um servidor. Pode ser definido como um componente semelhante um servidor, que gera dados HTML e XML para a camada de apresentação de uma aplicação Web. Ele processa dinamicamente requisições e respostas. (TODO REF: https://pt.wikipedia.org/wiki/Servlet)
-Mozilla Firefox: Browser muito utilizado.
-Firebug: .
-%a Firefox add-on that allows you to debug web pages and monitor the time it takes to load pages and execute scripts
+\paragraph{Informações para entender o exemplo:}
+\begin{itemize}
+    \item \emph{RabbitMQ Message Broker}: um simples programa que recebe e encaminha mensagens. Nesse exemplo ele está em um servidor, recebe dados de um mercado de ações fictício. %(TODO REF: https://www.rabbitmq.com/tutorials/tutorial-one-python.html)
+    \item \emph{Java Servlet}: uma classe Java usada para estender as funcionalidades de um servidor. Pode ser definido como um componente semelhante um servidor, que gera dados HTML e XML para a camada de apresentação de uma aplicação Web. Ele processa dinamicamente requisições e respostas. %(TODO REF: https://pt.wikipedia.org/wiki/Servlet)
+    \item Mozilla Firefox: \emph{Browser} muito utilizado.
+    \item Firebug: Um \emph{add-on} do Mozilla Firefox que permite fazer debug de páginas Web e monitorar o tempo que leva para carregar páginas e executar scripts.
+    \item \emph{Live HTTP Headers}: \emph{add-on} do Mozilla Firefox que mostra ao vivo o tráfego de cabeçalhos HTTP.
+\end{itemize}
+
+ O exemplo foi retirado do site \emph{https://www.websocket.org/quantum.html} e foi transcrito em tradução livre:
 %----------------------------------------------------
 
-% So how dramatic is that reduction in unnecessary network traffic and latency? Let's compare a polling application and a WebSocket application side by side.
-O quão dramática é a redução de tráfego de dados desnecessários e latência? Vamos comparar uma aplicação Polling e uma WebSocket lado a lado.
+\begin{quotation}
+Então, o quão dramática é a redução de tráfego de dados desnecessários e latência? Vamos comparar uma aplicação \emph{Polling} e uma WebSocket lado a lado.
 
 
-% For the polling example, I created a simple web application in which a web page requests real-time stock data from a RabbitMQ message broker using a traditional publish/subscribe model. It does this by polling a Java Servlet that is hosted on a web server. The RabbitMQ message broker receives data from a fictitious stock price feed with continuously updating prices. The web page connects and subscribes to a specific stock channel (a topic on the message broker) and uses an XMLHttpRequest to poll for updates once per second. When updates are received, some calculations are performed and the stock data is shown in a table as shown in the following image.
-Para o exemplo de Polling, eu criei uma simples aplicação Web, na qual a página manda requisições a um RabbitMQ Message Broker pedindo dados de um Mercado de Ações em tempo real, usando um modelo publish/subscribe tradicional. Ele requisita esses dados por fazer Polling para uma Java Servlet hospedado no Servidor Web. O RabbitMQ Message Broker recebe os dados de um feed de Mercado de Ações fictício, atualizado continuamente. A página Web conecta e se inscreve em um canal específico do Mercado (um Tópico do Message Broker) e usa uma chamada XMLHttpRequest para pedir (fazer um Poll) por updates uma vez por segundo. Quando updates chegam, alguns cálculos são feitos e os dados do Mercado são mostrados em uma tabela, como na imagem a seguir
+Para o exemplo de \emph{Polling}, eu criei uma simples aplicação Web, na qual a página manda requisições a um \emph{RabbitMQ Message Broker} pedindo dados de um Mercado de Ações em tempo real, usando um modelo \emph{publish}/\emph{subscribe} tradicional. Ele requisita esses dados por fazer \emph{Polling} para uma \emph{Java Servlet} hospedado no Servidor Web. O \emph{RabbitMQ Message Broker} recebe os dados de um \emph{feed} de Mercado de Ações fictício, atualizado continuamente. A página Web conecta e se inscreve em um canal específico do Mercado (um Tópico do \emph{Message Broker}) e usa uma chamada \code{XMLHttpRequest} para pedir (fazer um \emph{Poll}) por atualizações uma vez por segundo. Quando elas chegam, alguns cálculos são feitos e os dados do Mercado são mostrados em uma tabela, como na imagem a seguir:
 
-% Figure 2 — A JavaScript stock ticker application
-(TODO imagem)
+\includegraphics[width=1\linewidth]{images/stock-ticker.png}
 
-% Note: The back-end stock feed actually produces a lot of stock price updates per second, so using polling at one-second intervals is actually more prudent than using a Comet long-polling solution, which would result in a series of continuous polls. Polling effectively throttles the incoming updates here.
-Nota: O feed no Tópico do Mercado produz muitas atualizações de preço por segundo, então usar Polling com um segundo de intervalo é mais prudente do que Long-Polling, pois ele resultaria em uma série de Polls contínuos. O Polling controla de forma efetiva a vinda de atualizações.
+
+Figura 1 — Uma aplicação de valores de Mercado em JavaScript
+
+\textbf{Nota}: O \emph{feed} no Tópico do Mercado produz muitas atualizações de preço por segundo, então usar \emph{Polling} com um segundo de intervalo é mais prudente do que \emph{Long-Polling}, pois ele resultaria em uma série de \emph{Polls} contínuos. O \emph{Polling} controla de forma efetiva a vinda de atualizações.
 
 % It all looks great, but a look under the hood reveals there are some serious issues with this application. For example, in Mozilla Firefox with Firebug (a Firefox add-on that allows you to debug web pages and monitor the time it takes to load pages and execute scripts), you can see that GET requests hammer the server at one-second intervals. Turning on Live HTTP Headers (another Firefox add-on that shows live HTTP header traffic) reveals the shocking amount of header overhead that is associated with each request. The following two examples show the HTTP header data for just a single request and response.
-Tudo parece certo, mas ao se olhar o funcionamento, é revelado que há problemas sérios com essa aplicação. Por exemplo, com o Firebug (um add-on do Mozilla Firefox que pemite fazer o debug de uma página Web e monitorar o tempo que ela para carregar páginas e executar scripts), você consegue ver que a requisição GET martela o Servidor em invervalos de 1 segundo. Ativando o Live HTTP Headers (outro add-on do Mozilla Firefox que mostra ao vivo o tráfego de cabeçalhos HTTP), é revelado o enorme overhead causado por cabeçalhos associados a cada requisição. Os dois próximos exemplos mostram o cabeçalho HTTP para somente uma requisição e uma resposta.
+Tudo parece certo, mas ao se olhar o funcionamento, é revelado que há problemas sérios com essa aplicação. Por exemplo, com o \emph{Firebug}, você consegue ver que a requisição \code{GET} martela o Servidor em invervalos de 1 segundo. Ativando o \emph{Live HTTP Headers}, é revelado o enorme \emph{overhead} causado por cabeçalhos associados a cada requisição. Os dois próximos exemplos mostram o cabeçalho HTTP para somente uma requisição e uma resposta.
 
-% TODO formatação
-Exemplo 1 — cabeçalho de requisição HTTP
-\begin{small}
-\begin{Verbatim}[frame=single]
+\textbf{Exemplo 1 — cabeçalho de requisição HTTP:}
+\begin{lstlisting}
  GET /PollingStock//PollingStock HTTP/1.1
  Host: localhost:8080
  User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.5)
@@ -1461,81 +1473,70 @@ Exemplo 1 — cabeçalho de requisição HTTP
  showInheritedEvent=false;
  showInheritedStyle=false;
  showInheritedEffect=false
-\end{Verbatim}
-\end{small}
+\end{lstlisting}
 
-Exemplo 2 — cabeçalho de resposta HTTP
-\begin{small}
-\begin{Verbatim}[frame=single]
+\textbf{Exemplo 2 — cabeçalho de resposta HTTP}
+\begin{lstlisting}
 HTTP/1.x 200 OK
 X-Powered-By: Servlet/2.5
 Server: Sun Java System Application Server 9.1_02
 Content-Type: text/html;charset=UTF-8
 Content-Length: 21
 Date: Sat, 07 Nov 2009 00:32:46 GMT
-\end{Verbatim}
-\end{small}
+\end{lstlisting}
 
-% Just for fun, I counted all the characters. The total HTTP request and response header information overhead contains 871 bytes and that does not even include any data! Of course, this is just an example and you can have less than 871 bytes of header data, but I have also seen cases where the header data exceeded 2000 bytes. In this example application, the data for a typical stock topic message is only about 20 characters long. As you can see, it is effectively drowned out by the excessive header information, which was not even required in the first place!
-Só por diversão, eu contei todos os characteres. O total de overhead de informação na requisição e resposta HTTP possui 871 bytes, sem incuir nenhum dado! Claro, esse é somente um exemplo e você pode ter menos de 871 bytes de cabeçalho, mas eu também vi casos onde ele ultrapassava 2000 bytes. Nessa aplicação de exemplo, uma mensagem típica do Tópico de Mercado contém em torno de 20 characteres. Como você pode ver, ela é efetivamente afogada pelo excesso de informação do cabeçalho, que nem é necessário no final das contas!
+Só por diversão, eu contei todos os characteres. O total de \emph{overhead} de informação na requisição e resposta HTTP é de 871 bytes, sem incuir nenhum dado! Claro, esse é somente um exemplo e você pode ter menos de 871 bytes de cabeçalho, mas eu também vi casos onde ele ultrapassava 2000 bytes. Nessa aplicação de exemplo, uma mensagem típica do Tópico de Mercado contém em torno de 20 characteres. Como você pode ver, ela é efetivamente afogada pelo excesso de informação do cabeçalho, que nem é necessário no final das contas!
 
-% So, what happens when you deploy this application to a large number of users? Let's take a look at the network throughput for just the HTTP request and response header data associated with this polling application in three different use cases.
-Então, o que acontece quando você deploy (TODO I18n) essa aplicação para um grande número de usuários? Vamos observar o tráfego de dados somente dos dados do cabeçalho HTTP de requisição e resposta associados a essa aplicação de Polling em três casos diferentes.
+Então, o que acontece quando você dá \emph{deploy} nessa aplicação para um grande número de usuários? Vamos observar o tráfego de dados somente dos dados do cabeçalho HTTP de requisição e resposta associados a essa aplicação de \emph{Polling} em três casos diferentes.
 
-% Use case A: 1,000 clients polling every second: Network throughput is (871 x 1,000) = 871,000 bytes = 6,968,000 bits per second (6.6 Mbps)
-% Use case B: 10,000 clients polling every second: Network throughput is (871 x 10,000) = 8,710,000 bytes = 69,680,000 bits per second (66 Mbps)
-% Use case C: 100,000 clients polling every 1 second: Network throughput is (871 x 100,000) = 87,100,000 bytes = 696,800,000 bits per second (665 Mbps)
-(TODO formatação)
-Caso de uso A: 1,000 clientes fazendo Polling a cada segundo: tráfego de dados é (871 x 1,000) = 871,000 bytes = 6,968,000 bits por segundo. (6.6 Mbps)
-Caso de uso B: 10,000 clientes fazendo Polling a cada segundo: tráfego de dados é (871 x 10,000) = 8,710,000 bytes = 69,680,000 bits por segundo. (66 Mbps)
-Caso de uso C: 100,000 clientes fazendo Polling a cada segundo: tráfego de dados é (871 x 100,000) = 87,100,000 bytes = 696,800,000 bits por segundo. (665 Mbps)
+\begin{itemize}
+    \item \textbf{Caso de uso A}: 1,000 clientes fazendo \emph{Polling} a cada segundo: tráfego de dados é (871 x 1,000) = 871,000 bytes = 6,968,000 bits por segundo. (6.6 Mbps)
+    \item \textbf{Caso de uso B}: 10,000 clientes fazendo \emph{Polling} a cada segundo: tráfego de dados é (871 x 10,000) = 8,710,000 bytes = 69,680,000 bits por segundo. (66 Mbps)
+    \item \textbf{Caso de uso C}: 100,000 clientes fazendo \emph{Polling} a cada segundo: tráfego de dados é (871 x 100,000) = 87,100,000 bytes = 696,800,000 bits por segundo. (665 Mbps)
+\end{itemize}
 
-(TODO explicar HTML5?)
-% That's an enormous amount of unnecessary network throughput! If only we could just get the essential data over the wire. Well, guess what? You can with HTML5 Web Sockets! I rebuilt the application to use HTML5 Web Sockets, adding an event handler to the web page to asynchronously listen for stock update messages from the message broker (check out the many how-tos and tutorials on tech.kaazing.com/documentation/ for more information on how to build a WebSocket application). Each of these messages is a WebSocket frame that has just two bytes of overhead (instead of 871)! Take a look at how that affects the network throughput overhead in our three use cases.
-Essa é uma quatidade enorme de tráfego de dados desnecessários! Imagina só se fosse possível transferir a informação necessária. Então, com HTML5 Web Sockets você pode! Eu reconstrui a aplicação usando HTML5 Web Sockets, adicionando um manipulador de evento para que a página Web possa assincronamente ouvir por mensagens do Message Broker de atualizações do preço do Mercado. Cada uma dessas mensagens é um WebSocket frame que possui só 2 bytes de overhead (ao invés de 871)! Veja como isso afeta o tráfego de dados de overhead naqueles três casos.
+Essa é uma quatidade enorme de tráfego de dados desnecessários! Imagina só se fosse possível transferir a informação necessária. Então, com HTML5 Web Sockets você pode! Eu reconstrui a aplicação usando WebSockets, adicionando um manipulador de evento para que a página Web possa assincronamente ouvir por mensagens do \emph{Message Broker} de atualizações do preço do Mercado. Cada uma dessas mensagens é um WebSocket frame que possui só 2 bytes de overhead (ao invés de 871)! Veja como isso afeta o tráfego de dados de overhead naqueles três casos.
 
-% Use case A: 1,000 clients receive 1 message per second: Network throughput is (2 x 1,000) = 2,000 bytes = 16,000 bits per second (0.015 Mbps)
-% Use case B: 10,000 clients receive 1 message per second: Network throughput is (2 x 10,000) = 20,000 bytes = 160,000 bits per second (0.153 Mbps)
-% Use case C: 100,000 clients receive 1 message per second: Network throughput is (2 x 100,000) = 200,000 bytes = 1,600,000 bits per second (1.526 Mbps)
+\begin{itemize}
+    \item \textbf{Caso de uso A}: 1,000 clientes recebem 1 mensagem por segundo: Tráfego de dados é (2 x 1,000) = 2,000 bytes = 16,000 bits por segundo (0.015 Mbps)
+    \item \textbf{Caso de uso B}: 10,000 clientes recebem 1 mensagem por segundo: Tráfego de dados é (2 x 10,000) = 20,000 bytes = 160,000 bits por segundo (0.153 Mbps)
+    \item \textbf{Caso de uso C}: 100,000 clientes recebem 1 mensagem por segundo: Tráfego de dados é (2 x 100,000) = 200,000 bytes = 1,600,000 bits por segundo (1.526 Mbps)
+\end{itemize}
 
-Caso de uso A: 1,000 clientes recebem 1 mensagem por segundo: Tráfego de dados é (2 x 1,000) = 2,000 bytes = 16,000 bits por segundo (0.015 Mbps)
-Caso de uso B: 10,000 clientes recebem 1 mensagem por segundo: Tráfego de dados é (2 x 10,000) = 20,000 bytes = 160,000 bits por segundo (0.153 Mbps)
-Caso de uso C: 100,000 clientes recebem 1 mensagem por segundo: Tráfego de dados é (2 x 100,000) = 200,000 bytes = 1,600,000 bits por segundo (1.526 Mbps)
+Como você pode ver na figura abaixo, WebSockets provê uma redução dramática no tráfego de dados desnecessários em relação ao método de \emph{Polling}.
 
-% As you can see in the following figure, HTML5 Web Sockets provide a dramatic reduction of unnecessary network traffic compared to the polling solution.
-Como você pode ver na figura abaixo, HTML5 Web Sockets provê uma redução dramática no tráfego de dados desnecessários em relação ao método de Polling.
-(TODO I18n de ~polling solution~)
+\includegraphics[width=1\linewidth]{images/comp.png}
 
-% Figure 3 — Comparison of the unnecessary network throughput overhead between the polling and the WebSocket applications
-(TODO Figura 3)
+Figura 2 — Comparação de \emph{overhead} entre aplicações de \emph{Polling} e \emph{WebSocket}
 
-% And what about the reduction in latency? Take a look at the following figure. In the top half, you can see the latency of the half-duplex polling solution. If we assume, for this example, that it takes 50 milliseconds for a message to travel from the server to the browser, then the polling application introduces a lot of extra latency, because a new request has to be sent to the server when the response is complete. This new request takes another 50ms and during this time the server cannot send any messages to the browser, resulting in additional server memory consumption.
-E em relação à redução na latência? Veja a figura abaixo. Na metade de cima, você consegue a latência do método de Polling. Se assumirmos, nesse exemplo, que é necessário 50 milissegundos para uma mensagem chegue do Servidor para o browser, então a aplicação de Polling introduz muita latência extra, porque cada nova requisição precisa ser enviada ao Servidor quando a resposta está completa. Essa nova requisição requer outros 50 milissegundos, e, durante esse tempo, o Servidor não consegue mandar qualquer outra mensagem ao browser, resultando em um consumo de memória adicional ao Servidor.
+E em relação à redução na latência? Veja a figura abaixo. Na metade de cima, você consegue a latência do método de \emph{Polling}. Se assumirmos, nesse exemplo, que é necessário 50 milissegundos para uma mensagem chegue do servidor ao \emph{browser}, então a aplicação de \emph{Polling} introduz muita latência extra, porque cada nova requisição precisa ser enviada ao servidor quando a resposta está completa. Essa nova requisição requer outros 50 milissegundos, e, durante esse tempo, o servidor não consegue mandar qualquer outra mensagem ao browser, resultando em um consumo de memória adicional ao servidor.
 
-% In the bottom half of the figure, you see the reduction in latency provided by the WebSocket solution. Once the connection is upgraded to WebSocket, messages can flow from the server to the browser the moment they arrive. It still takes 50 ms for messages to travel from the server to the browser, but the WebSocket connection remains open so there is no need to send another request to the server.
-Na metade de baixo da figura, você vê a redução na latência proporcionada pelo uso de WebSocket. Uma vez que a conexão é upgraded (TODO I18n) para Websocket, as mensagens podem fluir do Servidor ao browser no momento em que surgem. Ainda leva 50 milissegundos para as mensagens atravessarem do Servidor ao cliente, mas a conexão Websocket permanece aberta para que não haja necessidade de enviar outra requisição ao Servidor.
+Na metade de baixo da figura, você vê a redução na latência proporcionada pelo uso de WebSocket. Uma vez que a conexão é promovida a WebSocket, as mensagens podem fluir do servidor ao browser no momento em que surgem. Ainda leva 50 milissegundos para as mensagens atravessarem do servidor ao cliente, mas a conexão WebSocket permanece aberta para que não haja necessidade de enviar outra requisição ao servidor.
 
 
-% Figure 4 — Latency comparison between the polling and WebSocket applications
-(TODO Figura 4)
+\includegraphics[width=1\linewidth]{images/latency.png}
+Figura 3 — Comparação de latências entre \emph{Polling} e \emph{WebSocket}
+\end{quotation}
 
-~ Final do exemplo ~
+
+
 
 %----------------------------------------------------
+\newpage
+\paragraph{Em conclusão}
 
-
-Em conclusão, WebSocket é a solução ideal para problemas apresentados anteriormente. É um protocolo feito para a real comunicação plenamente bilateral e obtém isso com o menor gasto de recursos possível. Com ele, a criação de aplicações Web se torna muito mais viável e popular.
+WebSocket é a solução ideal para problemas apresentados anteriormente. É um protocolo feito para a real comunicação plenamente bilateral e obtém isso com o menor gasto de recursos possível. Com ele, a criação de aplicações Web se torna muito mais viável e popular.
 
 Mas existe um problema nesse meio de desenvolvimento Web, que é o fato de que a todo momento a infraestrutura é alterada. Novos protocolos são criados, outros são atualizados, antigos deixam de funcionar corretamente. Esse é um problema inerente ao meio e que afeta a todos.
 
 % https://pt.wikipedia.org/wiki/SPDY
-Para ilustrar esse fato, vamos tomar como exemplo o protocolo SPDY (pronunciado “speedy"), desenvolvido principalmente pela Google. (TODO rodapé: Ele não é um protocolo padrão, porém é bastante promissor e é está sendo utilizado para o desenvolvimento do protocolo HTTP 2.0)
+Para ilustrar esse fato, vamos tomar como exemplo o protocolo \emph{SPDY} (pronunciado “speedy"), desenvolvido principalmente pela Google. \footnote{Ele não é um protocolo padrão, porém é bastante promissor e está sendo utilizado para o desenvolvimento do protocolo HTTP 2.0.}
 
-Em linhas gerais, esse protocolo busca velocidade e se baseia no fato de que, se uma conexão é estabelecida com o servidor e o cliente começa a enviar muitas requisições HTTP, essas requisições vão incluir informações repetidas, comuns àquela sessão. Ele define então que, ao invés de enviar essas informações desnecessárias repetidamente durante a sessão, o servidor passa a salvar em um dicionário os usuários conectados e utilizar essas informações salvas. Por conta disso, fazer requisições passa a ser mais rápido e consumir menos recursos. (TODO rodapé: note a semelhança com WebSockets)
+Em linhas gerais, esse protocolo busca velocidade e se baseia no fato de que, se uma conexão é estabelecida com o servidor e o cliente começa a enviar muitas requisições HTTP, essas requisições vão incluir informações repetidas, comuns àquela sessão. Ele define então que, ao invés de enviar essas informações desnecessárias repetidamente durante a sessão, o servidor passa a salvar em um dicionário os usuários conectados e utilizar essas informações salvas. Por conta disso, fazer requisições passa a ser mais rápido e consumir menos recursos. \footnote{Note a semelhança com WebSockets.}
 
-Também para aumentar a velocidade, o SPDY multiplexa requisições para permitir que sejam feitas em paralelo. Atualmente no protocolo HTTP as requisições são todas feitas em série. O problema aparece nesse momento, pois o WebSocket esperava ter um socket TCP/IP dedicado e agora passa a funcionar em cima de uma camada de conexão SPDY multiplexada.
+Também para aumentar a velocidade, o \emph{SPDY} multiplexa requisições para permitir que sejam feitas em paralelo. Atualmente no protocolo HTTP as requisições são todas feitas em série. O problema aparece nesse momento, pois o WebSocket esperava ter um socket TCP dedicado e agora passa a funcionar em cima de uma camada de conexão \emph{SPDY} multiplexada.
 
-O WebSocket (assim como outros protocolos e ferramentas) necessitam de  atualizações de tempos em tempos, por situações inevitáveis como essa. Essa mudança constante aumenta o nível de dificuldade para o desenvolvedor estar sempre atualizado com seus detalhes de implementação.
+O WebSocket (assim como outros protocolos e ferramentas) necessita de  atualizações de tempos em tempos, por situações imprevisíveis como essa. Essa mudança constante aumenta o nível de dificuldade para o desenvolvedor estar sempre atualizado com seus detalhes de implementação.
 
 Uma das maneiras de se contornar essa dificuldade é utillizar outras APIs que cuidam desses detalhes internamente.
 
@@ -1543,117 +1544,38 @@ Uma das maneiras de se contornar essa dificuldade é utillizar outras APIs que c
 \subsubsection{Socket.io}
 % https://davidwalsh.name/websocket
 
+O último elemento explorado é o Socket.io, uma API de WebSocket para JavaScript. Ela cuida de todos os detalhes de funcionamento do protocolo internamente, deixando uma interface simples ao usuário.
 
-% Socket.io é uma API de WebSocket para JavaScript, que é utilizada nesse Projeto. Ele busca cuidar de todos os detalhes de funcionamento do protocolo internamente, deixando uma interface simples ao usuário.
+Para uma conexão ser estabelecida, tanto o cliente quanto o servidor precisam estar executando Socket.io. Sua implementação tenta primeiramente fazer a conexão usando WebSocket, mas se o servidor não suporta esse protocolo, ele recua (faz \emph{fallback}) para outras tecnologias, como \emph{AJAX long-polling}, \emph{AJAX multipart streaming}, \emph{IFrame}, \emph{JSONP polling}, entre outros (todos utilizando a mesma interface). Esse \emph{fallback} permite à API abranger uma quantidade muito maior de servidores, reduzindo possíveis problemas numa implementação em larga escala.
 
-% Para uma conexão ser estabelecida, tanto o cliente quanto o servidor precisam estar executando Socket.io. Sua implementação tenta primeiramente fazer a conexão usando WebSocket, mas se o servidor não suporta esse protocolo, ele recua (faz fallback) para outras tecnologias, como AJAX long-polling, AJAX multipart streaming, IFrame, JSONP polling, entre outros (todos utilizando a mesma interface). Esse fallback abrange uma quantidade muito maior de servidores, permitindo um uso não tão restrito dessa API.
+Além da implementação básica do protocolo WebSocket, ele também adiciona outras funcionalidades importantes para o desenvolvimento de uma aplicação mais robusta:
 
-% Além da implementação básica do protocolo WebSocket, ele também outras funcionalidades muito importantes para o desenvolvimento de uma aplicação maior e mais robusta.
+\begin{itemize}
 
+\item A possibilidade de criação arbritrária de eventos. Além dos eventos padrões \emph{connect}, \emph{message} e \emph{disconnect}, o desenvolvedor pode criar quaisquer outros eventos que achar necessário.
 
-% É possível conectar múltiplos sockets em uma mesma porta. Internamente, ele faz uma multiplexação das várias conexões abertas em uma mesma porta, mas os processos entendem que tem um socket dedicado a eles. Utilizando WebSockets, cada socket precisa de uma porta exclusiva para fazer a conexão.
+Essa criação de eventos funciona da seguinte forma: o processo emissor manda a mensagem e o nome do evento que está sendo enviado. O processo receptor define o evento que vai ouvir e a subrotina que vai ser executada na ocorrência desse evento. Se o evento lançado for ouvido pelo receptor, o \emph{callback} é chamado.
 
-% A possibilidade de vários sockets em uma mesma aplicação permite uma modularização muito maior, pois não é necessário que um módulo saiba se tem uma conexão dedicada ou se está compartilhando com mais dezenas de outros sockets.
+Com WebSocket, o desenvolvedor fica preso aos quatro eventos pré definidos: \emph{onopen}, \emph{onclose}, \emph{onmessage} e \emph{onerror}. Internamente, os quatro são eventos de mensagem, disparados em momentos e situações específicas. O que o Socket.io faz é dar a liberdade de definir quaisquer eventos desejados.
 
-% Ele permite também a criação arbritrária de eventos. Com WebSocket, o desenvolvedor fica preso aos quatro eventos pré definidos: onopen, onclose, onmessage e onerror. Internamente, os quatro são eventos de mensagem, disparados em momentos e situações específicas. O que o Socket.io faz é dar a liberdade de definir quaisquer eventos desejados.
+\item A possibilidade de conectar múltiplos sockets em uma mesma porta. Internamente, ele faz uma multiplexação das várias conexões abertas em uma mesma porta, mas os processos entendem que tem um socket dedicado a eles. Utilizando WebSockets, cada socket precisa de uma porta exclusiva para fazer a conexão.
 
-% Essa criação de eventos funciona assim: na hora de enviar uma mensagem, o processo emissor define também o nome do evento que está sendo enviado. O processo receptor define o evento que vai ouvir e a subrotina que vai ser executada na ocorrência desse evento.
+A possibilidade de vários sockets em uma mesma aplicação permite uma modularização muito maior, pois não é necessário que um módulo saiba se tem uma conexão dedicada ou se está compartilhando com mais dezenas de outros sockets.
 
-% Um ponto negativo dessa definição de eventos é que o cabeçalho da mensagem é um pouco maior, pois o de WebSockets é mínimo ao extremo, mas esse tamanho ainda é ínfimo e o overhead causado é desprezível.
+Um ponto negativo dessa definição de eventos é que o cabeçalho da mensagem é um pouco maior, pois o de WebSockets é reduzido ao extremo, mas esse tamanho ainda é ínfimo e o overhead causado não se torna um problema.
 
-% Essas funcionalidades aumentam muito o grau de liberdade e permitem um escopo muito maior na hora de criar uma aplicação robusta. Imagine um sistema grande, onde dados são recebidos de múltiplas fontes, cálculos são feitos sobre eles, e o resultado pode ativar vários comportamentos de um outro processo. Algo assim exigiria um código complexo com WebSockets, mas com Socket.io é simples e direto.
+\item Definição de \emph{namespaces}. Dada a existência de múltipos sockets, é possível organizá-los em \emph{namespaces}. Cada \emph{namespace}
+vai conter um conjunto de sockets conectados, e eventos emitidos a um \emph{namespace} serão enviados somente à esse conjunto.
 
+Por padrão, caso nenhum \emph{namespace} seja definido, todos os sockets são conectados vão para o \emph{namespace} \emph{'/'}. Assim, esse funcionamento fica invisível ao desenvolvedor que não os está utilizando.
 
-Abaixo, é exibido o código de um chat simples como exemplo. O código está completo, nada foi omitido para explicitar a simplicidade de se fazer uma aplicação com Socket.io.
+\item Definição de \emph{rooms}. \emph{Rooms} são um segundo nível de organização, definidos dentro de \emph{namespaces}. Um socket pode entrar e sair de \emph{rooms} com funções \code{join} e \code{leave}. Cada socket pode definir uma \emph{room} específica na hora de emitir um evento, da forma:
 
-% http://socket.io/get-started/chat/
+\code{io.to('some room').emit('some event')}
 
-No cliente:
-%(TODO definição de sintaxe?)
-\begin{small}
-\begin{Verbatim}[frame=single]
-<!doctype html>
-<html>
-  <head>
-    <title>Socket.IO chat</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-    </style>
-  </head>
-  <body>
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-    <script>
-      var socket = io();
-      $('form').submit(function(){
-        socket.emit('chat message', $('#m').val());
-        $('#m').val('');
-        return false;
-      });
-      socket.on('chat message', function(msg){
-        $('#messages').append($('<li>').text(msg));
-      });
-    </script>
-  </body>
-</html>
-\end{Verbatim}
-\end{small}
+\end{itemize}
 
-%(TODO formatação)
-- No browser, a página HTML exibe o histórico da conversa e um formulário para o usuário escrever uma mensagem.
-
-- Ao inserir uma mensagem, o socket envia um evento 'chat message' com a texto.
-
-- O socket ouve um evento com o mesmo nome 'chat message'. Ao ocorrer, o conteúdo recebido é inserido na página e exibido ao usuário.
-
-- Note que não há um evento 'connection' definido, mas ainda assim ele é disparado quando a conexão é definida, e envia seus dados de identificação.
-
-
-No servidor:
-
-\begin{small}
-\begin{Verbatim}[frame=single]
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
-});
-
-io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
-  });
-});
-
-http.listen(3000, function(){
-  console.log('listening on *:3000');
-});
-\end{Verbatim}
-\end{small}
-
-%(TODO formatação)
-- No servidor, o evento 'connection' ativa uma subrotina que recebe o socket e registra nele o evento 'chat message'.
-
-- O evento 'chat message' ativa uma subrotina que emite a mensagem recebida para todos os sockets conectados ao servidor.
-
-Esse exemplo mostra múltiplos sockets em uso no servidor, e a definição de eventos arbitrários, ainda que semelhantes aos de WebSocket.
-
-Por fim, é possível dizer que resolve os problemas apresentados. Ele torna possível a comunicação bilateral cliente-servidor com mínimo custo e baixa latência. Sua interface simples torna o desenvolvimento de aplicações Web rápido e direto, mas suas funcionalidades são poderosas o bastante para se criar algo consistente, robusto e, principalmente, escalável.
-
-Socket.io é a principal ferramenta usada para fazer esse Projeto funcionar.
+É fácil notar a preocupação com organização dessas funcionalidades. Com o protocolo WebSocket puro, é inviável fazer uma aplicação que faz o uso de múltiplos sockets com execuções distintas, mas que interagem entre si. Um dos propósitos da criação de Socket.io foi aumentar o grau de liberdade do desenvolvedor e tornar esse tipo de aplicação muito simples de ser desenvolvida.
 
 \newpage
 
@@ -1702,6 +1624,8 @@ Com certa dificuldade um primeiro aplicativo de teste foi feito, para pegar valo
 [TODO] Para exemplificar a facilidade de desenvolvimento de lógica e de uma interface gráfica, abaixo tem o código para se criar um jogo de Pong.
 
 
+
+\section{Casos de Uso}
 
 \section{Parte Subjetiva}
 
