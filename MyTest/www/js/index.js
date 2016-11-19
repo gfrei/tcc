@@ -50,10 +50,9 @@ var app = {
 
 app.initialize();
 
-// Variables
 
+/*Variables */
 var socket;
-var default_port = 8000;
 var watchID = null;
 
 var speedX = {'x':1,'y':0,'z':0};
@@ -61,10 +60,7 @@ var speedY = {'x':0,'y':1,'z':0};
 var speedZ = {'x':0,'y':0,'z':1};
 
 
-
-
-// Auxiliar functions
-
+/* Auxiliar functions */
 function log(message) {
     socket.emit('device_print', message);
     var msg = 'Log: ' + message;
@@ -79,10 +75,6 @@ function validateIPaddress(ipaddress) {
     log("You have entered an invalid IP address!")
     return (false)
 }
-
-
-
-// Accelerometer Toggle
 
 function toggleAccelerometer(period) {
     var freq = ~~(1000 / period);
@@ -101,8 +93,7 @@ function toggleAccelerometer(period) {
 }
 
 
-
-// Socket emit functions
+/* Socket emit functions */
 function addSpeed(speed_vector) {
     socket.emit('device_add_speed', speed_vector);
 }
@@ -142,9 +133,7 @@ function localCalculation() {
 }
 
 
-
-// Socket events
-
+/*Socket events */
 function onServerConnect() {
     $('#status').text("Connected");
     app.receivedEvent('deviceready');
@@ -159,8 +148,6 @@ function onServerPing(data) {
 function onServerLog(msg) {
     $('#log').text(msg);
 }
-
-
 
 function connectSocket(ipaddress, port) {
     if(validateIPaddress(ipaddress)) {
@@ -179,8 +166,8 @@ function connectSocket(ipaddress, port) {
     }
 }
 
-// Device Ready Event
 
+/*Device Ready Event */
 document.addEventListener('deviceready', function() {
 
     $('#connect').submit(function (event) {
