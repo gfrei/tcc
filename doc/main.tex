@@ -100,12 +100,6 @@
 }
 
 \newcommand{\code}[1]{\lstinline[mathescape=true, columns=fixed, basicstyle={\small\ttfamily}]{#1}}
-% \lstset{
-%    numberstyle=\footnotesize,
-%    numbersep=9pt,
-%    captionpos=b,
-%    frame=single
-% }
 
 
  \usepackage{fancyvrb}
@@ -123,6 +117,19 @@
   /Subject  (Trabalho de Conclusão de Curso)
   /Keywords (TCC, Lean UX)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \begin{document}
 \pagenumbering{gobble}
@@ -184,6 +191,22 @@
 %\section{Análise Subjetiva}
 \addcontentsline{toc}{section}{Referências}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \section{Resumo}
 
@@ -242,11 +265,11 @@ A comunicação é a parte mais importante deste Projeto. O modelo cliente-servi
 
     \item \textbf{Baixa latência.} No caso de o cliente Web executar um jogo, o tempo entre um comando enviado do smartphone e a reação da página precisa ser o menor possível. Caso contrário, a experiência é danificada e pode até ser impossibilitada, se o jogo for construído com base em respostas rápidas.
 
-    \item \textbf{Cabeçalho mínimo de mensagens.} Se o fluxo de mensagens for alto, esse cabeçalho pode consumir muita banda da conexão, além de exigir muitos recursos, tanto do servidor como dos clientes. É necessário que ele possua a menor quantidade de informações desnecessárias. Caso a mensagem tenha muito conteúdo, ele fará pouca diferença, mas se ela for pequena, como um texto ou um conjunto de valores, o cabeçalho representa um aumento significativo no tamanho total, podendo ser até maior do que o próprio conteúdo.
+    \item \textbf{Baixo \emph{overhead} de mensagens.} É necessário que o cabeçalho das mensagens seja o mínimo possível. Se o fluxo de mensagens for alto, ele vai consumir muita banda da conexão e recursos, tanto do servidor como do cliente. É necessário que possua a menor quantidade de informações desnecessárias. Caso a mensagem tenha muito conteúdo, ele fará pouca diferença, mas se ela for pequena, como um texto ou um conjunto de valores, o cabeçalho representa um aumento significativo no tamanho total, podendo ser até maior do que o próprio conteúdo.
 
-    \item \textbf{Conexão bilateral.} Informações podem se originar de qualquer um dos clientes ou do servidor, então é necessário que o processo em questão possa enviar as informações a qualquer momento. No caso de um cliente precisar ser atualizado caso haja dados novos, é inviável que precise consultar o servidor a todo momento.
+    \item \textbf{Comunicação bilateral.} Informações podem se originar de qualquer um dos clientes ou do servidor, então é necessário que o processo em questão possa enviar as informações a qualquer momento. No caso de um cliente precisar ser atualizado caso haja dados novos, é inviável que precise consultar o servidor a todo momento.
 
-    \item \textbf{Permitir multiplas conexões simultâneas.} Não é necessário, mas permite uma liberdade ainda maior. No projeto é previsto somente que o servidor se conecte a um cliente Web e de smartphone, mas, se o servidor aceitar a conexão com vários clientes do mesmo tipo, o desenvolvimento deles pode tirar proveito disso. Um smartphone pode enviar e receber informações de outros, como em um Chat, por exemplo.
+    \item \textbf{Permitir multiplas conexões simultâneas.} Não é necessário, mas permite uma liberdade ainda maior. No projeto é previsto somente que o servidor se conecte a um cliente Web e de smartphone, mas, se o servidor aceitar a conexão com vários clientes do mesmo tipo, o desenvolvimento deles pode tirar proveito disso. Um smartphone pode enviar e receber informações de outros, como em um \emph{Chat}, por exemplo.
 \end{itemize}
 
 Com esses requerimentos em vista, o tecnologia usada foi o Framework de JavaScript Socket.io, que implementa o protocolo WebSocket.
@@ -1108,7 +1131,7 @@ A arquitetura interna está descrita no diagrama:
 
 
 
-
+\newpage
 \subsection{Utilizando Node.js e ExpressJS}
 
 *Something Something*
@@ -1134,10 +1157,7 @@ Alguns atributos chave de Node.js são:
 
 
 
-
-
-
-
+\newpage
 \subsection{Comunicação Web e Aplicações Web}
 
 
@@ -1145,10 +1165,12 @@ O protocolo WebSocket foi utilizado para a comunicação deste Projeto, pois há
 
 Enquanto que, na prática, bastou escolher esse protocolo WebSocket, sua criação representa uma evolução no paradigma de desenvolvimento de páginas Web. A seguir é dado um panorama dos fatores que desencadearam sua criação e o que isso representa.
 
-A comunicação de dados entre computadores através da Internet é algo muito comum, e necessita de uma arquitetura de rede adequada para ocorrer.
 
 % cliente-servidor
 \subsubsection{Modelo cliente-servidor}
+
+A comunicação de dados entre computadores através da Internet é algo muito comum, e necessita de uma arquitetura de rede adequada para ocorrer.
+
 A mais utilizada é o modelo cliente-servidor. Neste modelo, existem dois tipos de processos rodando, o Cliente e o Servidor. O Cliente é o processo que roda nos computadores locais e se conecta ao Servidor. A comunicação é dada quando o Cliente manda uma requisição ao Servidor (esta requisição pode ser por uma página web, um processamento de dados, entre outros). Por sua vez, o Servidor recebe esses dados e faz o processamento necessário para completar essa requisição, e em seguida envia uma resposta ao Cliente. A resposta pode pode ser o que foi requisitado ou outro tipo de mensagem, como de erro, caso ocorra uma falha no processamento ou negação de permissão. O Cliente então pode continuar com o seu próprio processo.
 
 
@@ -1158,9 +1180,9 @@ A mais utilizada é o modelo cliente-servidor. Neste modelo, existem dois tipos 
 
 O protocolo que acompanha esse modelo é principalmente HTTP (\emph{Hypertext Transfer Protocol}). Ele é usado para a transferência de Recursos entre processos. Recursos são arquivos HTML, imagens, resultados de buscas, entre outros.
 
-Um Cliente HTTP, como um navegador, abre uma conexão e envia uma mensagem de requisição ao Servidor HTTP, que retorna uma mensagem de resposta ao Cliente, normalmente contendo o recurso pedido. Após entregar a resposta, o Servidor encerra a conexão.
+Um Cliente HTTP, como um navegador, abre uma conexão e envia uma mensagem de requisição ao Servidor HTTP, que retorna uma mensagem de resposta, normalmente contendo o recurso pedido. Após entregar a resposta, o Servidor encerra a conexão.
 
-Por esse fato é dito que HTTP um protocolo sem estado, pois não mantém informações sobre a conexão entre transações. Ele também implica que cada mensagem HTTP precisa possuir um cabeçalho com informações sobre o contexto, uma vez que o Servidor não guarda nenhum dado.
+Por encerrar a conexão, é dito que HTTP um protocolo sem estado, pois não mantém informações sobre a conexão entre transações. Ele também implica que cada mensagem HTTP precisa possuir um cabeçalho com informações sobre o contexto, uma vez que o Servidor não guarda nenhum dado.
 
 
 
@@ -1263,7 +1285,7 @@ Por todos esses fatos, ficou claro que era necessário ter uma conexão bilatera
 \subsubsection{Sockets}
 % https://docs.oracle.com/javase/tutorial/networking/sockets/definition.html
 
-No modelo cliente-servidor uma conexão é definida por dois pontos finais, um no cliente e um no servidor. Cada um desses pontos finais serve para mandar e receber os dados do outro lado da conexão, e eles são nomeados como Sockets (Soquetes de Rede). Essa a conexão entre Sockets é definida no protocolo TCP\footnote{Protocolo base de transporte na Internet.}. Cada Socket é definido por um endereço de IP e uma Porta (por exemplo, 192.168.0.1:8000), independente de estar no Cliente ou no Servidor, e a conexão TCP pode ser definida de maneira única por seus dois Sockets conectados.
+No modelo cliente-servidor uma conexão é definida por dois pontos finais, um no cliente e um no servidor. Cada um desses pontos finais serve para mandar e receber os dados do outro lado da conexão, e eles são nomeados como Sockets (Soquetes de Rede). Essa a conexão entre Sockets é implementada no protocolo TCP\footnote{Protocolo base de transporte na Internet.}. Cada Socket é identificado por um endereço de IP e uma Porta (por exemplo, 192.168.0.1:8000), independente de estar no Cliente ou no Servidor, e a conexão TCP pode ser definida de maneira única por seus dois Sockets conectados.
 
 A conexão cliente-servidor, considerando os Sockets, é feita da seguite maneira:
 
@@ -1302,7 +1324,7 @@ Essa API não é acessível ao nível de desenvolvimento Web por fazer parte do 
 
 WebSocket é um protocolo que lida com Sockets de uma conexão que foi criado para permitir a comunicação bilateral entre cliente e servidor. Ele permite mais liberdade para criar novos protocolos e maneiras de se transferir dados.
 
-Sua interface é bastante simples, seu objetivo é o envio e recebimento de mensagens entre o cliente e o servidor. Para o protocolo, não existe essa diferenciação entre os dois, ambos são apenas dois processos conectados. Essa hierarquia cliente-servidor deixa de existir e não há mais uma separação de funções entre ambos. A comunicação é dada por envio de mensagens e ocorrência de eventos. Esses processos podem enviar mensagens a qualquer momento e estão ouvindo um ao outro.
+Sua interface é bastante simples, seu objetivo é o envio e recebimento de mensagens entre o cliente e o servidor. Para o protocolo, essa hierarquia cliente-servidor deixa de existir, não há diferenciação entre os dois, ambos são apenas dois processos conectados. A comunicação é dada por envio de mensagens e ocorrência de eventos. Esses processos podem enviar mensagens a qualquer momento e estão ouvindo um ao outro.
 
 O protocolo foi pensado para funcionar bem com a infraestrutura Web já existente. Como parte desse paradigma, sua especificação determina que uma conexão é estabelecida inicialmente com o protocolo HTTP, garantindo retrocompatibilidade.
 
@@ -1405,11 +1427,11 @@ https://www.websocket.org/echo.html
 
 Essa página executa um código simples. Ela cria um WebSocket conectado à “ws://echo.websocket.org/".
 
-O evento de conexão (onOpen) ativa uma função que escreve na tela e manda uma string para o outro WebSocket.
+O evento de conexão \emph{'onOpen'} ativa uma função que escreve na tela e manda uma string para o outro WebSocket.
 
-O evento de recebimento de mensagem (onMessage) escreve na tela o conteúdo que foi recebido e fecha a conexão.
+O evento de recebimento de mensagem \emph{'onMessage'} escreve na tela o conteúdo que foi recebido e fecha a conexão.
 
-O evento de encerramento de conexão e de erro (onClose e onError) só escrevem na tela um status.
+O evento de encerramento de conexão e de erro (\emph{'onClose'} e \emph{'onError'}) só escrevem na tela um status.
 
 
 
@@ -1439,7 +1461,7 @@ No experimento a seguir, é mostrado a diferença de tráfego de dados e latênc
 Então, o quão dramática é a redução de tráfego de dados desnecessários e latência? Vamos comparar uma aplicação \emph{Polling} e uma WebSocket lado a lado.
 
 
-Para o exemplo de \emph{Polling}, eu criei uma simples aplicação Web, na qual a página manda requisições a um \emph{RabbitMQ Message Broker} pedindo dados de um Mercado de Ações em tempo real, usando um modelo \emph{publish}/\emph{subscribe} tradicional. Ele requisita esses dados por fazer \emph{Polling} para uma \emph{Java Servlet} hospedado no Servidor Web. O \emph{RabbitMQ Message Broker} recebe os dados de um \emph{feed} de Mercado de Ações fictício, atualizado continuamente. A página Web conecta e se inscreve em um canal específico do Mercado (um Tópico do \emph{Message Broker}) e usa uma chamada \code{XMLHttpRequest} para pedir (fazer um \emph{Poll}) por atualizações uma vez por segundo. Quando elas chegam, alguns cálculos são feitos e os dados do Mercado são mostrados em uma tabela, como na imagem a seguir:
+Para o exemplo de \emph{Polling}, eu criei uma simples aplicação Web, na qual a página manda requisições a um \emph{RabbitMQ Message Broker} pedindo dados de um Mercado de Ações em tempo real, usando um modelo \emph{publish}/\emph{subscribe} tradicional. Ele requisita esses dados por fazer \emph{Polling} para um \emph{Java Servlet} hospedado no Servidor Web. O \emph{RabbitMQ Message Broker} recebe os dados de um \emph{feed} de Mercado de Ações fictício, atualizado continuamente. A página Web conecta e se inscreve em um canal específico do Mercado (um Tópico do \emph{Message Broker}) e usa uma chamada \code{XMLHttpRequest} para pedir (fazer um \emph{Poll}) por atualizações uma vez por segundo. Quando elas chegam, alguns cálculos são feitos e os dados do Mercado são mostrados em uma tabela, como na imagem a seguir:
 
 \includegraphics[width=1\linewidth]{images/stock-ticker.png}
 
@@ -1544,7 +1566,7 @@ Uma das maneiras de se contornar essa dificuldade é utillizar outras APIs que c
 \subsubsection{Socket.io}
 % https://davidwalsh.name/websocket
 
-O último elemento explorado é o Socket.io, uma API de WebSocket para JavaScript. Ela cuida de todos os detalhes de funcionamento do protocolo internamente, deixando uma interface simples ao usuário.
+Por fim, foi criado o Socket.io, uma API de WebSocket para JavaScript. Ela cuida de todos os detalhes de funcionamento do protocolo internamente, deixando uma interface simples ao usuário. Assim, mudanças no funcionamento do protocolo não chegam ao desenvolvedor.
 
 Para uma conexão ser estabelecida, tanto o cliente quanto o servidor precisam estar executando Socket.io. Sua implementação tenta primeiramente fazer a conexão usando WebSocket, mas se o servidor não suporta esse protocolo, ele recua (faz \emph{fallback}) para outras tecnologias, como \emph{AJAX long-polling}, \emph{AJAX multipart streaming}, \emph{IFrame}, \emph{JSONP polling}, entre outros (todos utilizando a mesma interface). Esse \emph{fallback} permite à API abranger uma quantidade muito maior de servidores, reduzindo possíveis problemas numa implementação em larga escala.
 
@@ -1552,24 +1574,24 @@ Além da implementação básica do protocolo WebSocket, ele também adiciona ou
 
 \begin{itemize}
 
-\item A possibilidade de criação arbritrária de eventos. Além dos eventos padrões \emph{connect}, \emph{message} e \emph{disconnect}, o desenvolvedor pode criar quaisquer outros eventos que achar necessário.
+\item \textbf{A possibilidade de criação arbritrária de eventos}. Além dos eventos padrões \emph{'connect'}, \emph{'message'} e \emph{'disconnect'}, o desenvolvedor pode criar quaisquer outros eventos que achar necessário.
 
 Essa criação de eventos funciona da seguinte forma: o processo emissor manda a mensagem e o nome do evento que está sendo enviado. O processo receptor define o evento que vai ouvir e a subrotina que vai ser executada na ocorrência desse evento. Se o evento lançado for ouvido pelo receptor, o \emph{callback} é chamado.
 
-Com WebSocket, o desenvolvedor fica preso aos quatro eventos pré definidos: \emph{onopen}, \emph{onclose}, \emph{onmessage} e \emph{onerror}. Internamente, os quatro são eventos de mensagem, disparados em momentos e situações específicas. O que o Socket.io faz é dar a liberdade de definir quaisquer eventos desejados.
+Com WebSocket, o desenvolvedor fica preso aos quatro eventos pré definidos: \emph{'onopen'}, \emph{'onclose'}, \emph{'onmessage'} e \emph{'onerror'}. Internamente, os quatro são eventos de mensagem, disparados em momentos e situações específicas. O que o Socket.io faz é dar a liberdade de definir quaisquer eventos desejados.
 
-\item A possibilidade de conectar múltiplos sockets em uma mesma porta. Internamente, ele faz uma multiplexação das várias conexões abertas em uma mesma porta, mas os processos entendem que tem um socket dedicado a eles. Utilizando WebSockets, cada socket precisa de uma porta exclusiva para fazer a conexão.
+\item \textbf{A possibilidade de conectar múltiplos sockets em uma mesma porta}. Internamente, ele faz uma multiplexação das várias conexões abertas em uma mesma porta, mas os processos entendem que tem um socket dedicado a eles. Utilizando WebSockets, cada socket precisa de uma porta exclusiva para fazer a conexão.
 
 A possibilidade de vários sockets em uma mesma aplicação permite uma modularização muito maior, pois não é necessário que um módulo saiba se tem uma conexão dedicada ou se está compartilhando com mais dezenas de outros sockets.
 
-Um ponto negativo dessa definição de eventos é que o cabeçalho da mensagem é um pouco maior, pois o de WebSockets é reduzido ao extremo, mas esse tamanho ainda é ínfimo e o overhead causado não se torna um problema.
+Um ponto negativo dessa definição de eventos é que o cabeçalho da mensagem é um pouco maior, pois o de WebSockets é reduzido ao extremo, mas esse tamanho ainda é ínfimo e o \emph{overhead} causado não se torna um problema.
 
-\item Definição de \emph{namespaces}. Dada a existência de múltipos sockets, é possível organizá-los em \emph{namespaces}. Cada \emph{namespace}
+\item \textbf{Definição de \emph{namespaces}}. Dada a existência de múltipos sockets, é possível organizá-los em \emph{namespaces}. Cada \emph{namespace}
 vai conter um conjunto de sockets conectados, e eventos emitidos a um \emph{namespace} serão enviados somente à esse conjunto.
 
-Por padrão, caso nenhum \emph{namespace} seja definido, todos os sockets são conectados vão para o \emph{namespace} \emph{'/'}. Assim, esse funcionamento fica invisível ao desenvolvedor que não os está utilizando.
+Por padrão, caso nenhum \emph{namespace} seja definido, todos os sockets são conectados ao \emph{namespace} \emph{'/'}. Assim, esse funcionamento fica invisível ao desenvolvedor que não os está utilizando.
 
-\item Definição de \emph{rooms}. \emph{Rooms} são um segundo nível de organização, definidos dentro de \emph{namespaces}. Um socket pode entrar e sair de \emph{rooms} com funções \code{join} e \code{leave}. Cada socket pode definir uma \emph{room} específica na hora de emitir um evento, da forma:
+\item \textbf{Definição de \emph{rooms}}. \emph{Rooms} são um segundo nível de organização, definidos dentro de \emph{namespaces}. Um socket pode entrar e sair de \emph{rooms} com funções \code{join} e \code{leave}. Cada socket pode definir uma \emph{room} específica na hora de emitir um evento, da forma:
 
 \code{io.to('some room').emit('some event')}
 
@@ -1579,57 +1601,47 @@ Por padrão, caso nenhum \emph{namespace} seja definido, todos os sockets são c
 
 \newpage
 
-\section{Evolução do Projeto}
+% \section{Evolução do Projeto}
 
-Esse projeto utiliza várias tecnologias que eu nunca tive contato.
-
-
-Inicialmente a ideia inicial do TCC era usar um Arduino e um conjunto de sensores para coletar dados do meio e mandar de maneira síncrona para um servidor. O servidor então usaria esses dados para fazer algum controle. Numa primeira discussão com o orientador, a ideia foi rapidamente descartada, pelos seguintes motivos:
-
-Os sensores dele normalmente são imprecisos;
-A montagem de um dispositivo como o idealizado seria desnecessariamente custosa e muito propensa a erros;
-Sem uma montagem muito bem executada, o dispositivo ficaria muito frágil;
-É possível conseguir muitas leituras de sensores utilizando um smartphone.
+% Esse projeto utiliza várias tecnologias que eu nunca tive contato.
 
 
-Com os argumentos apresentados, a decisão foi criar um aplicativo para Android com o mesmo propósito. Todos os argumentos apresentados são resolvidos com essa solução. A implementação é extremamente mais simples; os sensores são muito mais precisos; a estrutura física já está pronta e é um objeto que já está presente em todo o mundo (o produto final atinge grande parte da população); e, por fim, é muito viável a adição ou remoção de funcionalidades, além de muito mais suporte para a plataforma.
+% Inicialmente a ideia inicial do TCC era usar um Arduino e um conjunto de sensores para coletar dados do meio e mandar de maneira síncrona para um servidor. O servidor então usaria esses dados para fazer algum controle. Numa primeira discussão com o orientador, a ideia foi rapidamente descartada, pelos seguintes motivos:
+
+% Os sensores dele normalmente são imprecisos;
+% A montagem de um dispositivo como o idealizado seria desnecessariamente custosa e muito propensa a erros;
+% Sem uma montagem muito bem executada, o dispositivo ficaria muito frágil;
+% É possível conseguir muitas leituras de sensores utilizando um smartphone.
 
 
-Uma vez que a decisão de utilizar um smartphone, foi necessário saber como implementar um aplicativo que tenha acesso aos sensores.
-A primeira ideia foi utilizar serviço MIT App Inventor.
+% Com os argumentos apresentados, a decisão foi criar um aplicativo para Android com o mesmo propósito. Todos os argumentos apresentados são resolvidos com essa solução. A implementação é extremamente mais simples; os sensores são muito mais precisos; a estrutura física já está pronta e é um objeto que já está presente em todo o mundo (o produto final atinge grande parte da população); e, por fim, é muito viável a adição ou remoção de funcionalidades, além de muito mais suporte para a plataforma.
 
 
+% Uma vez que a decisão de utilizar um smartphone, foi necessário saber como implementar um aplicativo que tenha acesso aos sensores.
+% A primeira ideia foi utilizar serviço MIT App Inventor.
+
+% \section{Tecnologias citadas}
+
+% \subsection{MIT App Inventor}
+
+% É um serviço disponibilizado pelo MIT para a criação de aplicativos. Ele é extremamente didático e inclusivo, sua interface não é dada por linhas de código, e sim por blocos lógicos que se encaixam e formam um algoritmo (na prática, é bastante ruim não poder escrever linhas de código livremente). Sua API possui interface para o uso de sensores, além de outras funcionalidades que não foram exploradas neste TCC, como acesso à ferramenta de reconhecimento de voz e ferramentas sociais, como email, mensagem e Twitter. O serviço é bom, porém possui várias restrições, então é difícil de ser usado.
 
 
-
-\section{Tecnologias citadas}
-
+% Com certa dificuldade um primeiro aplicativo de teste foi feito, para pegar valores do giroscópio. O próximo passo seria criar um servidor e estabelecer uma conexão entre ambos, porém as opções de conectividade do App Inventor também são muito restritas, então, dada a dificuldade prevista, eu achei melhor deixar essa plataforma de lado no momento e procurar outras alternativas para a criação de um app.
 
 
+% \subsection{Kivy}
 
+% É um framework Open Source de Python. Seu objetivo é o desenvolvimento rápido de aplicações multiplataforma que fazem o uso de interfaces inovadoras, como telas com Multitouch e sensores de movimento. Sua API, por exemplo, lida com eventos de mouse, teclado e toques de tela. Ele também possui um foco na criação de apps com NUI (Natural User Interface).
+%   NUI é uma metodologia de interface cuja proposta é ser invisível ao usuário, e apresentar uma experiência natural e intuitiva. Seu principal foco é evitar grandes barreiras durante o aprendizado. Através de decisões de design, o usuário tem um entendimento do software sem grandes dificuldades, à medida que a complexidade da interação aumenta.
 
-\subsection{MIT App Inventor}
-
-É um serviço disponibilizado pelo MIT para a criação de aplicativos. Ele é extremamente didático e inclusivo, sua interface não é dada por linhas de código, e sim por blocos lógicos que se encaixam e formam um algoritmo (na prática, é bastante ruim não poder escrever linhas de código livremente). Sua API possui interface para o uso de sensores, além de outras funcionalidades que não foram exploradas neste TCC, como acesso à ferramenta de reconhecimento de voz e ferramentas sociais, como email, mensagem e Twitter. O serviço é bom, porém possui várias restrições, então é difícil de ser usado.
-
-
-Com certa dificuldade um primeiro aplicativo de teste foi feito, para pegar valores do giroscópio. O próximo passo seria criar um servidor e estabelecer uma conexão entre ambos, porém as opções de conectividade do App Inventor também são muito restritas, então, dada a dificuldade prevista, eu achei melhor deixar essa plataforma de lado no momento e procurar outras alternativas para a criação de um app.
-
-
-\subsection{Kivy}
-
-É um framework Open Source de Python. Seu objetivo é o desenvolvimento rápido de aplicações multiplataforma que fazem o uso de interfaces inovadoras, como telas com Multitouch e sensores de movimento. Sua API, por exemplo, lida com eventos de mouse, teclado e toques de tela. Ele também possui um foco na criação de apps com NUI (Natural User Interface).
-  NUI é uma metodologia de interface cuja proposta é ser invisível ao usuário, e apresentar uma experiência natural e intuitiva. Seu principal foco é evitar grandes barreiras durante o aprendizado. Através de decisões de design, o usuário tem um entendimento do software sem grandes dificuldades, à medida que a complexidade da interação aumenta.
-
-[TODO] Para exemplificar a facilidade de desenvolvimento de lógica e de uma interface gráfica, abaixo tem o código para se criar um jogo de Pong.
+% [TODO] Para exemplificar a facilidade de desenvolvimento de lógica e de uma interface gráfica, abaixo tem o código para se criar um jogo de Pong.
 
 
 
 \section{Casos de Uso}
 
 \section{Parte Subjetiva}
-
-
 \subsection{Desafios e frustrações}
 \subsection{A contribuição do curso de Computação}
 \subsection{Próximo Passos}
@@ -1646,11 +1658,6 @@ Com certa dificuldade um primeiro aplicativo de teste foi feito, para pegar valo
 % Bibliografia:
 % https://en.wikipedia.org/wiki/Kivy
 % https://en.wikipedia.org/wiki/Natural_user_interface
-
-
-% Imagens:
-
-
 
 % Ajax
 % https://en.wikipedia.org/wiki/Ajax_(programming)

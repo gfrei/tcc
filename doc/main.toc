@@ -21,25 +21,21 @@
 \contentsline {subsubsection}{\numberline {4.4.2}Implementa\IeC {\c c}\IeC {\~a}o}{22}{subsubsection.4.4.2}
 \contentsline {section}{\numberline {5}Estudo Aprofundado da Tecnologia}{26}{section.5}
 \contentsline {subsection}{\numberline {5.1}Desenvolvendo Aplicativos com Apache Cordova}{26}{subsection.5.1}
-\contentsline {subsection}{\numberline {5.2}Utilizando Node.js e ExpressJS}{27}{subsection.5.2}
-\contentsline {subsection}{\numberline {5.3}Comunica\IeC {\c c}\IeC {\~a}o Web e Aplica\IeC {\c c}\IeC {\~o}es Web}{27}{subsection.5.3}
-\contentsline {subsubsection}{\numberline {5.3.1}Modelo cliente-servidor}{28}{subsubsection.5.3.1}
-\contentsline {subsubsection}{\numberline {5.3.2}AJAX}{29}{subsubsection.5.3.2}
-\contentsline {subsubsection}{\numberline {5.3.3}Necessidade de Comunica\IeC {\c c}\IeC {\~a}o Bilateral}{30}{subsubsection.5.3.3}
-\contentsline {subsubsection}{\numberline {5.3.4}Sockets}{32}{subsubsection.5.3.4}
-\contentsline {subsubsection}{\numberline {5.3.5}Websockets}{33}{subsubsection.5.3.5}
-\contentsline {subsubsection}{\numberline {5.3.6}Teste de efici\IeC {\^e}ncia de Websockets}{36}{subsubsection.5.3.6}
-\contentsline {paragraph}{Informa\IeC {\c c}\IeC {\~o}es para entender o exemplo:}{36}{section*.4}
-\contentsline {paragraph}{Em conclus\IeC {\~a}o}{41}{section*.5}
-\contentsline {subsubsection}{\numberline {5.3.7}Socket.io}{41}{subsubsection.5.3.7}
-\contentsline {section}{\numberline {6}Evolu\IeC {\c c}\IeC {\~a}o do Projeto}{44}{section.6}
-\contentsline {section}{\numberline {7}Tecnologias citadas}{44}{section.7}
-\contentsline {subsection}{\numberline {7.1}MIT App Inventor}{44}{subsection.7.1}
-\contentsline {subsection}{\numberline {7.2}Kivy}{45}{subsection.7.2}
-\contentsline {section}{\numberline {8}Casos de Uso}{45}{section.8}
-\contentsline {section}{\numberline {9}Parte Subjetiva}{45}{section.9}
-\contentsline {subsection}{\numberline {9.1}Desafios e frustra\IeC {\c c}\IeC {\~o}es}{45}{subsection.9.1}
-\contentsline {subsection}{\numberline {9.2}A contribui\IeC {\c c}\IeC {\~a}o do curso de Computa\IeC {\c c}\IeC {\~a}o}{45}{subsection.9.2}
-\contentsline {subsection}{\numberline {9.3}Pr\IeC {\'o}ximo Passos}{45}{subsection.9.3}
-\contentsline {subsection}{\numberline {9.4}Agradecimentos}{45}{subsection.9.4}
-\contentsline {section}{\numberline {10}Bibliografia}{45}{section.10}
+\contentsline {subsection}{\numberline {5.2}Utilizando Node.js e ExpressJS}{28}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}Comunica\IeC {\c c}\IeC {\~a}o Web e Aplica\IeC {\c c}\IeC {\~o}es Web}{29}{subsection.5.3}
+\contentsline {subsubsection}{\numberline {5.3.1}Modelo cliente-servidor}{29}{subsubsection.5.3.1}
+\contentsline {subsubsection}{\numberline {5.3.2}AJAX}{30}{subsubsection.5.3.2}
+\contentsline {subsubsection}{\numberline {5.3.3}Necessidade de Comunica\IeC {\c c}\IeC {\~a}o Bilateral}{31}{subsubsection.5.3.3}
+\contentsline {subsubsection}{\numberline {5.3.4}Sockets}{33}{subsubsection.5.3.4}
+\contentsline {subsubsection}{\numberline {5.3.5}Websockets}{34}{subsubsection.5.3.5}
+\contentsline {subsubsection}{\numberline {5.3.6}Teste de efici\IeC {\^e}ncia de Websockets}{37}{subsubsection.5.3.6}
+\contentsline {paragraph}{Informa\IeC {\c c}\IeC {\~o}es para entender o exemplo:}{37}{section*.4}
+\contentsline {paragraph}{Em conclus\IeC {\~a}o}{42}{section*.5}
+\contentsline {subsubsection}{\numberline {5.3.7}Socket.io}{42}{subsubsection.5.3.7}
+\contentsline {section}{\numberline {6}Casos de Uso}{45}{section.6}
+\contentsline {section}{\numberline {7}Parte Subjetiva}{45}{section.7}
+\contentsline {subsection}{\numberline {7.1}Desafios e frustra\IeC {\c c}\IeC {\~o}es}{45}{subsection.7.1}
+\contentsline {subsection}{\numberline {7.2}A contribui\IeC {\c c}\IeC {\~a}o do curso de Computa\IeC {\c c}\IeC {\~a}o}{45}{subsection.7.2}
+\contentsline {subsection}{\numberline {7.3}Pr\IeC {\'o}ximo Passos}{45}{subsection.7.3}
+\contentsline {subsection}{\numberline {7.4}Agradecimentos}{45}{subsection.7.4}
+\contentsline {section}{\numberline {8}Bibliografia}{45}{section.8}
