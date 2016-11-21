@@ -115,16 +115,8 @@
   /Title    (Comunicação cliente-servidor bilateral de baixa latência aplicado a Android)
   /Author   (Guilherme Freire Silva)
   /Subject  (Trabalho de Conclusão de Curso)
-  /Keywords (TCC, Lean UX)
+  /Keywords (TCC, Socket, Android)
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -164,40 +156,14 @@
 \end{center}
 
 \newpage
-% \include{secoes/quote}
 
 \newpage
-\listoffigures
-\listoftables
 \tableofcontents
 
-% \include{secoes/resumo}
-
-\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \pagenumbering{arabic}     % começamos a numerar
 
 \renewcommand{\arraystretch}{1.2}
-
-% \include{secoes/introducao}
-% \include{secoes/metodologias/ux}
-% \include{secoes/metodologias/lean}
-% \include{secoes/metodologias/agile}
-% \include{secoes/metodologias/lean_ux}
-% \include{secoes/desenvolvimento/processos_lean}
-% \include{secoes/desenvolvimento/processos_app}
-% %\include{secoes/analiseSubjetiva}
-% \include{secoes/apendice/apendice}
-
-%\section{Análise Subjetiva}
-\addcontentsline{toc}{section}{Referências}
-
-
-
-
-
-
-
-
 
 
 
@@ -210,17 +176,24 @@
 \newpage
 \section{Resumo}
 
+Desenvolvimento de um ambiente Web com três tipos de elementos diferentes. Desenvolvimento de um aplicativo mobile em Apache Cordova. Desenvolvimento de uma página Web 3D com THREE.JS. Criação de um servidor utilizando Node.js e Express.js. Comunicação entre os três elementos utilizando o protocolo WebSocket com o framework Socket.io.
+
+\textbf{Palavras-chave}: Socket.io, Node.js, Express.js, THREE.JS, Apache Cordova.
+
 
 \newpage
 \section{Abstract}
 
+Web environment development with three distinct types of elements. Mobile development with Apache Cordova. 3D Web development with THREE.JS. Server-side aplication with Node.js and Express.js. Communication between these three elements with WebSocket protocol and Socket.io framework.
+
+\textbf{keywords}: Socket.io, Node.js, Express.js, THREE.JS, Apache Cordova.
+
 
 \newpage
 \section{Introdução}
-% \alert{semper massa}
 Dispositivos móveis, como smartphones e tablets, estão cada dia mais presentes. Sua tecnologia se atualiza a cada momento e ainda é muito nova, muitas de suas funcionalidades ainda podem ser bastante exploradas.
 
-O mesmo vale para tecnologias para a internet. O ambiente Web está em constante transformação, APIs \footnote{\emph{Application Programming Interface}, conjunto de rotinas e padrões de programação para acesso a um aplicativo de software ou plataforma baseado na Web} e ferramentas são criadas e renovadas a todo momento e podem ser aplicadas a vários contextos de forma relevante e inovadora.
+O mesmo vale para tecnologias para a internet. O ambiente Web está em constante transformação, APIs \footnote{\emph{Application Programming Interface}, conjunto de rotinas e padrões de programação para acesso a um aplicativo de software ou plataforma baseado na Web.} e ferramentas são criadas e renovadas a todo momento e podem ser aplicadas a vários contextos de forma relevante e inovadora.
 
 Com esse contexto em mente, o Projeto apresentado foi concebido para unir essas duas pontas de tecnologias em uma Aplicação Web que se comunica com um dispositivo móvel. O conceito básico é ter um Applicativo de smartphone que se conecte a um servidor e passe a enviar e receber informações. O servidor lança uma página Web que recebe esses dados enviados e executa sua funcionalidade.
 
@@ -229,14 +202,8 @@ O conceito de “funcionalidade" é propositalmente deixado em aberto pois esse 
 O Projeto tem como objetivo então abrir e esse canal de comunicação bilateral entre páginas Web e smartphones, além de facilitar o desenvolvimento de aplicações voltadas a essa estrutura.
 
 
-% \newpage
-% \subsection{Motivação}
-
-% Precisa de uma? (TODO)
-
 \newpage
 \subsection{Objetivos}
-
 
 \begin{itemize}
     \item Desenvolver um aplicativo para smartphones.
@@ -250,6 +217,7 @@ O Projeto tem como objetivo então abrir e esse canal de comunicação bilateral
     \item Desenvolver uma página Web como Caso de Uso.
 \end{itemize}
 
+De forma concreta, ao final do desenvolvimento é esperado que exista esse ecossistema online, com o servidor e os dois clientes, de Android e Web. O aplicativo Android deve gerar dados e os enviar ao servidor, além de receber dele. A página Web deve executar um programa interativo que recebe dados do servidor a qualquer momento para alterar sua execução. E, por fim, o servidor precisa funcionar como intermediador dos dados, enviando e recebendo dados de cada cliente quando for necessário.
 
 
 \newpage
@@ -323,7 +291,7 @@ O Apache Cordova é um \emph{framework} \emph{open-source} para a criação de a
 
 Ele é multiplataforma, permite o desenvolvimento para sistemas como Android, iOS ou navegadores. Oferece uma API de alto nível para acessar os módulos desejados, como de sensores, arquivos e rede.
 
-O aplicativo implementado é uma página Web, possui exatamente a estrutura. Há um arquivo principal “index.html" que referencia os recursos necessários, como CSS, JavaScript, imagens e arquivos de mídia. A parte lógica é feita em JavaScript, e a renderização em HTML5 e CSS3. Para ser portado para uma plataforma específica, o HTML é enviado para a classe \emph{“Wrapper”} dessa plataforma, onde estão definidos os detalhes de implementação. Essa classe também tem incorporada um browser nativo, o \emph{WebView}, que executará o programa Web dentro do dispositivo.
+O aplicativo implementado é uma página Web, possui a mesma estrutura. Há um arquivo principal “index.html" que referencia os recursos necessários, como CSS, JavaScript, imagens e arquivos de mídia. A parte lógica é feita em JavaScript, e a renderização em HTML5 e CSS3.
 
 \subsubsection{Implementação}
 
@@ -341,7 +309,7 @@ Essa é uma imagem de sua interface:
 
 
 
-As interações da interace são: % TODO verificar se não mudou nada
+As interações da interace são:
 
 \begin{itemize}
 \item Um formulário para fazer a conexão com o servidor, dados IP e porta. Há um feedback visual que indica se ela foi bem sucedida.
@@ -662,11 +630,6 @@ Para a renderização 3D, foi utilizada a biblioteca THREE.JS.
 
 
 \subsubsection{THREE.JS}
-% https://en.wikipedia.org/wiki/WebGL
-
-% https://en.wikipedia.org/wiki/Three.js
-% https://www.npmjs.com/package/three
-% https://pt.wikipedia.org/wiki/Unidade_de_processamento_gr%C3%A1fico
 
 THREE.JS é uma biblioteca de JavaScript para a criação e execução de gráficos 3D em navegadores, de maneira leve e otimizada. Ele permite ao \emph{browser} renderizar gráficos sem a necessidade de plugins, e utilizar a GPU \footnote{GPU (\emph{Graphics Processing Unit}) é um microprocessador especializado em processar gráficos. Sua estrutura de processamento paralelo os tornam mais capazes neste tipo de trabalho que CPUs normais. Uma GPU normalmente é utilizada em placas de vídeo.} do usuário para os cálculos de física e processamento de imagens. Essas funcionalidades são herdadas de WebGL, uma outra API de computação gráfica em JavaScript para \emph{browsers}.
 
@@ -912,17 +875,12 @@ render();
 O servidor foi projetado para escutar eventos dos clientes Web e Android, e responder ou encaminhar os dados recebidos. Ele é implementado com Javascript, com o auxilio de Node.js e ExpressJS.
 
 \subsubsection{Node.js e ExpressJS para criar um servidor}
-% https://www.youtube.com/watch?v=pU9Q6oiQNd0
-% https://nodejs.org/en/
-% https://www.tutorialspoint.com//nodejs/nodejs_introduction.htm
 
-% http://tableless.com.br/o-que-nodejs-primeiros-passos-com-node-js/
 Node.js é uma plataforma para desenvolvimento de aplicações \emph{server-side} (executadas no servidor) baseadas em rede utilizando JavaScript e o V8 JavaScript Engine \footnote{É o interpretador de JavaScript \emph{open source} implementado pelo Google em C++ e utilizado pelo Chrome.}. Com Node.js é possível criar aplicações Web utilizando apenas código em JavaScript.
 
 Ao se levar em conta o modo em que o código em JavaScript pode ser estruturado e as demandas de aplicações Web, Node.js abre uma gama de novas possibilidades para desenvolvimento Web.
 
 
-% http://www.tutorialspoint.com/expressjs/index.htm
 Express é um \emph{framework} mínimo e flexível para Node.js que oferece um conjunto robusto de funcionalidades. Sua API é simples, mas oferece o conjunto de ferramentas essenciais para o desenvolvimento de para páginas e aplicações Web e Mobile, e programas de \emph{backend}. Ela lida com detalhes de baixo nível como protocolos e processos. Além da sua funcionalidade básica, existem módulos disponíveis para adicionar novas, que são diretamente aplicados ao Express.
 
 Para essa implementação, Node.js e Express trabalham em conjunto para criar um servidor local e lançar a página da Aplicação Web desenvolvida.
@@ -1106,9 +1064,6 @@ Quando uma conexão é iniciada, o socket criado é atribuído de eventos e seus
 
 \subsection{Desenvolvendo Aplicativos com Apache Cordova}
 
-
-% TODO melhorar
-
 O Apache Cordova é um \emph{framework} \emph{open-source} para a criação de aplicativos para \emph{mobile}. Seu desenvolvimento é dado com o uso de tecnologias Web, como HTML5, CSS3 e JavaScript.
 
 Ele é multiplataforma, permite o desenvolvimento para sistemas como Android, iOS ou navegadores. Por tal motivo, oferece uma API de alto nível para acessar os módulos desejados, tais como de sensores, arquivos e rede. A interface para o uso dessas funcionalidades é abstrata, de forma que código desenvolvido é executável em todas as plataformas oferecidas e o desenvolvedor não precisa se preocupar com os detalhes de cada uma na hora da implementação.
@@ -1127,33 +1082,33 @@ O segundo \emph{Workflow} é chamado \emph{“Platform-centered”}, e deve ser 
 
 A arquitetura interna está descrita no diagrama:
 
-% TODO adicionar imagem
+\includegraphics[width=1\linewidth]{images/cordovaapparchitecture.png}
 
 
 
-\newpage
-\subsection{Utilizando Node.js e ExpressJS}
+% \newpage
+% \subsection{Utilizando Node.js e ExpressJS}
 
-*Something Something*
+% *Something Something*
 
-% https://www.tutorialspoint.com//nodejs/nodejs_introduction.htm
-Alguns atributos chave de Node.js são:
+% % https://www.tutorialspoint.com//nodejs/nodejs_introduction.htm
+% Alguns atributos chave de Node.js são:
 
-% Asynchronous and Event Driven − All APIs of Node.js library are asynchronous, that is, non-blocking. It essentially means a Node.js based server never waits for an API to return data. The server moves to the next API after calling it and a notification mechanism of Events of Node.js helps the server to get a response from the previous API call.
-- Assíncrono e Orientado a Eventos - Todas as APIs da biblioteca de Node.js são assíncronas, o que garante que são não bloqueantes. Isso essencialmente significa que um servidor baseado em Node.js não espera por dados de retorno da chamada da API, ele somente continua com sua execução para a próxima chamada de API. Os dados de retorno chegam ao servidor atráves de um mecanismo de notificações, os Eventos de Node.js. % Cada evento ativa um callback para os dados serem tratados.
+% % Asynchronous and Event Driven − All APIs of Node.js library are asynchronous, that is, non-blocking. It essentially means a Node.js based server never waits for an API to return data. The server moves to the next API after calling it and a notification mechanism of Events of Node.js helps the server to get a response from the previous API call.
+% - Assíncrono e Orientado a Eventos - Todas as APIs da biblioteca de Node.js são assíncronas, o que garante que são não bloqueantes. Isso essencialmente significa que um servidor baseado em Node.js não espera por dados de retorno da chamada da API, ele somente continua com sua execução para a próxima chamada de API. Os dados de retorno chegam ao servidor atráves de um mecanismo de notificações, os Eventos de Node.js. % Cada evento ativa um callback para os dados serem tratados.
 
 
-% Very Fast − Being built on Google Chrome's V8 JavaScript Engine, Node.js library is very fast in code execution.
-- Muito rápido - Por ser construído com base no V8 JavaScript Engine do Google Chrome, a biblioteca de Node.js é muito veloz em execução de código.
+% % Very Fast − Being built on Google Chrome's V8 JavaScript Engine, Node.js library is very fast in code execution.
+% - Muito rápido - Por ser construído com base no V8 JavaScript Engine do Google Chrome, a biblioteca de Node.js é muito veloz em execução de código.
 
-% Single Threaded but Highly Scalable − Node.js uses a single threaded model with event looping. Event mechanism helps the server to respond in a non-blocking way and makes the server highly scalable as opposed to traditional servers which create limited threads to handle requests. Node.js uses a single threaded program and the same program can provide service to a much larger number of requests than traditional servers like Apache HTTP Server.
-- Possui \emph{thread} única porém é muito escalável - Node.js possui um modelo de laço de Eventos com a utilização de uma única \emph{thread}. O mecanismo de Eventos ajuda o servidor enviar respostas de forma não bloqueante e faz o seridor altamente escalável em comparação ao modelo tradicional de servidores que criam um número limitado de \emph{threads} para lidar com requisições dos clientes. Node.js usa um programa de \emph{thread} única e esse mesmo programa pode providenciar serviço a um número muito maior de requisições do que um servidor tradicional, como o Apache HTTP.
+% % Single Threaded but Highly Scalable − Node.js uses a single threaded model with event looping. Event mechanism helps the server to respond in a non-blocking way and makes the server highly scalable as opposed to traditional servers which create limited threads to handle requests. Node.js uses a single threaded program and the same program can provide service to a much larger number of requests than traditional servers like Apache HTTP Server.
+% - Possui \emph{thread} única porém é muito escalável - Node.js possui um modelo de laço de Eventos com a utilização de uma única \emph{thread}. O mecanismo de Eventos ajuda o servidor enviar respostas de forma não bloqueante e faz o seridor altamente escalável em comparação ao modelo tradicional de servidores que criam um número limitado de \emph{threads} para lidar com requisições dos clientes. Node.js usa um programa de \emph{thread} única e esse mesmo programa pode providenciar serviço a um número muito maior de requisições do que um servidor tradicional, como o Apache HTTP.
 
-% No Buffering − Node.js applications never buffer any data. These applications simply output the data in chunks.
-- Sem \emph{Buffering} - Aplicações em Node.js nunca armazenam nenhum dado em \emph{buffers}. Essas apliações simplesmente enviam dados em blocos.
+% % No Buffering − Node.js applications never buffer any data. These applications simply output the data in chunks.
+% - Sem \emph{Buffering} - Aplicações em Node.js nunca armazenam nenhum dado em \emph{buffers}. Essas apliações simplesmente enviam dados em blocos.
 
-% License − Node.js is released under the MIT license.
-- Licenciado - Node.js está sob uma licença MIT.
+% % License − Node.js is released under the MIT license.
+% - Licenciado - Node.js está sob uma licença MIT.
 
 
 
@@ -1175,7 +1130,6 @@ A mais utilizada é o modelo cliente-servidor. Neste modelo, existem dois tipos 
 
 
 % HTTP
-% https://www.jmarshall.com/easy/http/
 %\subsubsection{Protocolo HTTP}
 
 O protocolo que acompanha esse modelo é principalmente HTTP (\emph{Hypertext Transfer Protocol}). Ele é usado para a transferência de Recursos entre processos. Recursos são arquivos HTML, imagens, resultados de buscas, entre outros.
@@ -1195,6 +1149,8 @@ Por encerrar a conexão, é dito que HTTP um protocolo sem estado, pois não man
 
 % Esta arquitetura não serve para as necessidades do projeto, a hipótese de uso foi descartada após o estudo de sua estrutura.
 
+
+
 %Começo de problemas em usar somente cliente-servidor
 O modelo cliente-servidor é suficiente para páginas Web, pois o Cliente pede páginas estáticas e o Servidor as fornece sempre que necessário. Mas essa arquitetura não permite um uso mais dinâmico dessas páginas Web, pois sua estrutura é muito burocrática.
 
@@ -1210,11 +1166,11 @@ Um exemplo de comportamento impossível com essas restrições é dar um \emph{f
 
 % Apresento Ajax
 \subsubsection{AJAX}
-% https://www.tutorialspoint.com/ajax/what_is_ajax.htm
+
 Da discussão gerada a partir desses problemas surgiu o Ajax (\emph{Asynchronous JavaScript and XML}). Ajax é uma técnica de desenvolvimento Web criada para possibilitar a requisição por dados parciais ao Servidor e recebê-los de forma assíncrona no \emph{background}, sem precisar recarregar a página exibida. Com essa técnica passa a ser possível atualizar partes de uma página com base em eventos do usuário.
 
 % Exemplo de Ajax
-Para ilustrar esse funcionamento com um exemplo simples, basta usar a ferramenta de busca do Google\footnote{google.com}. O usuário começa a digitar uma busca e resultados já aparecem sem a necessidade de atualizar a página, mesmo antes da busca estar completa (TODO imagem). O \emph{input} do usuário ativa requisições no \emph{background} para obter e atualizar os resultados exibidos, sem se preocupar se a busca será alterada no futuro. Assim, o usuário recebe um \emph{feedback} mais dinâmico e menos burocrático do que o convencional (digitar a busca completa e ir para uma página de resultados).
+Para ilustrar esse funcionamento com um exemplo simples, basta usar a ferramenta de busca do Google\footnote{google.com}. O usuário começa a digitar uma busca e resultados já aparecem sem a necessidade de atualizar a página, mesmo antes da busca estar completa. O \emph{input} do usuário ativa requisições no \emph{background} para obter e atualizar os resultados exibidos, sem se preocupar se a busca será alterada no futuro. Assim, o usuário recebe um \emph{feedback} mais dinâmico e menos burocrático do que o convencional (digitar a busca completa e ir para uma página de resultados).
 
 % Final de Ajax
 Com o Ajax, nota-se uma mudança de paradigmas na Web. Onde antes só havia a noção de página Web, agora começa a se formar uma noção de Aplicação Web. Antes, a maior interatividade possível era algo como um fluxo de telas com dados dependentes da tela passada, mas agora ações de usuários passam a ter resultados instantâneos. Sites com um fluxo de dados muito grande e dinâmico passam a ser possíveis, como Facebook \footnote{facebook.com}, no qual é possível fazer comentários, interagir com usuários e visualizar tanto conteúdo quando desejado sem precisar atualizar a página.
@@ -1283,7 +1239,6 @@ Por todos esses fatos, ficou claro que era necessário ter uma conexão bilatera
 
 
 \subsubsection{Sockets}
-% https://docs.oracle.com/javase/tutorial/networking/sockets/definition.html
 
 No modelo cliente-servidor uma conexão é definida por dois pontos finais, um no cliente e um no servidor. Cada um desses pontos finais serve para mandar e receber os dados do outro lado da conexão, e eles são nomeados como Sockets (Soquetes de Rede). Essa a conexão entre Sockets é implementada no protocolo TCP\footnote{Protocolo base de transporte na Internet.}. Cada Socket é identificado por um endereço de IP e uma Porta (por exemplo, 192.168.0.1:8000), independente de estar no Cliente ou no Servidor, e a conexão TCP pode ser definida de maneira única por seus dois Sockets conectados.
 
@@ -1320,8 +1275,6 @@ Essa API não é acessível ao nível de desenvolvimento Web por fazer parte do 
 
 \subsubsection{Websockets}
 
-% https://www.websocket.org/aboutwebsocket.html
-
 WebSocket é um protocolo que lida com Sockets de uma conexão que foi criado para permitir a comunicação bilateral entre cliente e servidor. Ele permite mais liberdade para criar novos protocolos e maneiras de se transferir dados.
 
 Sua interface é bastante simples, seu objetivo é o envio e recebimento de mensagens entre o cliente e o servidor. Para o protocolo, essa hierarquia cliente-servidor deixa de existir, não há diferenciação entre os dois, ambos são apenas dois processos conectados. A comunicação é dada por envio de mensagens e ocorrência de eventos. Esses processos podem enviar mensagens a qualquer momento e estão ouvindo um ao outro.
@@ -1350,9 +1303,7 @@ Existem quatro tipos de eventos e seus \emph{callbacks} são definidos na criaç
 
 
 Para ilustrar melhor esse comportamento de conexão, mensagens e eventos, abaixo há um exemplo em HTML de uma página que utiliza WebSockets.
-
-(TODO link)
-https://www.websocket.org/echo.html
+\footnote{Exemplo encontrado em \url{https://www.websocket.org/echo.html}}
 
 \begin{lstlisting}[language=HTML5]
   <!DOCTYPE html>
@@ -1440,21 +1391,20 @@ O evento de encerramento de conexão e de erro (\emph{'onClose'} e \emph{'onErro
 \subsubsection{Teste de eficiência de Websockets}
 
 
-No experimento a seguir, é mostrado a diferença de tráfego de dados e latência entre WebSocket e \emph{Polling} para requisitar dados em tempo real.
+No experimento\footnote{Exemplo encontrado em \url{https://www.websocket.org/quantum.html}} a seguir, é mostrado a diferença de tráfego de dados e latência entre WebSocket e \emph{Polling} para requisitar dados em tempo real.
 
-% (TODO REF https://www.websocket.org/quantum.html)
 %----------------------------------------------------
 
 \paragraph{Informações para entender o exemplo:}
 \begin{itemize}
-    \item \emph{RabbitMQ Message Broker}: um simples programa que recebe e encaminha mensagens. Nesse exemplo ele está em um servidor, recebe dados de um mercado de ações fictício. %(TODO REF: https://www.rabbitmq.com/tutorials/tutorial-one-python.html)
-    \item \emph{Java Servlet}: uma classe Java usada para estender as funcionalidades de um servidor. Pode ser definido como um componente semelhante um servidor, que gera dados HTML e XML para a camada de apresentação de uma aplicação Web. Ele processa dinamicamente requisições e respostas. %(TODO REF: https://pt.wikipedia.org/wiki/Servlet)
+    \item \emph{RabbitMQ Message Broker}: um simples programa que recebe e encaminha mensagens. Nesse exemplo ele está em um servidor, recebe dados de um mercado de ações fictício.\footnote{\url{https://www.rabbitmq.com/tutorials/tutorial-one-python.html}}
+    \item \emph{Java Servlet}: uma classe Java usada para estender as funcionalidades de um servidor. Pode ser definido como um componente semelhante um servidor, que gera dados HTML e XML para a camada de apresentação de uma aplicação Web. Ele processa dinamicamente requisições e respostas.\footnote{\url{https://pt.wikipedia.org/wiki/Servlet}}
     \item Mozilla Firefox: \emph{Browser} muito utilizado.
     \item Firebug: Um \emph{add-on} do Mozilla Firefox que permite fazer debug de páginas Web e monitorar o tempo que leva para carregar páginas e executar scripts.
     \item \emph{Live HTTP Headers}: \emph{add-on} do Mozilla Firefox que mostra ao vivo o tráfego de cabeçalhos HTTP.
 \end{itemize}
 
- O exemplo foi retirado do site \emph{https://www.websocket.org/quantum.html} e foi transcrito em tradução livre:
+ O exemplo foi transcrito em tradução livre:
 %----------------------------------------------------
 
 \begin{quotation}
@@ -1507,7 +1457,7 @@ Content-Length: 21
 Date: Sat, 07 Nov 2009 00:32:46 GMT
 \end{lstlisting}
 
-Só por diversão, eu contei todos os characteres. O total de \emph{overhead} de informação na requisição e resposta HTTP é de 871 bytes, sem incuir nenhum dado! Claro, esse é somente um exemplo e você pode ter menos de 871 bytes de cabeçalho, mas eu também vi casos onde ele ultrapassava 2000 bytes. Nessa aplicação de exemplo, uma mensagem típica do Tópico de Mercado contém em torno de 20 characteres. Como você pode ver, ela é efetivamente afogada pelo excesso de informação do cabeçalho, que nem é necessário no final das contas!
+Só por diversão, eu contei todos os caracteres. O total de \emph{overhead} de informação na requisição e resposta HTTP é de 871 bytes, sem incuir nenhum dado! Claro, esse é somente um exemplo e você pode ter menos de 871 bytes de cabeçalho, mas eu também vi casos onde ele ultrapassava 2000 bytes. Nessa aplicação de exemplo, uma mensagem típica do Tópico de Mercado contém em torno de 20 caracteres. Como você pode ver, ela é efetivamente afogada pelo excesso de informação do cabeçalho, que nem é necessário no final das contas!
 
 Então, o que acontece quando você dá \emph{deploy} nessa aplicação para um grande número de usuários? Vamos observar o tráfego de dados somente dos dados do cabeçalho HTTP de requisição e resposta associados a essa aplicação de \emph{Polling} em três casos diferentes.
 
@@ -1525,11 +1475,11 @@ Essa é uma quatidade enorme de tráfego de dados desnecessários! Imagina só s
     \item \textbf{Caso de uso C}: 100,000 clientes recebem 1 mensagem por segundo: Tráfego de dados é (2 x 100,000) = 200,000 bytes = 1,600,000 bits por segundo (1.526 Mbps)
 \end{itemize}
 
-Como você pode ver na figura abaixo, WebSockets provê uma redução dramática no tráfego de dados desnecessários em relação ao método de \emph{Polling}.
+Como você pode ver na figura abaixo, WebSocket provê uma redução dramática no tráfego de dados desnecessários em relação ao método de \emph{Polling}.
 
 \includegraphics[width=1\linewidth]{images/comp.png}
 
-Figura 2 — Comparação de \emph{overhead} entre aplicações de \emph{Polling} e \emph{WebSocket}
+Figura 2 — Comparação de \emph{overhead} entre aplicações de \emph{Polling} e \emph{WebSocket}.
 
 E em relação à redução na latência? Veja a figura abaixo. Na metade de cima, você consegue a latência do método de \emph{Polling}. Se assumirmos, nesse exemplo, que é necessário 50 milissegundos para uma mensagem chegue do servidor ao \emph{browser}, então a aplicação de \emph{Polling} introduz muita latência extra, porque cada nova requisição precisa ser enviada ao servidor quando a resposta está completa. Essa nova requisição requer outros 50 milissegundos, e, durante esse tempo, o servidor não consegue mandar qualquer outra mensagem ao browser, resultando em um consumo de memória adicional ao servidor.
 
@@ -1537,7 +1487,7 @@ Na metade de baixo da figura, você vê a redução na latência proporcionada p
 
 
 \includegraphics[width=1\linewidth]{images/latency.png}
-Figura 3 — Comparação de latências entre \emph{Polling} e \emph{WebSocket}
+Figura 3 — Comparação de latências entre \emph{Polling} e \emph{WebSocket}.
 \end{quotation}
 
 
@@ -1551,7 +1501,6 @@ WebSocket é a solução ideal para problemas apresentados anteriormente. É um 
 
 Mas existe um problema nesse meio de desenvolvimento Web, que é o fato de que a todo momento a infraestrutura é alterada. Novos protocolos são criados, outros são atualizados, antigos deixam de funcionar corretamente. Esse é um problema inerente ao meio e que afeta a todos.
 
-% https://pt.wikipedia.org/wiki/SPDY
 Para ilustrar esse fato, vamos tomar como exemplo o protocolo \emph{SPDY} (pronunciado “speedy"), desenvolvido principalmente pela Google. \footnote{Ele não é um protocolo padrão, porém é bastante promissor e está sendo utilizado para o desenvolvimento do protocolo HTTP 2.0.}
 
 Em linhas gerais, esse protocolo busca velocidade e se baseia no fato de que, se uma conexão é estabelecida com o servidor e o cliente começa a enviar muitas requisições HTTP, essas requisições vão incluir informações repetidas, comuns àquela sessão. Ele define então que, ao invés de enviar essas informações desnecessárias repetidamente durante a sessão, o servidor passa a salvar em um dicionário os usuários conectados e utilizar essas informações salvas. Por conta disso, fazer requisições passa a ser mais rápido e consumir menos recursos. \footnote{Note a semelhança com WebSockets.}
@@ -1564,7 +1513,6 @@ Uma das maneiras de se contornar essa dificuldade é utillizar outras APIs que c
 
 
 \subsubsection{Socket.io}
-% https://davidwalsh.name/websocket
 
 Por fim, foi criado o Socket.io, uma API de WebSocket para JavaScript. Ela cuida de todos os detalhes de funcionamento do protocolo internamente, deixando uma interface simples ao usuário. Assim, mudanças no funcionamento do protocolo não chegam ao desenvolvedor.
 
@@ -1639,42 +1587,209 @@ Por padrão, caso nenhum \emph{namespace} seja definido, todos os sockets são c
 
 
 
-\section{Casos de Uso}
-
-\section{Parte Subjetiva}
-\subsection{Desafios e frustrações}
-\subsection{A contribuição do curso de Computação}
-\subsection{Próximo Passos}
-\subsection{Agradecimentos}
-
-
+% \section{Casos de Uso}
 
 
 % TODO Apendice: falar do SPDY (protocolo tipo http)
 
+\newpage
+\section{Conclusão}
 
-\section{Bibliografia}
+O Projeto propõe um ambiente Web de comunicação entre smartphones executando o aplicativo desenvolvido e a página Web que recebe dados para alterar seu funcionamento, através de um Servidor que permite a comunicação da maneira eficiente e viável.
 
-% Bibliografia:
-% https://en.wikipedia.org/wiki/Kivy
-% https://en.wikipedia.org/wiki/Natural_user_interface
+Os dois maiores desafios nessa proposta eram:
 
-% Ajax
-% https://en.wikipedia.org/wiki/Ajax_(programming)
+\begin{itemize}
+    \item Encontrar uma forma de comunicação que atendesse à todas as necessidades dessa arquitetura;
+    \item Desenvolver essa arquitetura para servir de base para projetos de maior porte.
+\end{itemize}
 
-% Imagens de conexão cliente servidor com Sockets
-% https://docs.oracle.com/javase/tutorial/networking/sockets/definition.html
+O primeiro item é resolvido com a utilização do \textbf{Socket.io}. Ele é a ferramenta ideal para lidar com a comunicação entre os clientes e o servidor, tendo em vista todos os requerimentos apresentados. Além de ideal, sua interface também é muito simples de ser usada e é um aspecto positivo para o segundo item.
+
+Para o segundo item, foi necessário encontrar as ferramentas corretas.
+
+O \textbf{Apache Cordova} permite o desenvolvimento de aplicativos para Android (além de outras plataformas) igual ao desenvolvimento Web. Este ponto facilita na hora de se desenvolver um aplicativo em conjunto com uma aplicação Web.
+
+\textbf{Node.js} e \textbf{Express} tornam a criação de um servidor muito simples e direta, com o funcionamento desejado para a comunicação entre os clientes.
+
+A aplicação Web está menos definida, mas no caso de uso apresentado, \textbf{THREE.js} permite a criação 3D de forma direta, abstraindo detalhes de implementação de bibliotecas 3D de baixo nível.
+
+Todas essas ferramentas funcionam bem entre si e permitem o desenvolvimento rápido e direto de projetos maiores e escaláveis. Por fim, é concluido que o ambiente Web funciona bem e o Projeto foi bem sucedido na proposta apresentada.
+
+
+\newpage
+
+\begin{thebibliography}{50}
+\bibitem{websocket_quantum}
+HTML5 WebSocket - A Quantum Leap in Scalability for the Web,
+\\\texttt{\url{https://www.websocket.org/quantum.html}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{websocket_prot}
+RFC 6455 - The WebSocket Protocol,
+\\\texttt{\url{https://tools.ietf.org/html/rfc6455}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{socket_yt}
+Computer Networks 1-4: Sockets,
+\\\texttt{\url{https://www.youtube.com/watch?v=zWqLYby99EU}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{socket_oracle}
+What Is a Socket?,
+\\\texttt{\url{https://docs.oracle.com/javase/tutorial/networking/sockets/definition.html}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{socket_websocket}
+node.js - Differences between socket.io and websockets - Stack Overflow,
+\\\texttt{\url{http://stackoverflow.com/questions/10112178/differences-between-socket-io-and-websockets}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{polling_stackoverflow}
+ - What are Long-Polling, Websockets, Server-Sent Events (SSE) and Comet? - Stack Overflow,
+\\\texttt{\url{http://stackoverflow.com/questions/11077857/what-are-long-polling-websockets-server-sent-events-sse-and-comet}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{long_polling_timeout_stackoverflow}
+javascript - HTTP Long Polling - Timeout best practice - Stack Overflow,
+\\\texttt{\url{http://stackoverflow.com/questions/37391096/http-long-polling-timeout-best-practice}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{threejs_guide}
+The Beginners Guide to three.js - Treehouse Blog,
+\\\texttt{\url{http://blog.teamtreehouse.com/the-beginners-guide-to-three-js}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{socketio}
+Socket.IO,
+\\\texttt{\url{http://socket.io/}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{cordova}
+Apache Cordova,
+\\\texttt{\url{https://cordova.apache.org/}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{sockerio_cordova}
+Socket.IO  —  Socket.IO with Apache Cordova,
+\\\texttt{\url{http://socket.io/socket-io-with-apache-cordova/}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{cordova_tutpoint}
+Cordova Tutorial,
+\\\texttt{\url{http://www.tutorialspoint.com/cordova/}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{three_scene}
+three.js / documentation - Creating a scene,
+\\\texttt{\url{https://threejs.org/docs/index.html\#Manual/Introduction/Creating_a_scene}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{websocket_socketio}
+WebSocket and Socket.IO,
+\\\texttt{\url{https://davidwalsh.name/websocket}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{webgl_wiki}
+WebGL,
+\\\texttt{\url{https://en.wikipedia.org/wiki/WebGL}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{threejs_wiki}
+Three.js,
+\\\texttt{\url{https://en.wikipedia.org/wiki/Three.js}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{node_yt}
+What is Node.js Exactly? - a beginners introduction to Nodejs,
+\\\texttt{\url{https://www.youtube.com/watch?v=pU9Q6oiQNd0}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{nodejs}
+Node.js,
+\\\texttt{\url{https://nodejs.org/en/}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{nodejs_tutorial}
+Node.js Introduction,
+\\\texttt{\url{https://www.tutorialspoint.com//nodejs/nodejs_introduction.htm}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{express_tutorial}
+ExpressJS Tutorial,
+\\\texttt{\url{http://www.tutorialspoint.com/expressjs/index.htm}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{http_easy}
+HTTP Made Really Easy,
+\\\texttt{\url{https://www.jmarshall.com/easy/http/}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{ajax_tutorial}
+What Is Ajax?,
+\\\texttt{\url{https://www.tutorialspoint.com/ajax/what_is_ajax.htm}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{websocket_about}
+About HTML5 WebSocket,
+\\\texttt{\url{https://www.websocket.org/aboutwebsocket.html}}
+
+Acessado em: 20/11/16
+
+
+\bibitem{spdy_wiki}
+SPDY,
+\\\texttt{\url{https://pt.wikipedia.org/wiki/SPDY}}
+
+Acessado em: 20/11/16
 
 
 
-% BIBLIOGRAFIA
-% https://www.websocket.org/quantum.html
+\end{thebibliography}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- \singlespacing   % espaçamento simples
-\bibliographystyle{unsrt}
- % citação bibliográfica textual
- \bibliography{referencias}  % associado ao arquivo: 'referencias.bib'
 
 \end{document}
