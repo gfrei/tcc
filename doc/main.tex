@@ -158,6 +158,14 @@
 \newpage
 
 \newpage
+\section{Resumo}
+
+Desenvolvimento de um ambiente Web com três tipos de elementos diferentes. Desenvolvimento de um aplicativo mobile em Apache Cordova. Desenvolvimento de uma página Web 3D com THREE.JS. Criação de um servidor utilizando Node.js e Express.js. Comunicação entre os três elementos utilizando o protocolo WebSocket com o framework Socket.io.
+
+\textbf{Palavras-chave}: Socket.io, Node.js, Express.js, THREE.JS, Apache Cordova.
+
+
+\newpage
 \tableofcontents
 
 \newpage
@@ -173,20 +181,14 @@
 
 
 
-\newpage
-\section{Resumo}
-
-Desenvolvimento de um ambiente Web com três tipos de elementos diferentes. Desenvolvimento de um aplicativo mobile em Apache Cordova. Desenvolvimento de uma página Web 3D com THREE.JS. Criação de um servidor utilizando Node.js e Express.js. Comunicação entre os três elementos utilizando o protocolo WebSocket com o framework Socket.io.
-
-\textbf{Palavras-chave}: Socket.io, Node.js, Express.js, THREE.JS, Apache Cordova.
 
 
-\newpage
-\section{Abstract}
+% \newpage
+% \section{Abstract}
 
-Web environment development with three distinct types of elements. Mobile development with Apache Cordova. 3D Web development with THREE.JS. Server-side aplication with Node.js and Express.js. Communication between these three elements with WebSocket protocol and Socket.io framework.
+% Web environment development with three distinct types of elements. Mobile development with Apache Cordova. 3D Web development with THREE.JS. Server-side aplication with Node.js and Express.js. Communication between these three elements with WebSocket protocol and Socket.io framework.
 
-\textbf{keywords}: Socket.io, Node.js, Express.js, THREE.JS, Apache Cordova.
+% \textbf{keywords}: Socket.io, Node.js, Express.js, THREE.JS, Apache Cordova.
 
 
 \newpage
@@ -195,26 +197,33 @@ Dispositivos móveis, como smartphones e tablets, estão cada dia mais presentes
 
 O mesmo vale para tecnologias para a internet. O ambiente Web está em constante transformação, APIs \footnote{\emph{Application Programming Interface}, conjunto de rotinas e padrões de programação para acesso a um aplicativo de software ou plataforma baseado na Web.} e ferramentas são criadas e renovadas a todo momento e podem ser aplicadas a vários contextos de forma relevante e inovadora.
 
-Com esse contexto em mente, o Projeto apresentado foi concebido para unir essas duas pontas de tecnologias em uma Aplicação Web que se comunica com um dispositivo móvel. O conceito básico é ter um Applicativo de smartphone que se conecte a um servidor e passe a enviar e receber informações. O servidor lança uma página Web que recebe esses dados enviados e executa sua funcionalidade.
+Com esse contexto em mente, o Projeto para o Trabalho de Formatura Supervisionado apresentado foi concebido para unir essas duas pontas de tecnologias em uma Aplicação Web que se comunica com um dispositivo móvel. O conceito básico é ter um Applicativo de smartphone que se conecte a um servidor e passe a enviar e receber informações. O servidor lança uma página Web que recebe esses dados enviados e executa sua funcionalidade.
 
 O conceito de “funcionalidade" é propositalmente deixado em aberto pois esse fluxo de dados encapsula uma grande variedade de funcionalidades. É possível, por exemplo, executar um jogo na página Web que utiliza o smartphone como um controle, ou manter um banco de dados no Servidor e fazer buscas utilizando o smartphone.
 
-O Projeto tem como objetivo então abrir e esse canal de comunicação bilateral entre páginas Web e smartphones, além de facilitar o desenvolvimento de aplicações voltadas a essa estrutura.
+O Projeto tem como objetivo então abrir esse canal de comunicação bilateral entre páginas Web e smartphones, além de facilitar o desenvolvimento de aplicações voltadas a essa estrutura.
 
 
 \newpage
 \subsection{Objetivos}
 
 \begin{itemize}
-    \item Desenvolver um aplicativo para smartphones.
+    \item Estudar a comunicação servidor x cliente mobile.
 
-    \item Criar um servidor.
+    \item Construir uma estrutura eficiente de comunicação.
 
-    \item Construir uma comunicação entre ambos.
+    \item Validar o uso da estrutura através de uma página Web e um Aplicativo.
 
-    \item Encontrar uma forma eficiente de comunicação.
 
-    \item Desenvolver uma página Web como Caso de Uso.
+    % \item Desenvolver um aplicativo para smartphones.
+
+    % \item Criar um servidor.
+
+    % \item Construir uma comunicação entre ambos.
+
+    % \item Encontrar uma forma eficiente de comunicação.
+
+    % \item Desenvolver uma página Web como Caso de Uso.
 \end{itemize}
 
 De forma concreta, ao final do desenvolvimento é esperado que exista esse ecossistema online, com o servidor e os dois clientes, de Android e Web. O aplicativo Android deve gerar dados e os enviar ao servidor, além de receber dele. A página Web deve executar um programa interativo que recebe dados do servidor a qualquer momento para alterar sua execução. E, por fim, o servidor precisa funcionar como intermediador dos dados, enviando e recebendo dados de cada cliente quando for necessário.
@@ -249,9 +258,9 @@ WebSocket é um protocolo que permite a comunicação bilateral entre cliente e 
 
 A estrutura da mensagem em WebSocket é mínima. O corpo da mensagem, os dados a serem enviados, só possui dois formatos, texto ou binário. O cabeçalho contém um identificador de tipo do formato, que tem um campo para o tamanho da mensagem e nada mais. A mensagem completa é só o conteúdo mais seu tamanho. Como a conexão não muda em momento algum, todas as informações contidas no cabeçalho de requisição e resposta HTTP são invariantes e, portanto, não precisam ser reenviadas.
 
-Um dos processos conectados, em um momento arbitrário, envia uma mensagem ao outro, talvez porque dados tenham sido atualizados ou o usuário tenha feito alguma ação em específico. Uma vez que a mensagem é enviada, esse processo volta ao que estava fazendo, sem a necessidade de esperar alguma resposta do outro processo. Esse comportamento é chamado de assíncrono, pois não um lado não age em sincronia com o outro.
+Um dos processos conectados, em um momento arbitrário, envia uma mensagem ao outro, talvez porque dados tenham sido atualizados ou o usuário tenha feito alguma ação em específico. Uma vez que a mensagem é enviada, esse processo volta ao que estava fazendo, sem a necessidade de esperar alguma resposta do outro processo. Esse comportamento é chamado de assíncrono, pois um lado não age em sincronia com o outro.
 
-O outro processo recebe a nova mensagem através de um evento. Quando esse evento acontece, ele executa um comportamento específico (\emph{callback}) com os dados recebidos, como alteração de informações exibidos ou um cálculo com os valores novos. Por isso é dito que WebSocket é Orientado a Eventos.
+O outro processo recebe a nova mensagem através de um evento. Quando esse evento acontece, ele executa um comportamento específico (\emph{callback}) com os dados recebidos, como alteração de informações exibidas ou um cálculo com os valores novos. Por isso é dito que WebSocket é Orientado a Eventos.
 
 
 \subsubsection{Socket.io}
@@ -280,7 +289,7 @@ O aplicativo foi desenvolvido com a proposta de servir como base para o desenvol
   \item Se conectar e desconectar de um servidor, utilizando o endereço IP e Porta.
   \item Enviar eventos pontuais ao servidor, com objetivos variados.
   \item Iniciar ou parar o envio contínuo de eventos, lançados em intervalos regulares. Os dados enviados são os valores do acelerômetro\footnote{Sensor que mede a vibração ou a aceleração do movimento do dispositivo.} do dispositivo.
-  \item Exibe na tela mensagens enviadas do servidor.
+  \item Exibe na tela mensagens recebidas do servidor.
 \end{itemize}
 
 Ele foi implementado usando o \emph{framework} Cordova.
@@ -289,13 +298,13 @@ Ele foi implementado usando o \emph{framework} Cordova.
 
 O Apache Cordova é um \emph{framework} \emph{open-source} para a criação de aplicativos para \emph{mobile}. Seu desenvolvimento é dado com o uso de tecnologias Web, como HTML5, CSS3 e JavaScript.
 
-Ele é multiplataforma, permite o desenvolvimento para sistemas como Android, iOS ou navegadores. Oferece uma API de alto nível para acessar os módulos desejados, como de sensores, arquivos e rede.
+Ele é multiplataforma; permite o desenvolvimento para sistemas como Android, iOS ou navegadores. Oferece uma API de alto nível para acessar os módulos desejados, como de sensores, arquivos e rede.
 
-O aplicativo implementado é uma página Web, possui a mesma estrutura. Há um arquivo principal “index.html" que referencia os recursos necessários, como CSS, JavaScript, imagens e arquivos de mídia. A parte lógica é feita em JavaScript, e a renderização em HTML5 e CSS3.
+O aplicativo implementado possui a mesma estrutura de uma página Web (utiliza HTML, JavaScript e CSS). Há um arquivo principal “index.html" que referencia os recursos necessários, como CSS, JavaScript, imagens e arquivos de mídia. A parte lógica é feita em JavaScript, e a renderização em HTML5 e CSS3.
 
 \subsubsection{Implementação}
 
-O aplicativo implementado possui o básico de interação, conecta-se com o servidor, exibe informações recebidas na tela, utiliza alguns botões para mandar informações e faz o uso do acelerômetro do dispositivo.
+O aplicativo implementado possui o básico de interação, conecta-se com o servidor, exibe informações recebidas na tela, utiliza alguns botões para mandar informações e faz uso do acelerômetro do dispositivo.
 
 Essa é uma imagem de sua interface:
 
@@ -309,7 +318,7 @@ Essa é uma imagem de sua interface:
 
 
 
-As interações da interace são:
+As interações da interface são:
 
 \begin{itemize}
 \item Um formulário para fazer a conexão com o servidor, dados IP e porta. Há um feedback visual que indica se ela foi bem sucedida.
