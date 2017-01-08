@@ -1,0 +1,108 @@
+Oi Guilherme,
+
+aqui estão algumas sugestões para melhorar
+a monografia. A organização poderia ser melhorada.
+
+1. Contextulizar melhor o trabalho na introdução
+    Eu entendi que o propósito do trabalho é
+    implementar um mecanismo que permita
+    um app android e um serviço/aplicação web
+    se comunicarem, intermediados por um servidor
+    (ou algo assim).
+
+    O que não fica claro é como essa proposta relaciona-se
+    ou difere do que já existe e é praticado.
+    Apresentar exemplos para ilustrar diferenças pode
+    ser uma boa.
+
+    Dado o contexto, então dizer qual o objetivo do trabalho.
+    Resumir a organização do textono final do capítulo
+    de introdução.
+
+2. Acho que deveria ser incluído um capítulo de
+    fundamentos, para apresentar os componentes
+    importantes do seu trabalho.
+    Modelo cliente-servidor, como ocorre a comunicação
+    nesses modelos
+    (não sei se isso deve vir antes ou depois do cap. 3)
+
+3. Como é o modelo de uso que você propõe? Use exemplos
+    para ilustrar quais tipos de aplicações poderiam
+    se beneficiar. Liste os requisitos para viabilizar as
+    aplicações (por exemplo, a questão da latência)
+
+4. Implementação proposta:
+        Mostrar uma possível forma de se implementar
+        o modelo de uso proposto (ou seja, o que você
+        de fato implementou)
+        - tecnologias, protocolos, etc de fato usados
+        (algumas escolhas devem estar, imagino eu,
+         fortemente influenciados pelos requisitos)
+        - visão geral (organização) da solução implementada
+
+5. Teste e avaliação
+    Exemplo de aplicação
+    teste de uso (informações sobre latência, condições
+    nas quais os testes foram efetuados, etc)
+    Avaliação, etc
+
+Acho que de forma geral, as sugestões que tenho são
+essas. Resumindo, (1) deixar claro do que se trata o
+trabalho, e (2) melhorar a organização do conteúdo
+(fluxo lógico do texto) --- para isso, um possível
+caminho é descrever o problema a ser tratado, descrever
+os fundamentos importantes para se entender o problema
+e a solução proposta, descrever a solução proposta
+(em termos conceituais/de modelagem, e não de uma
+particular implementação), descrever uma implementação
+da solução proposta (justificando as tecnologias, etc)
+utilizadas, mostrar a avaliação/teste da implementação.
+
+Estou à disposição para esclarecer dúvidas.
+
+
+
+
+
+
+Oi Guilherme,
+
+não chegou pois eu ainda não enviei ...
+E não enviei pois eu não consegui falar com
+o prof. Gubi ...
+Posso adiantar a minha impressão sobre o seu
+trabalho: eu entendi que você fez bastante coisa,
+mas meus conhecimentos sobre o assunto me
+impedem de avaliar o aspecto mais técnico do
+seu trabalho.
+Por exemplo, recentemente eu vi um trabalho
+https://vimeo.com/48150517
+http://www.webdigi.co.uk/fun/space/
+e me pareceu muito relacionado com o que você
+fez, mas não sei avaliar muito bem.
+Independentemente do aspecto técnico, eu achei
+que o texto poderia ser melhorado bastante.
+Em particular, para mim pareceu que ficou faltando
+um pouco de contexto (exemplos e referências a trabalhos
+similares, por exemplo) e uma explicação mais alto nível
+sobre o funcionamento do processo. A organização
+também não ajuda muito na leitura.
+Baseado somente na minha impressão, o resultado
+seria REC (para melhorar o texto apenas).
+Mas eu achei que seria melhor conversar com o
+Gubi antes de enviar um feedback.
+Mas talvez mesmo conversando com o Gubi, acho que
+muito possivelmente  o resultado será o mesmo
+(isto é, REC).
+
+Envio em anexo o pdf com algumas anotações.
+
+
+
+- Estudar comunicação servidor x cliente mobile
+- Construir uma estrutura para comunicação eficiente
+- Validar uso da estrutura
+    - web page
+    - app
+
+Qual a diferença entre web-page + server e webservice?
