@@ -16,7 +16,7 @@ a monografia. A organização poderia ser melhorada.
     ser uma boa.
 
     Dado o contexto, então dizer qual o objetivo do trabalho.
-    Resumir a organização do textono final do capítulo
+    Resumir a organização do texto no final do capítulo
     de introdução.
 
 2. Acho que deveria ser incluído um capítulo de
@@ -106,3 +106,9 @@ Envio em anexo o pdf com algumas anotações.
     - app
 
 Qual a diferença entre web-page + server e webservice?
+
+
+
+
+100%  >  19%
+  0%  >  70%

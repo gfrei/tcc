@@ -193,6 +193,27 @@ Desenvolvimento de um ambiente Web com três tipos de elementos diferentes. Dese
 
 \newpage
 \section{Introdução}
+
+O Projeto para o Trabalho de Formatura Supervisionado apresentado nessa monografia tem como objetivo explorar tecnologias e ferramentas presentes no cotidiano de forma inovadora.
+
+Uma das ferramentas utilizadas foram smartphones. Por possuírem muitas funcionalidades e estarem em constante atualização, tornam-se bastante atrativos para o desenvolvimento.
+
+
+
+
+
+
+
+Existe uma tecnologia muito recente que está constante atualização e que ainda não é plenamente explorada; a de dispositivos móveis, como smartphones e tablets. Por um lado, muito esforço é desprendido para se tirar o melhor proveito dela, aplicativos são criados a todo momento para resolver os mais variados problemas. Por outro lado, smartphones possuem muitas funcionalidades e evoluem rapidamente, gerando uma gama muito extensa de possibilidades de desenvolvimento.
+
+Outro ponto interessante dessas tecnologias é que estão fortemente presentes na sociedade, uma parcela muito grande da população possui algum dispositivo desses. Essa acessibilidade torna o desenvolvimento muito mais sensível.
+
+
+
+
+
+
+
 Dispositivos móveis, como smartphones e tablets, estão cada dia mais presentes. Sua tecnologia se atualiza a cada momento e ainda é muito nova, muitas de suas funcionalidades ainda podem ser bastante exploradas.
 
 O mesmo vale para tecnologias para a internet. O ambiente Web está em constante transformação, APIs \footnote{\emph{Application Programming Interface}, conjunto de rotinas e padrões de programação para acesso a um aplicativo de software ou plataforma baseado na Web.} e ferramentas são criadas e renovadas a todo momento e podem ser aplicadas a vários contextos de forma relevante e inovadora.
@@ -227,6 +248,33 @@ O Projeto tem como objetivo então abrir esse canal de comunicação bilateral e
 \end{itemize}
 
 De forma concreta, ao final do desenvolvimento é esperado que exista esse ecossistema online, com o servidor e os dois clientes, de Android e Web. O aplicativo Android deve gerar dados e os enviar ao servidor, além de receber dele. A página Web deve executar um programa interativo que recebe dados do servidor a qualquer momento para alterar sua execução. E, por fim, o servidor precisa funcionar como intermediador dos dados, enviando e recebendo dados de cada cliente quando for necessário.
+% TODO Qual a diferença entre web-page + server e webservice?
+
+
+\newpage
+\section{Fundamentos}
+
+Esta seção explica conceitos que são utilizados no Projeto, ou que ajudam a entender a tecnologia usada e as decisões tomadas.
+
+\subsection{Estrutura e funcionamento de páginas Web}
+
+
+% TODO http://computer.howstuffworks.com/web-page.htm
+Uma página Web (\emph{webpage}) é o produto final gerado principalmente por arquivos HTML, CSS, JavaScript, imagens e outros recursos (\emph{resources}). A webpage será interpretada por um \emph{Web Browser}, que irá interagir com o usuário, tanto exibindo informações, quanto recebendo \emph{inputs}. Cada um desses elementos citados se comporta da seguinte forma:
+
+\begin{itemize}
+    \item HTML - \emph{Hyper Text Markup Language} é a linguagem que descreve como uma página deve ser formatada. Para isso, ela funciona através de um conjunto de \emph{tags}. Essas tags \emph{tags} definem o tamanho, cor de texto, fonte, \emph{hiperlinks}, imagens, scripts, dentre outros. O principal arquivo de uma webpage é um HTML, que define sua estrutura, formatação e conteúdo.
+
+    \item CSS - (\emph{Cascading Style Sheets})É um arquivo de suporte para um HTML cujo propósito é definir estilos de formatação. Ele não é necessário, porém é muito importante na criação de estilos mais complexos, para webpages mais robustas e profissionais. Ele simplifica e centraliza o processo de formatação de uma página, com uma interface simples e completa.
+
+    \item JavaScript - É a linguagem de programação de scripts executados em HTML. É o responsável pela parte lógica do funcionamento de uma webpage, executando código dentro dela, com dados externos ou do usuário.
+
+    \item Web Browser - Um \emph{browser}, ou navegador, é o programa que recebe, interpreta e exibe páginas HTML, além de ser capaz de se conectar a servidores e fazer requisições por webpages. O usuário insere o endereço no qual se encontra a página que quer visualizar e o browser coleta e exibe esses dados (sejam dados locais ou vindos da internet, através de uma conexão).
+
+    \item Servidor Web - Um servidor web é um processo em execução que aceita conexões e requisições de browsers. Essas requisições recebidas são respondidas com a webpage correspondente e todos os recursos necessários para a sua execução, como sons, imagens e scripts.
+
+\end{itemize}
+
 
 
 \newpage
