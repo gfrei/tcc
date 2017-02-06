@@ -169,7 +169,7 @@ Desenvolvimento de um ambiente Web com três tipos de elementos diferentes. Dese
 \tableofcontents
 
 \newpage
-\pagenumbering{arabic}     % começamos a numerar
+% \pagenumbering{arabic}     % começamos a numerar
 
 \renewcommand{\arraystretch}{1.2}
 
@@ -196,33 +196,66 @@ Desenvolvimento de um ambiente Web com três tipos de elementos diferentes. Dese
 
 O Projeto para o Trabalho de Formatura Supervisionado apresentado nessa monografia tem como objetivo explorar tecnologias e ferramentas presentes no cotidiano de forma inovadora.
 
-Uma das ferramentas utilizadas foram smartphones. Por possuírem muitas funcionalidades e estarem em constante atualização, tornam-se bastante atrativos para o desenvolvimento.
+Uma das tecnologias exploradas foi a de smartphones. Eles são dispositivos muito sofisticados, possuem muitas funcionalidades, como acesso à internet, alto poder de processamento, tela de toque, diversos sensores, Bluetooth, WiFi, dentre outros.
+
+Além de diversas funcionalidades, a capacidade de desenvolvimento para essa plataforma é muito grande, os principais Sistemas Operacionais (Android e iOS) permitem essa liberdade de desenvolvimento em sua plataforma, oferecendo o suporte necessário para tal.
+
+Existe também uma gama de ferramentas para o desenvolvimento mobile, com as mais diversas metodologias, além de uma ativa comunidade online para dar suporte e documentar erros e boas práticas.
+
+Atualmente, a maior parte dos aplicativos para smartphones usam a conectividade com a internet para recolher dados e exibí-los, de uma forma ou de outra, para o usuário. Alguns exemplos dessa estrutura são:
+
+\begin{itemize}
+    \item Em um aplicativo de notícias, o sistema recebe do servidor uma lista de notícias. O usuário pode ter um conjunto de preferências enviadas ao servidor para receber um conteúdo mais específico.
+
+    \item Em um aplicativo de localização, o sistema recebe dados do GPS e envia ao servidor, para receber o mapa dos arredores da posição enviada.
+
+    \item Em jogos, talvez parte do conteúdo (como sons e imagens) não esteja no baixado ainda, então ele faz o download quando o jogador faz certas ações. O jogo também pode enviar o progresso ao servidor como backup, para ser restaurado quando necessário.
+\end{itemize}
+
+Ao analisar esse comportamento, fica claro como o usuário só interage com seu dispositivo, toda a comunicação externa é um resultado disso. Na maioria dos casos, o usuário não tem ativamente o propósito de alterar coisas fora do espaço de seu smartphone.
+
+\begin{itemize}
+
+    \item Um contra-exemplo dessa estrutura é o aplicativo Unified Remote \footnote{https://www.unifiedremote.com/, acessado em 05/02/17.}. Ele oferece um controle remoto para o seu computador. Para funcionar, é necessário instalar um software no computador a ser controlado e tanto ele, como o smartphone devem estar conectados à mesma rede WiFi. Então, com o smartphone, é possível controlar o cursor, o volume do som, teclado, dentre outros.
+
+\end{itemize}
+
+Esse fato impulsionou esse Projeto em criar um ecossistema composto por um aplicativo e um servidor. O diferencial é que o aplicativo não é o único produto com o qual o usuário está interagindo de forma direta, mas sim o servidor também, de forma tangível e direta.
+
+A ideia é que o usuário faça ações no aplicativo, e veja o resultado dessas ações diretamente no servidor. O smartphone deixa de ser o produto final, e se torna somente uma forma de input de dados para um sistema maior.
+
+Um resultado desejado é que ações originadas no servidor também surtam efeito no aplicativo, para mostrar que é possível uma comunicação bilateral sem hierarquias entre os dois lados desse sistema.
+
+Outro resultado desejado é que seja possível conectar mais de um smartphone com esse servidor, para que ambos possam interagir com ele e talvez até entre si.
+
+Em suma, o objetivo que esse Projeto busca é um sistema composto por um aplicativo e um servidor que interagem entre si para proporcionar ao usuário uma experiência mais completa do que a que os aplicativos de hoje oferecem.
+
+
+Existem alguns exemplos de aplicativos e projetos que tem essa estrutura:
+
+\begin{itemize}
+
+    % TODO https://vimeo.com/48150517
+    % TODO http://www.webdigi.co.uk/fun/space/
+    \item Na palestra de Roshan Abraham entitulada “Using your iPhone as a game controller with NodeJS, HTML5" é apresentado um trabalho cuja estrutura é quase idêntica ao Projeto desenvolvido.
+
+    No trabalho, existe um servidor que lança uma página Web com um \emph{QR Code} no computador do usuário. Quando um dispositivo que roda o Sistema Operacional iOS (iPhone ou iPad) lê esse código, ele executa uma página Web que envia dados do acelerômetro ao servidor. O servidor por sua vez, ao receber essa conexão, envia ao navegador no computador um jogo de “\emph{Space Invaders}". Nesse jogo, a nave é controlada pelas leituras do acelerômetro; ou seja, ao inclinar o dispositivo para um lado, ela vai acompanhar esse movimento.
+
+    A diferença entre esse trabalho e o Projeto apresentado aqui é que ele se limita à iOS e utiliza uma página Web no dispositivo, ao invés de um aplicativo dedicado. Por utilizar o browser do dispositivo como aplicativo, ele é limitado aos recursos e funcionalidades que esse browser tem acesso.
+
+    % www.airconsole.com
+    \item AirConsole - Uma plataforma de jogos online, na qual cada jogador usa seu smartphone como controle e a tela do computador exibe o jogo. Ele funciona de maneira similar ao exemplo de cima, porém é um produto finalizado, muito mais robusto.
+
+    Essa plataforma oferece duas maneiras de usar o smartphone, é possível se conectar através de um browser (como no exemplo acima) ou usar um aplicativo (como esse Projeto propõe). Para se conectar, o computador exibe um código e o jogador o insere no smartphone. É possível conectar multiplos jogadores em uma única sessão, para que o jogo seja \emph{multiplayer}. Cada jogo também apresenta um layout diferente de controle para o smartphone.
+
+    A plataforma também disponibiliza um API \footnote{\emph{Application program interface}} para o desenvolvimento, então é possível usá-la para criar jogos de forma livre.
+
+    Todas as funcionalidades dessa plataforma são desejáveis para este Projeto, ele é o que mais se aproxima do ideal. Porém, essa plataforma é somente para jogos e usa servidores próprios, deixando o processamente no lado do servidor fechado aos desenvolvedores. O projeto foi pensado para satisfazer uma gama maior de necessidades, não somente de jogos, e dar a liberdade ao desenvolvedor de alterar o código do servidor, para adequar melhor suas necessidades.
+
+\end{itemize}
 
 
 
-
-
-
-
-Existe uma tecnologia muito recente que está constante atualização e que ainda não é plenamente explorada; a de dispositivos móveis, como smartphones e tablets. Por um lado, muito esforço é desprendido para se tirar o melhor proveito dela, aplicativos são criados a todo momento para resolver os mais variados problemas. Por outro lado, smartphones possuem muitas funcionalidades e evoluem rapidamente, gerando uma gama muito extensa de possibilidades de desenvolvimento.
-
-Outro ponto interessante dessas tecnologias é que estão fortemente presentes na sociedade, uma parcela muito grande da população possui algum dispositivo desses. Essa acessibilidade torna o desenvolvimento muito mais sensível.
-
-
-
-
-
-
-
-Dispositivos móveis, como smartphones e tablets, estão cada dia mais presentes. Sua tecnologia se atualiza a cada momento e ainda é muito nova, muitas de suas funcionalidades ainda podem ser bastante exploradas.
-
-O mesmo vale para tecnologias para a internet. O ambiente Web está em constante transformação, APIs \footnote{\emph{Application Programming Interface}, conjunto de rotinas e padrões de programação para acesso a um aplicativo de software ou plataforma baseado na Web.} e ferramentas são criadas e renovadas a todo momento e podem ser aplicadas a vários contextos de forma relevante e inovadora.
-
-Com esse contexto em mente, o Projeto para o Trabalho de Formatura Supervisionado apresentado foi concebido para unir essas duas pontas de tecnologias em uma Aplicação Web que se comunica com um dispositivo móvel. O conceito básico é ter um Applicativo de smartphone que se conecte a um servidor e passe a enviar e receber informações. O servidor lança uma página Web que recebe esses dados enviados e executa sua funcionalidade.
-
-O conceito de “funcionalidade" é propositalmente deixado em aberto pois esse fluxo de dados encapsula uma grande variedade de funcionalidades. É possível, por exemplo, executar um jogo na página Web que utiliza o smartphone como um controle, ou manter um banco de dados no Servidor e fazer buscas utilizando o smartphone.
-
-O Projeto tem como objetivo então abrir esse canal de comunicação bilateral entre páginas Web e smartphones, além de facilitar o desenvolvimento de aplicações voltadas a essa estrutura.
 
 
 \newpage
@@ -258,22 +291,32 @@ Esta seção explica conceitos que são utilizados no Projeto, ou que ajudam a e
 
 \subsection{Estrutura e funcionamento de páginas Web}
 
-
-% TODO http://computer.howstuffworks.com/web-page.htm
-Uma página Web (\emph{webpage}) é o produto final gerado principalmente por arquivos HTML, CSS, JavaScript, imagens e outros recursos (\emph{resources}). A webpage será interpretada por um \emph{Web Browser}, que irá interagir com o usuário, tanto exibindo informações, quanto recebendo \emph{inputs}. Cada um desses elementos citados se comporta da seguinte forma:
+Uma página Web (\emph{webpage}) é o produto final gerado por arquivos HTML, CSS, JavaScript, imagens e outros recursos (\emph{resources}). A webpage é interpretada por um \emph{Web Browser}, que interage com o usuário, tanto exibindo informações, quanto recebendo \emph{inputs}. Cada um desses elementos citados se comporta da seguinte forma:
 
 \begin{itemize}
-    \item HTML - \emph{Hyper Text Markup Language} é a linguagem que descreve como uma página deve ser formatada. Para isso, ela funciona através de um conjunto de \emph{tags}. Essas tags \emph{tags} definem o tamanho, cor de texto, fonte, \emph{hiperlinks}, imagens, scripts, dentre outros. O principal arquivo de uma webpage é um HTML, que define sua estrutura, formatação e conteúdo.
+    \item HTML \emph{Hyper Text Markup Language} - É a linguagem que descreve como uma webpage deve ser formatada. Para isso, ela funciona através de um conjunto de \emph{tags}, cada uma com uma função diferente. Elas definem conteúdo (o texto propriamente dito), formatação (alteração de tamanho, cor, fonte) inserção de recursos externos (imagens, áudios, vídeos, caixas de inserção de texto), fluxo entre páginas (\emph{hiperlinks}, redirecionamentos, auto rolagem da página, definição de segmentos de conteúdo) execução de código lógico (inserção de scripts para processamento de dados), dentre outros. O principal arquivo de uma webpage é um HTML, que dita sua estrutura, formatação e conteúdo.
 
-    \item CSS - (\emph{Cascading Style Sheets})É um arquivo de suporte para um HTML cujo propósito é definir estilos de formatação. Ele não é necessário, porém é muito importante na criação de estilos mais complexos, para webpages mais robustas e profissionais. Ele simplifica e centraliza o processo de formatação de uma página, com uma interface simples e completa.
+    \item CSS (\emph{Cascading Style Sheets}) - É um arquivo de suporte para HTML cujo propósito é definir estilos de formatação. Ele centraliza o processo de formatação de estilos e dá opções mais refinadas de customização. Não é necessário, porém é muito importante na criação de estilos mais complexos, para webpages mais robustas e profissionais.
 
-    \item JavaScript - É a linguagem de programação de scripts executados em HTML. É o responsável pela parte lógica do funcionamento de uma webpage, executando código dentro dela, com dados externos ou do usuário.
+    \item JavaScript - É a linguagem de programação de scripts executados em HTML. É o responsável pela parte lógica do funcionamento de uma webpage, executando código dentro dela, com dados externos ou do usuário. Usando scripts é possível criar timers, contadores, atualizar informações exibidas, carregar conteúdo dinamicamente, renderizar outros tipos de objetos na tela, entre outros. Uma webpage que usa scripts de forma inteligente é mais interativa e possui muito mais recursos.
 
-    \item Web Browser - Um \emph{browser}, ou navegador, é o programa que recebe, interpreta e exibe páginas HTML, além de ser capaz de se conectar a servidores e fazer requisições por webpages. O usuário insere o endereço no qual se encontra a página que quer visualizar e o browser coleta e exibe esses dados (sejam dados locais ou vindos da internet, através de uma conexão).
+    \item Web Browser - Um \emph{browser}, ou navegador, é o programa que exibe webpages. Para exibir uma página que o usuário pede, ele se conecta ao servidor, a recebe e interpreta e então a exibe na tela.
 
-    \item Servidor Web - Um servidor web é um processo em execução que aceita conexões e requisições de browsers. Essas requisições recebidas são respondidas com a webpage correspondente e todos os recursos necessários para a sua execução, como sons, imagens e scripts.
+    \item Servidor Web - Um servidor web é um processo em execução possui webpages e seus recursos (CSS, JavaScript, imagens). Ele possui um endereço IP para ser localizado por browsers na internet e, após uma conexão ser feita, ele envia as páginas requisitadas ao browser. Os servidores são capazes de lidar com múltiplas conexões.
 
 \end{itemize}
+
+
+
+\subsection{Comunicação Web}
+
+% TODO Explicar HTTP, que ele vem de TCP/IP, ou algo assim;
+Para que possa haver uma conexão entre dois processos através da internet, o browser e o servidor por exemplo, é necessário que haja um protocolo de comunicação comum a ambos. O mais utilizado é o protocolo HTTP.
+
+
+%
+
+
 
 
 
@@ -1843,6 +1886,13 @@ SPDY,
 \\\texttt{\url{https://pt.wikipedia.org/wiki/SPDY}}
 
 Acessado em: 20/11/16
+
+
+\bibitem{how_web-page}
+How Web Pages Work,
+\\\texttt{\url{http://computer.howstuffworks.com/web-page.htm}}
+
+Acessado em: 04/02/17
 
 
 
