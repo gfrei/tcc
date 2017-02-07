@@ -310,11 +310,24 @@ Uma página Web (\emph{webpage}) é o produto final gerado por arquivos HTML, CS
 
 \subsection{Comunicação Web}
 
-% TODO Explicar HTTP, que ele vem de TCP/IP, ou algo assim;
-Para que possa haver uma conexão entre dois processos através da internet, o browser e o servidor por exemplo, é necessário que haja um protocolo de comunicação comum a ambos. O mais utilizado é o protocolo HTTP.
+Para que conexões através da internet sejam possíveis, como uma conexão entre um browser e um servidor por exemplo, uma arquitetura de rede adequada é necessária. A arquitetura mais comum para este uso é o modelo cliente-servidor.
 
+Neste modelo, existem dois tipos de programas sendo executados:
 
-%
+\begin{itemize}
+    \item O Cliente é o programa que precisa receber dados da internet. Browsers, por exemplo, para poder exibir uma página, precisam requisitá-la de algum lugar. O usuário insere o endereço do site que deseja, e então o browser pede a esse endereço a página que gostaria.
+
+    Nesse pedido, ele também envia outros tipos de informações, como seu próprio endereço, alguns dados do usuário, detalhes do que está requisitando, dados e \emph{tokens} de segurança, entre outros.
+
+    Ele recebe como resposta uma página e todos os recursos necessários para que ela seja visualizada corretamente (é possível também receber mensagens de erro caso ocorra qualquer falha, como erros nos dados enviados ou problemas de conexão). Essa página pode trazer dados que permitem o acesso à outra página, gerando um fluxo de telas.
+
+    \item O Servidor é o programa que opera do outro lado da conexão. Ele possui um endereço e os dados de uma webpage (os arquivos HTML, CSS, JavaScript e outros recursos) e, uma vez em execução, ele aguarda pedidos vindos de clientes.
+
+    Ao receber uma requisição, ele verifica os dados do cliente, da requisição, de segurança, dentre outros. Se tudo estiver correto e ele possuir o que é pedido, é enviada uma resposta contendo esses arquivos. Caso contrário, a resposta contém somente uma mensagem de erro, para que o cliente possa corrigir e fazer uma nova requisição.
+
+    Um servidor recebe requisições de vários cliente ao mesmo tempo. Por tal motivo, ele não salva dados do cliente nem de conexão. Cada requisição mais resposta é uma conexão isolada, o contexto não é salvo. Como consequência, todas as requisições precisam conter todas as informações necessárias para serem atendidas.
+\end{itemize}
+
 
 
 
