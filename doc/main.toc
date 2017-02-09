@@ -5,6 +5,7 @@
 \contentsline {section}{\numberline {3}Fundamentos}{}{section.3}
 \contentsline {subsection}{\numberline {3.1}Estrutura e funcionamento de p\IeC {\'a}ginas Web}{}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Comunica\IeC {\c c}\IeC {\~a}o Web}{}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Sockets}{}{subsection.3.3}
 \contentsline {section}{\numberline {4}Desenvolvimento}{}{section.4}
 \contentsline {subsection}{\numberline {4.1}Comunica\IeC {\c c}\IeC {\~a}o}{}{subsection.4.1}
 \contentsline {subsubsection}{\numberline {4.1.1}Protocolo WebSocket}{}{subsubsection.4.1.1}

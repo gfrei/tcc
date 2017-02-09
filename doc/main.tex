@@ -321,15 +321,24 @@ Neste modelo, existem dois tipos de programas sendo executados:
 
     Ele recebe como resposta uma página e todos os recursos necessários para que ela seja visualizada corretamente (é possível também receber mensagens de erro caso ocorra qualquer falha, como erros nos dados enviados ou problemas de conexão). Essa página pode trazer dados que permitem o acesso à outra página, gerando um fluxo de telas.
 
-    \item O Servidor é o programa que opera do outro lado da conexão. Ele possui um endereço e os dados de uma webpage (os arquivos HTML, CSS, JavaScript e outros recursos) e, uma vez em execução, ele aguarda pedidos vindos de clientes.
+    \item O Servidor é o programa que opera do outro lado da conexão. Ele possui endereço e dados de uma webpage (os arquivos HTML, CSS, JavaScript e outros recursos) e, uma vez em execução, ele aguarda pedidos vindos de clientes.
 
     Ao receber uma requisição, ele verifica os dados do cliente, da requisição, de segurança, dentre outros. Se tudo estiver correto e ele possuir o que é pedido, é enviada uma resposta contendo esses arquivos. Caso contrário, a resposta contém somente uma mensagem de erro, para que o cliente possa corrigir e fazer uma nova requisição.
 
     Um servidor recebe requisições de vários cliente ao mesmo tempo. Por tal motivo, ele não salva dados do cliente nem de conexão. Cada requisição mais resposta é uma conexão isolada, o contexto não é salvo. Como consequência, todas as requisições precisam conter todas as informações necessárias para serem atendidas.
 \end{itemize}
 
+É importante explicitar que esse modelo não serve somente para transportar páginas Web pela internet, ele é mais abstrato, transporta serviços. Servidores podem armazenar bancos de dados e clientes podem requisitar buscas (\emph{queries}) a eles; o servidor pode somente armazenar arquivos do usuário (em serviços de backup em Nuvem, como o Dropbox\footnote{dropbox.com}) e o cliente requisita o download ou upload de arquivos.
 
+Em resumo, no modelo cliente-servidor, há dois tipos de processo sendo executados, o cliente e o servidor. O cliente necessita de um serviço que o servidor oferece. Ele então gera uma requisição e a envia ao servidor. Se tudo ocorrer bem, o servidor envia uma resposta contendo os dados que o cliente necessita. A conexão é encerrada e o servidor volta ao estado de espera por outras requisições.
 
+\subsection{Sockets}
+
+Em contraponto com os tópicos anteriores, sockets são elementos da comunicação Web bastante concretos. Dentre os componentes presentes na estrutura que implementa um protocolo de comunicação, como HTTP ou P2P, o socket é aquele cujo propósito é efetivamente mandar e receber informação. Ele é a porta de entrada e saída de dados de um processo que se comunica com outros através da internet.
+
+Como eles são componentes internos, cada protocolo os utiliza de uma certa maneira. No modelo cliente-servidor por exemplo, o socket do servidor tem o poder de enviar informações a um cliente a qualquer momento, mas o protocolo só permite o envio de respostas a uma requisição, nunca um envio espontâneo.
+
+Cada socket possui um endereço único para ser localizado na Web, a união do endereço de IP e uma Porta, definida pelo processo. Toda conexão Web é concretamente definida através do par de sockets, um de cada processo.
 
 
 
