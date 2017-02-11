@@ -220,7 +220,7 @@ Ao analisar esse comportamento, fica claro como o usuário só interage com seu 
 
 \end{itemize}
 
-Esse fato impulsionou esse Projeto em criar um ecossistema composto por um aplicativo e um servidor. O diferencial é que o aplicativo não é o único produto com o qual o usuário está interagindo de forma direta, mas sim o servidor também, de forma tangível e direta.
+Esse fato impulsionou esse Projeto em criar um ecossistema composto por um aplicativo e um servidor. O diferencial é que o aplicativo não é o único produto com o qual o usuário está interagindo de forma direta, mas sim o servidor também, de forma tangível.
 
 A ideia é que o usuário faça ações no aplicativo, e veja o resultado dessas ações diretamente no servidor. O smartphone deixa de ser o produto final, e se torna somente uma forma de input de dados para um sistema maior.
 
@@ -228,10 +228,8 @@ Um resultado desejado é que ações originadas no servidor também surtam efeit
 
 Outro resultado desejado é que seja possível conectar mais de um smartphone com esse servidor, para que ambos possam interagir com ele e talvez até entre si.
 
-Em suma, o objetivo que esse Projeto busca é um sistema composto por um aplicativo e um servidor que interagem entre si para proporcionar ao usuário uma experiência mais completa do que a que os aplicativos de hoje oferecem.
 
-
-Existem alguns exemplos de aplicativos e projetos que tem essa estrutura:
+Existem alguns exemplos de aplicativos e projetos que possuem uma estrutura similar:
 
 \begin{itemize}
 
@@ -280,7 +278,14 @@ Existem alguns exemplos de aplicativos e projetos que tem essa estrutura:
     % \item Desenvolver uma página Web como Caso de Uso.
 \end{itemize}
 
-De forma concreta, ao final do desenvolvimento é esperado que exista esse ecossistema online, com o servidor e os dois clientes, de Android e Web. O aplicativo Android deve gerar dados e os enviar ao servidor, além de receber dele. A página Web deve executar um programa interativo que recebe dados do servidor a qualquer momento para alterar sua execução. E, por fim, o servidor precisa funcionar como intermediador dos dados, enviando e recebendo dados de cada cliente quando for necessário.
+
+
+Em suma, o objetivo desse Projeto é criar um sistema composto por um aplicativo e um servidor que interagem entre si, proporcionando ao usuário uma experiência mais completa do que a que os aplicativos de hoje oferecem.
+
+Como o desenvolvimento desse sistema é bastante extenso, o foco será somente na criação dele como um arcabouço para o desenvolvimento de aplicações maiores. Não haverá uma aplicação que utilize seu pontencial máximo, somente uma que valide os objetivos propostos.
+
+% De forma concreta, ao final do desenvolvimento é esperado que exista esse ecossistema online, com o servidor e os dois clientes, de Android e Web. O aplicativo Android deve gerar dados e os enviar ao servidor, além de receber dele. A página Web deve executar um programa interativo que recebe dados do servidor a qualquer momento para alterar sua execução. E, por fim, o servidor precisa funcionar como intermediador dos dados, enviando e recebendo dados de cada cliente quando for necessário.
+
 % TODO Qual a diferença entre web-page + server e webservice?
 
 
@@ -325,12 +330,37 @@ Neste modelo, existem dois tipos de programas sendo executados:
 
     Ao receber uma requisição, ele verifica os dados do cliente, da requisição, de segurança, dentre outros. Se tudo estiver correto e ele possuir o que é pedido, é enviada uma resposta contendo esses arquivos. Caso contrário, a resposta contém somente uma mensagem de erro, para que o cliente possa corrigir e fazer uma nova requisição.
 
-    Um servidor recebe requisições de vários cliente ao mesmo tempo. Por tal motivo, ele não salva dados do cliente nem de conexão. Cada requisição mais resposta é uma conexão isolada, o contexto não é salvo. Como consequência, todas as requisições precisam conter todas as informações necessárias para serem atendidas.
+    Por fim, um servidor tem a capacidade de receber requisições de vários cliente ao mesmo tempo. A cada requisição, ele executa seu processamento, envia a resposta adequada e atende o seguinte.
 \end{itemize}
 
 É importante explicitar que esse modelo não serve somente para transportar páginas Web pela internet, ele é mais abstrato, transporta serviços. Servidores podem armazenar bancos de dados e clientes podem requisitar buscas (\emph{queries}) a eles; o servidor pode somente armazenar arquivos do usuário (em serviços de backup em Nuvem, como o Dropbox\footnote{dropbox.com}) e o cliente requisita o download ou upload de arquivos.
 
 Em resumo, no modelo cliente-servidor, há dois tipos de processo sendo executados, o cliente e o servidor. O cliente necessita de um serviço que o servidor oferece. Ele então gera uma requisição e a envia ao servidor. Se tudo ocorrer bem, o servidor envia uma resposta contendo os dados que o cliente necessita. A conexão é encerrada e o servidor volta ao estado de espera por outras requisições.
+
+\subsection{Protocolo HTTP}
+
+O protocolo HTTP (\emph{Hypertext Transfer Protocol}) é o principal protocolo do modelo cliente-servidor, lidando com a transferência de dados via Web.
+
+Este protocolo está implementado tanto no cliente, como no servidor. Ele se encarrega de abrir a conexão entre ambos; de formar as mensagens a serem enviadas, como requisições e respostas, e fazer a transferência desses dados, sejam arquivos HTML, JavaScript, imagens, ou qualquer outro recurso.
+
+Ele é um protocolo sem estado, os processos não salvam informações sobre cada conexão. Cada mensagem enviada contém todo o contexto necessário para ser compreendida e respondida.
+
+Alguns conceitos importantes sobre comunicação:
+
+\begin{itemize}
+    \item Latência. É o tempo entre uma mensagem ser enviada por um sistema e ser recebida pelo outro. Pelas propriedades físicas de uma conexão (distância real entre o cliente e o servidor, velocidade de impulsos elétricos) esse tempo é um fator real e que deve ser levado em consideração durante o desenvolvimento de um sistema online.
+
+    A forma mais básica e direta de se calcular a latência com um servidor é fazer um \emph{ping}. Essa técnica consiste fazer uma requisição vazia ao servidor pedindo resposta vazia de volta e calcular o tempo entre o momento que uma mensagem foi enviada e outra foi recebida.
+
+    \item HTTP é um protocolo sem estado. Os processos que participam de conexão não guardam dados sobre ela. Quando uma mensagem é enviada, todos os dados necessários para sua compreensão são enviados juntos.
+
+    Uma conexão nesse contexto não é algo longo, dura somente o tempo entre o cliente mandar a requisição e receber a resposta.
+
+    \item Cabeçalho de uma mensagem. Quando uma mensagem é formada, ela não pode ter somente seu conteúdo, é necessário que haja outras informações junto, para que possa ser compreendida. O cabeçalho pode conter um identificador do usuário, tipo do conteúdo da mensagem, dados de conexão e segurança, entre outros. Essas informações são necessárias, porém aumentam o tamanho da mensagem final que será enviada.
+
+    \item Um servidor HTTP não possui autonomia para enviar dados a um cliente espontaneamente, ele só pode enviar quando a mensagem é uma resposta a uma requisição do cliente.
+\end{itemize}
+
 
 \subsection{Sockets}
 
@@ -339,6 +369,65 @@ Em contraponto com os tópicos anteriores, sockets são elementos da comunicaç�
 Como eles são componentes internos, cada protocolo os utiliza de uma certa maneira. No modelo cliente-servidor por exemplo, o socket do servidor tem o poder de enviar informações a um cliente a qualquer momento, mas o protocolo só permite o envio de respostas a uma requisição, nunca um envio espontâneo.
 
 Cada socket possui um endereço único para ser localizado na Web, a união do endereço de IP e uma Porta, definida pelo processo. Toda conexão Web é concretamente definida através do par de sockets, um de cada processo.
+
+
+
+\newpage
+\section{Funcionamento e Modelo}
+
+
+Uma vez que a ideia geral do Projeto está fechada, é necessário definir como a estrutura vai funcionar exatamente e encontrar um modelo que satisfaça as necessidades definidas.
+
+No âmbito geral temos dois softwares a serem desenvolvidos, um aplicativo para smartphones e um servidor. Eles devem estar sendo executados simultaneamente e cada um deve interferir com o outro diretamente. O foco é ter um produto que mostre que essa arquitetura funciona de forma satisfatória.
+
+Os requerimentos do servidor:
+
+\begin{itemize}
+
+    \item Ser capaz de receber conexões e dados vindos de smartphones.
+
+    \item Enviar dados para esses smartphones que foram conectados à rede.
+
+    \item Exibir um feedback visual de sua execução.
+
+    \item Permitir que os dados que recebe do smartphone alterem sua execução de forma concreta.
+
+\end{itemize}
+
+Os requerimentos do aplicativo:
+
+\begin{itemize}
+
+    \item Conectar-se a um servidor específico.
+
+    \item Conseguir enviar dados a esse servidor a qualquer momento.
+
+    \item Receber dados desse servidor a qualquer momento.
+
+    \item Ter uma interface que permita inputs variados.
+
+\end{itemize}
+
+Para começar essa estruturação, o primeiro ponto a ser aprofundado é que tipo de visualização que se espera do processamento do servidor. O programa que o executa é estritamente lógico, não é possível fazer uma aplicação direta nele, precisa haver algo para intermediar essa interface.
+
+\newpage
+\section{Implementação}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
