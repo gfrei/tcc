@@ -7,23 +7,23 @@
 \contentsline {subsection}{\numberline {3.2}Comunica\IeC {\c c}\IeC {\~a}o Web}{}{subsection.3.2}
 \contentsline {subsection}{\numberline {3.3}Protocolo HTTP}{}{subsection.3.3}
 \contentsline {subsection}{\numberline {3.4}Sockets}{}{subsection.3.4}
-\contentsline {section}{\numberline {4}Funcionamento e Modelo}{}{section.4}
+\contentsline {section}{\numberline {4}Modelo e defini\IeC {\c c}\IeC {\~a}o de funcionamento}{}{section.4}
+\contentsline {subsection}{\numberline {4.1}Comunica\IeC {\c c}\IeC {\~a}o}{}{subsection.4.1}
+\contentsline {subsubsection}{\numberline {4.1.1}Protocolo WebSocket}{}{subsubsection.4.1.1}
+\contentsline {subsubsection}{\numberline {4.1.2}Socket.io}{}{subsubsection.4.1.2}
+\contentsline {subsection}{\numberline {4.2}Aplicativo para Smartphone}{}{subsection.4.2}
+\contentsline {subsubsection}{\numberline {4.2.1}Cordova}{}{subsubsection.4.2.1}
+\contentsline {subsection}{\numberline {4.3}Webpage do servidor}{}{subsection.4.3}
+\contentsline {subsubsection}{\numberline {4.3.1}THREE.JS}{}{subsubsection.4.3.1}
+\contentsline {subsection}{\numberline {4.4}Servidor}{}{subsection.4.4}
+\contentsline {subsubsection}{\numberline {4.4.1}Node.js e ExpressJS para criar um servidor}{}{subsubsection.4.4.1}
 \contentsline {section}{\numberline {5}Implementa\IeC {\c c}\IeC {\~a}o}{}{section.5}
 \contentsline {section}{\numberline {6}Desenvolvimento}{}{section.6}
-\contentsline {subsection}{\numberline {6.1}Comunica\IeC {\c c}\IeC {\~a}o}{}{subsection.6.1}
-\contentsline {subsubsection}{\numberline {6.1.1}Protocolo WebSocket}{}{subsubsection.6.1.1}
-\contentsline {subsubsection}{\numberline {6.1.2}Socket.io}{}{subsubsection.6.1.2}
-\contentsline {subsection}{\numberline {6.2}Aplicativo Android}{}{subsection.6.2}
-\contentsline {subsubsection}{\numberline {6.2.1}Cordova}{}{subsubsection.6.2.1}
-\contentsline {subsubsection}{\numberline {6.2.2}Implementa\IeC {\c c}\IeC {\~a}o}{}{subsubsection.6.2.2}
-\contentsline {subsubsection}{\numberline {6.2.3}C\IeC {\'o}digo da Interface}{}{subsubsection.6.2.3}
-\contentsline {subsubsection}{\numberline {6.2.4}C\IeC {\'o}digo da parte l\IeC {\'o}gica}{}{subsubsection.6.2.4}
-\contentsline {subsection}{\numberline {6.3}Aplica\IeC {\c c}\IeC {\~a}o Web como Caso de Uso}{}{subsection.6.3}
-\contentsline {subsubsection}{\numberline {6.3.1}THREE.JS}{}{subsubsection.6.3.1}
-\contentsline {subsubsection}{\numberline {6.3.2}Implementa\IeC {\c c}\IeC {\~a}o}{}{subsubsection.6.3.2}
-\contentsline {subsection}{\numberline {6.4}Servidor}{}{subsection.6.4}
-\contentsline {subsubsection}{\numberline {6.4.1}Node.js e ExpressJS para criar um servidor}{}{subsubsection.6.4.1}
-\contentsline {subsubsection}{\numberline {6.4.2}Implementa\IeC {\c c}\IeC {\~a}o}{}{subsubsection.6.4.2}
+\contentsline {subsubsection}{\numberline {6.0.1}Implementa\IeC {\c c}\IeC {\~a}o}{}{subsubsection.6.0.1}
+\contentsline {subsubsection}{\numberline {6.0.2}C\IeC {\'o}digo da Interface}{}{subsubsection.6.0.2}
+\contentsline {subsubsection}{\numberline {6.0.3}C\IeC {\'o}digo da parte l\IeC {\'o}gica}{}{subsubsection.6.0.3}
+\contentsline {subsubsection}{\numberline {6.0.4}Implementa\IeC {\c c}\IeC {\~a}o}{}{subsubsection.6.0.4}
+\contentsline {subsubsection}{\numberline {6.0.5}Implementa\IeC {\c c}\IeC {\~a}o}{}{subsubsection.6.0.5}
 \contentsline {section}{\numberline {7}Estudo Aprofundado da Tecnologia}{}{section.7}
 \contentsline {subsection}{\numberline {7.1}Desenvolvendo Aplicativos com Apache Cordova}{}{subsection.7.1}
 \contentsline {subsection}{\numberline {7.2}Comunica\IeC {\c c}\IeC {\~a}o Web e Aplica\IeC {\c c}\IeC {\~o}es Web}{}{subsection.7.2}
