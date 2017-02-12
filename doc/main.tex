@@ -492,6 +492,7 @@ Socket.io será utilizado para a comunicação em todos os componentes.% Todos o
 
 
 
+\newpage
 \subsection{Aplicativo para Smartphone}
 
 O aplicativo deve seguir a proposta de servir como base para o desenvolvimento de aplicativos maiores. Sobre seu funcionamento nesse projeto, ele vai permitir as seguintes ações:
@@ -522,6 +523,7 @@ O Apache Cordova é um \emph{framework} \emph{open-source} para a criação de a
 Ele é multiplataforma; permite o desenvolvimento para sistemas como Android, iOS ou navegadores. Oferece uma API de alto nível para acessar os módulos desejados, como de sensores, arquivos e rede.
 
 
+\newpage
 \subsection{Webpage do servidor}
 
 A Webpage que o servidor emite é o componente que possui maior grau de liberdade no Projeto. Pode-se considerar que, para o usuário, é o produto final. O aplicativo é igualmente importante, mas ele funciona como interface para lidar com essa Webpage.
@@ -579,6 +581,7 @@ Abaixo está uma lista de funcionalidades que possui. Por possuir muitos termos 
 \end{itemize}
 
 
+\newpage
 \subsection{Servidor}
 
 O servidor precisa ser projetado para escutar eventos do aplicativo, e responder ou encaminhar os dados recebidos. Ele será implementado com JavaScript, com o auxilio de Node.js e ExpressJS.
@@ -592,20 +595,9 @@ Ao se levar em conta o modo em que o código em JavaScript pode ser estruturado 
 Express é um \emph{framework} mínimo e flexível para Node.js que oferece um conjunto robusto de funcionalidades. Sua API é simples, mas oferece ferramentas essenciais para o desenvolvimento de para páginas e aplicações Web e Mobile, e programas de \emph{backend}. Ela lida com detalhes de baixo nível como protocolos e processos. Além da sua funcionalidade básica, existem módulos disponíveis para adicionar novas, que são diretamente aplicados ao Express.
 
 
+\subsection{Aplicações do modelo}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+TODO
 
 
 
@@ -620,87 +612,11 @@ Express é um \emph{framework} mínimo e flexível para Node.js que oferece um c
 Nessa seção, é apresentada a implementação do Projeto, com o código exibido e explicado.
 
 
-% \subsection{Comunicação}
-
-% A comunicação é a parte mais importante deste Projeto. O modelo cliente-servidor foi usado, mas foi necessário levar alguns pontos em consideração. O cliente de smartphone e o cliente Web precisam se comunicar com o servidor da melhor forma possível. O protocolo de comunicação é o fator que mais pode limitar as possibilidades previstas. Para não haver problemas, a comunicação precisa de:
-% \begin{itemize}
-
-%     \item \textbf{Baixa latência.} No caso de o cliente Web executar um jogo, o tempo entre um comando enviado do smartphone e a reação da página precisa ser o menor possível. Caso contrário, a experiência é danificada e pode até ser impossibilitada, se o jogo for construído com base em respostas rápidas.
-
-%     \item \textbf{Baixo \emph{overhead} de mensagens.} É necessário que o cabeçalho das mensagens seja o mínimo possível. Se o fluxo de mensagens for alto, ele vai consumir muita banda da conexão e recursos, tanto do servidor como do cliente. É necessário que possua a menor quantidade de informações desnecessárias. Caso a mensagem tenha muito conteúdo, ele fará pouca diferença, mas se ela for pequena, como um texto ou um conjunto de valores, o cabeçalho representa um aumento significativo no tamanho total, podendo ser até maior do que o próprio conteúdo.
-
-%     \item \textbf{Comunicação bilateral.} Informações podem se originar de qualquer um dos clientes ou do servidor, então é necessário que o processo em questão possa enviar as informações a qualquer momento. No caso de um cliente precisar ser atualizado caso haja dados novos, é inviável que precise consultar o servidor a todo momento.
-
-%     \item \textbf{Permitir multiplas conexões simultâneas.} Não é necessário, mas permite uma liberdade ainda maior. No projeto é previsto somente que o servidor se conecte a um cliente Web e de smartphone, mas, se o servidor aceitar a conexão com vários clientes do mesmo tipo, o desenvolvimento deles pode tirar proveito disso. Um smartphone pode enviar e receber informações de outros, como em um \emph{Chat}, por exemplo.
-% \end{itemize}
-
-% Com esses requerimentos em vista, o tecnologia usada foi o Framework de JavaScript Socket.io, que implementa o protocolo WebSocket.
-
-
-% \subsubsection{Protocolo WebSocket}
-
-% WebSocket é um protocolo que permite a comunicação bilateral entre cliente e servidor. Para o protocolo, não existe essa diferenciação entre os dois, o cliente e o servidor são apenas dois processos conectados. A comunicação é dada por envio de mensagens e ocorrência de eventos. Esses processos podem enviar mensagens a qualquer momento e estão ouvindo um ao outro.
-
-% A estrutura da mensagem em WebSocket é mínima. O corpo da mensagem, os dados a serem enviados, só possui dois formatos, texto ou binário. O cabeçalho contém um identificador de tipo do formato, que tem um campo para o tamanho da mensagem e nada mais. A mensagem completa é só o conteúdo mais seu tamanho. Como a conexão não muda em momento algum, todas as informações contidas no cabeçalho de requisição e resposta HTTP são invariantes e, portanto, não precisam ser reenviadas.
-
-% Um dos processos conectados, em um momento arbitrário, envia uma mensagem ao outro, talvez porque dados tenham sido atualizados ou o usuário tenha feito alguma ação em específico. Uma vez que a mensagem é enviada, esse processo volta ao que estava fazendo, sem a necessidade de esperar alguma resposta do outro processo. Esse comportamento é chamado de assíncrono, pois um lado não age em sincronia com o outro.
-
-% O outro processo recebe a nova mensagem através de um evento. Quando esse evento acontece, ele executa um comportamento específico (\emph{callback}) com os dados recebidos, como alteração de informações exibidas ou um cálculo com os valores novos. Por isso é dito que WebSocket é Orientado a Eventos.
-
-
-% \subsubsection{Socket.io}
-
-% Socket.io é a API de WebSocket para JavaScript utilizada. Além da implementação básica do protocolo, ele também adiciona outras funcionalidades importantes para o desenvolvimento de uma aplicação mais robusta. As que foram utilizadas no Projeto foram:
-
-% \begin{itemize}
-
-% \item A possibilidade de conectar múltiplos sockets em uma mesma porta. Utilizando WebSockets, cada socket precisa de uma porta exclusiva para fazer a conexão.
-
-% \item Criação arbritrária de eventos. Com WebSocket, o desenvolvedor fica preso a quatro eventos pré definidos: \emph{onopen}, \emph{onclose}, \emph{onmessage} e \emph{onerror}.
-
-% Essa criação de eventos funciona da seguinte forma: o processo emissor manda a mensagem e o nome do evento que está sendo enviado. O processo receptor define o evento que vai ouvir e a subrotina que vai ser executada na ocorrência desse evento. Se o evento lançado for ouvido pelo receptor, o \emph{callback} é chamado.
-% \end{itemize}
-
-% O uso de Socket.io está presente no código do servidor e dos clientes Android e Web. Todos esses processos escutam e enviam eventos entre si, e o servidor permite a conexão de múltiplos clientes.
-
-
-
-% \newpage
-% \subsection{Aplicativo Android}
-
-% O aplicativo foi desenvolvido com a proposta de servir como base para o desenvolvimento de aplicativos maiores. Ele possui os elementos básicos propostos por esse Projeto. Ele permite as seguintes ações:
-
-% \begin{itemize}
-%   \item Se conectar e desconectar de um servidor, utilizando o endereço IP e Porta.
-%   \item Enviar eventos pontuais ao servidor, com objetivos variados.
-%   \item Iniciar ou parar o envio contínuo de eventos, lançados em intervalos regulares. Os dados enviados são os valores do acelerômetro\footnote{Sensor que mede a vibração ou a aceleração do movimento do dispositivo.} do dispositivo.
-%   \item Exibe na tela mensagens recebidas do servidor.
-% \end{itemize}
-
-% Ele foi implementado usando o \emph{framework} Cordova.
-
-% \subsubsection{Cordova}
-
-% O Apache Cordova é um \emph{framework} \emph{open-source} para a criação de aplicativos para \emph{mobile}. Seu desenvolvimento é dado com o uso de tecnologias Web, como HTML5, CSS3 e JavaScript.
-
-% Ele é multiplataforma; permite o desenvolvimento para sistemas como Android, iOS ou navegadores. Oferece uma API de alto nível para acessar os módulos desejados, como de sensores, arquivos e rede.
-
-% O aplicativo implementado possui a mesma estrutura de uma página Web (utiliza HTML, JavaScript e CSS). Há um arquivo principal “index.html" que referencia os recursos necessários, como CSS, JavaScript, imagens e arquivos de mídia. A parte lógica é feita em JavaScript, e a renderização em HTML5 e CSS3.
-
-\subsubsection{Implementação}
-
-O aplicativo implementado possui o básico de interação, conecta-se com o servidor, exibe informações recebidas na tela, utiliza alguns botões para mandar informações e faz uso do acelerômetro do dispositivo.
-
-Essa é uma imagem de sua interface:
-
-
 \newpage
-% \begin{figure}
+\subsection{Aplicativo Android}
+
 \includegraphics[width=1\linewidth]{images/Cordova.png}
-% \caption{Aplicativo criado utilizando Apache Cordova}
-% \end{figure}
 \newpage
-
 
 
 As interações da interface são:
@@ -716,7 +632,7 @@ As interações da interface são:
 
 \item Um conjunto de botões que emitem ações pontuais ao servidor, como calcular o \emph{Ping} \footnote{Tempo necessário para uma mensagem ser enviada ao servidor e voltar dele.} ou enviar um conjunto de dados.
 
-\item Um outro conjunto de botões que ligam ou desligam um fluxo contínuo de mensagens. Essas mensagens emitidas contêm os dados do acelerômetro do aparelho.
+\item Um outro conjunto de botões que ligam ou desligam um fluxo contínuo de mensagens. Essas mensagens emitidas contêm os dados do acelerômetro do dispositivo.
 
 \begin{itemize}
 \item Ao serem pressionados, esses botões iniciam o fluxo de mensagens. Se pressionados novamente, o fluxo é interrompido.
@@ -815,7 +731,6 @@ A parte visual do aplicativo está no arquivo index.html:
 \subsubsection{Código da parte lógica}
 
 A parte lógica do aplicativo está no arquivo index.js:
-
 
 
 \begin{lstlisting}[language=JavaScript]
@@ -987,7 +902,7 @@ document.addEventListener('deviceready', function() {
 \begin{itemize}
   \item Na linha 143, uma função é adicionada ao evento \emph{“deviceready"} que o Cordova emite quando toda a inicialização é finalizada. Na ocorrência desse evento, a ação do botão “Connect" é alterada para tentar conectar-se ao servidor, através da função \code{connectSocket}.
 
-Essa função \code{connectSocket} recebe o IP e Porta vindos do formulário do botão. Se o IP for válido (a função \code{validateIPaddress} faz essa verificação com expresões regulares), ela fazer uma conexão entre o dispositivo e o servidor definido por esses IP e Porta. Se a conexão já está feita, ele a disconecta.
+Essa função \code{connectSocket} recebe o IP e Porta vindos do formulário do botão. Se o IP for válido (a função \code{validateIPaddress} faz essa verificação com expressões regulares), ela fazer uma conexão entre o dispositivo e o servidor definido por esses IP e Porta. Se a conexão já está feita, ele a disconecta.
 \end{itemize}
 
 \textbf{Eventos que o servidor ativa:}
@@ -1011,65 +926,12 @@ Essa função \code{connectSocket} recebe o IP e Porta vindos do formulário do 
 
 
 
-% \newpage
-% \subsection{Aplicação Web como Caso de Uso}
+\newpage
+\subsection{Webpage}
 
-% A Aplicação Web criada para exemplificar o uso do sistema proposto pelo Projeto foi projetada com a ideia de servir de base para o desenvolvimento de um jogo.
+\includegraphics[width=1\linewidth]{images/sphere.png}
 
-% A principal decisão de design foi fazer o \emph{browser} executar uma computação gráfica. Ele renderiza uma esfera no centro da tela e seu socket escuta por eventos de movimentação. Ao receber esses eventos, as velocidades X, Y e Z de rotação dessa esfera são alterados. Um dos eventos adiciona valores à velocidade atual. O outro define a velocidade total. Além de alterar a velocidade, esses valores recebidos também alteram a cor da esfera.
-
-% \includegraphics[width=1\linewidth]{images/sphere.png}
-
-% Para a renderização 3D, foi utilizada a biblioteca THREE.JS.
-
-
-% \subsubsection{THREE.JS}
-
-% THREE.JS é uma biblioteca de JavaScript para a criação e execução de gráficos 3D em navegadores, de maneira leve e otimizada. Ele permite ao \emph{browser} renderizar gráficos sem a necessidade de plugins, e utilizar a GPU \footnote{GPU (\emph{Graphics Processing Unit}) é um microprocessador especializado em processar gráficos. Sua estrutura de processamento paralelo os tornam mais capazes neste tipo de trabalho que CPUs normais. Uma GPU normalmente é utilizada em placas de vídeo.} do usuário para os cálculos de física e processamento de imagens. Essas funcionalidades são herdadas de WebGL, uma outra API de computação gráfica em JavaScript para \emph{browsers}.
-
-% Sua interface é simples de se usar, ela lida internamente com os detalhes técnicos de implementação de baixo nível, deixando o desenvolvimento menos carregado, uma vez que processamento gráfico é uma área complexa da computação.
-
-% THREE.JS é completa o bastante para a criação de cenários 3D completos, com objetos, luzes e texturas. Por utilizar a GPU para o processamento, a performance não é comprometida por suas funcionalidades.
-
-% Abaixo está uma lista de funcionalidades que possui. Por possuir muitos termos inglês sem tradução em português, a lista de forma literal da sua página\footnote{https://en.wikipedia.org/wiki/Three.js} na Wikipédia:
-
-% \begin{itemize}
-
-%   \item \textbf{Effects}: Anaglyph, cross-eyed and parallax barrier.
-
-%   \item \textbf{Scenes}: add and remove objects at run-time; fog
-
-%   \item \textbf{Cameras}: perspective and orthographic; controllers: trackball, FPS, path and more
-
-%   \item \textbf{Animation}: armatures, forward kinematics, inverse kinematics, morph and keyframe
-
-%   \item \textbf{Lights}: ambient, direction, point and spot lights; shadows: cast and receive
-
-%   \item \textbf{Materials}: Lambert, Phong, smooth shading, textures and more
-
-%   \item \textbf{Shaders}: access to full OpenGL Shading Language (GLSL) capabilities: lens flare, depth pass and extensive post-processing library
-
-%   \item \textbf{Objects}: meshes, particles, sprites, lines, ribbons, bones and more - all with Level of detail
-
-%   \item \textbf{Geometry}: plane, cube, sphere, torus, 3D text and more; modifiers: lathe, extrude and tube
-
-%   \item \textbf{Data} loaders: binary, image, JSON and scene
-
-%   \item \textbf{Utilities}: full set of time and 3D math functions including frustum, matrix, quaternion, UVs and more
-
-%   \item \textbf{Export} and import: utilities to create Three.js-compatible JSON files from within: Blender, openCTM, FBX, Max, and OBJ
-
-%   \item \textbf{Support}: API documentation is under construction, public forum and wiki in full operation
-
-%   \item \textbf{Examples}: Over 150 files of coding examples plus fonts, models, textures, sounds and other support files
-
-%   \item \textbf{Debugging}: Stats.js, WebGL Inspector, Three.js Inspector
-% \end{itemize}
-
-
-\subsubsection{Implementação}
-
-Esse projeto explora somente o básico de THREE.js para a criação de um ambiente 3D.
+Essa página explora somente o básico de THREE.js para a criação de um ambiente 3D.
 
 Este código é mais extenso, então somente as partes principais são exibidas.
 
@@ -1263,25 +1125,10 @@ render();
 
 
 
-% \newpage
-% \subsection{Servidor}
+\newpage
+\subsection{Servidor}
 
-% O servidor foi projetado para escutar eventos dos clientes Web e Android, e responder ou encaminhar os dados recebidos. Ele é implementado com JavaScript, com o auxilio de Node.js e ExpressJS.
-
-% \subsubsection{Node.js e ExpressJS para criar um servidor}
-
-% Node.js é uma plataforma para desenvolvimento de aplicações \emph{server-side} (executadas no servidor) baseadas em rede utilizando JavaScript e o V8 JavaScript Engine \footnote{É o interpretador de JavaScript \emph{open source} implementado pelo Google em C++ e utilizado pelo Chrome.}. Com Node.js é possível criar aplicações Web utilizando apenas código em JavaScript.
-
-% Ao se levar em conta o modo em que o código em JavaScript pode ser estruturado e as demandas de aplicações Web, Node.js abre uma gama de novas possibilidades para desenvolvimento Web.
-
-
-% Express é um \emph{framework} mínimo e flexível para Node.js que oferece um conjunto robusto de funcionalidades. Sua API é simples, mas oferece o conjunto de ferramentas essenciais para o desenvolvimento de para páginas e aplicações Web e Mobile, e programas de \emph{backend}. Ela lida com detalhes de baixo nível como protocolos e processos. Além da sua funcionalidade básica, existem módulos disponíveis para adicionar novas, que são diretamente aplicados ao Express.
-
-% Para essa implementação, Node.js e Express trabalham em conjunto para criar um servidor local e lançar a página da Aplicação Web desenvolvida.
-
-\subsubsection{Implementação}
-
-O servidor criado para o Projeto tem suas configurações definidas no arquivo \code{package.json}. Esse arquivo permite a restauração e reprodução do servidor em outros locais.
+O servidor criado tem suas configurações definidas no arquivo \code{package.json}. Esse arquivo permite a restauração e reprodução do servidor em outros locais.
 
 
 \begin{lstlisting}[language=JavaScript]
