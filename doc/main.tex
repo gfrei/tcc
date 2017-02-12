@@ -529,7 +529,7 @@ Ele é multiplataforma; permite o desenvolvimento para sistemas como Android, iO
 
 A Webpage que o servidor emite é o componente que possui maior grau de liberdade no Projeto. Pode-se considerar que, para o usuário, é o produto final. O aplicativo é igualmente importante, mas ele funciona como interface para lidar com essa Webpage.
 
-Existe uma gama de possibilidades de desenvolvimento. Para o escopo do projeto, a página criada terá as funcionalidades básicas de um jogo, tanto visualmente como em usabilidade. O smartphone servirá para fazer um controle básico nesse contexto.
+Existe uma gama de possibilidades de desenvolvimento. Para o escopo do projeto, a página criada como caso de uso terá as funcionalidades básicas de um jogo, tanto visualmente como em usabilidade. O smartphone servirá para fazer um controle básico nesse contexto.
 
 A principal decisão de design é fazer o browser renderizar elementos gráficos em três dimensões. Ele deve renderizar uma esfera no centro da tela e vai escutar eventos de movimentação do servidor. Cada evento deve alterar as velocidades X, Y e Z de rotação dessa esfera. Outro tipo evento deve alterar a cor dessa esfera.% Um dos eventos adiciona valores à velocidade atual. O outro define a velocidade total. Além de alterar a velocidade, esses valores recebidos também alteram a cor da esfera.
 
@@ -597,7 +597,7 @@ Express é um \emph{framework} mínimo e flexível para Node.js que oferece um c
 
 
 \newpage
-\subsection{Aplicações do modelo}
+\subsection{Exemplos de aplicações do modelo}
 
 \begin{itemize}
     \item Com a base proposta pelo Projeto, a aplicação natural a ser desenvolvida seria um jogo virual. Para seu funcionamento, o smartphone serviria como o controle, e a execução do jogo seria na webpage.
@@ -630,13 +630,23 @@ Express é um \emph{framework} mínimo e flexível para Node.js que oferece um c
 
 
 \newpage
-\section{Implementação}
+\section{Implementação do caso de uso}
 
-Nessa seção, é apresentada a implementação do Projeto, com o código exibido e explicado.
+Nessa seção, é apresentada a implementação do caso de uso descrito para o Projeto, com o código exibido e explicado.
+
+Em resumo, o caso de uso descreve o seguinte comportamento:
+
+\begin{itemize}
+    \item A webpage exibe uma esfera, em um ambiente em três dimensões. O servidor pode enviar valores à essa página, que irão rotacionar a esfera em seus eixos X, Y, Z. Esses valores também vão alterar a cor dessa esfera, de acordo com alguns cálculos.
+
+    \item O servidor recebe dados do aplicativo e os envia para a webpage. Ele também envia feedbacks de volta ao aplicativo.
+
+    \item O aplicativo controla o que acontece na webpage. Ele pode enviar eventos pontuais ou pode gerar um fluxo contínuo de valores do acelerômetro ao servidor.
+\end{itemize}
 
 
 \newpage
-\subsection{Aplicativo Android}
+\subsection{Aplicativo}
 
 \includegraphics[width=1\linewidth]{images/Cordova.png}
 \newpage
@@ -1295,7 +1305,75 @@ Quando uma conexão é iniciada, o socket criado é atribuído de eventos e seus
 \end{itemize}
 
 
+\newpage
+\section{Teste e avaliação}
 
+Esse capítulo descreve os resultados da implementação do caso de uso acima.
+
+
+\subsection{Comunicação via Socket.io}
+
+A conexão foi testada durante todos os momentos do desenvolvimento, desde o momento da sua implementação. O teste foi feito somente em redes locais, pois implementar segurança para conexão em qualquer endereço estava fora do escopo.
+
+Na maior parte dos testes, a rede WiFi local não era dividida por vários dispositivos, na prática era exclusiva do servidor e do smartphone.
+
+Foram utilizados dois smartphones para os testes:
+\begin{itemize}
+    \item Dispositivo A : LG G2
+    \item Dispositivo B : Moto Z
+\end{itemize}
+
+Aqui estão lembretes de funcionalidades implementadas:
+
+\begin{itemize}
+
+    \item \textbf{Ping}: Essa função envia um evento ao servidor e espera um evento de resposta, para calcula o tempo entre o envio e a chegada.
+
+    \item \textbf{Fluxo de Eventos}: Foram implementados botões para ligar ou desligar um fluxo constante de eventos ao servidor, a intervalos regulares. Os intervalos são:
+    \begin{itemize}
+        \item 60 vezes por segundo.
+        \item 30 vezes por segundo.
+        \item 10 vezes por segundo.
+        \item 1 veze por segundo.
+    \end{itemize}
+
+    \item \textbf{Cálculo Local}: Há uma função de cálculo, presente tanto no aplicativo como no servidor. É calculado o tempo que cada dispositivo leva para fazê-lo, para comparar a eficiência entre eles.
+
+    A função é a seguinte:
+    \begin{lstlisting}[language=JavaScript]
+    var r = 0;
+    var i, j, k;
+    for(i = 0; i < 1000000; i++) {
+        for(i = 0; i < 10000000; i++) {
+            for(i = 0; i < 10000000; i++) {
+                r += (3 * i + (j + k / 2))% 103;
+            }
+        }
+    }
+    \end{lstlisting}
+
+\end{itemize}
+
+De volta aos testes, os pontos que merecem ser citados:
+
+\begin{itemize}
+
+    \item Uma conexão é feita entre o smartphone e o servidor. Nesse momento, enquanto os dois processos estão em repouso, foram executadas chamadas à função de Ping.
+
+    \begin{itemize}
+        \item \textbf{Resultado A}: valores variavam bastante entre \textbf{15 milissegundos} e \textbf{120 milissegundos}. Poucos valores saíam desse intervalo, a média era de \textbf{65 milissegundos}, aproximadamente.
+        \item \textbf{Resultado B}: valores variavam bastante entre \textbf{15 milissegundos} e \textbf{120 milissegundos}. Poucos valores saíam desse intervalo, a média era de \textbf{65 milissegundos}, aproximadamente.
+    \end{itemize}
+
+    \item O teste acima foi refeito, com o Fluxo de Eventos ligado a 60 e 30 vezes por segundo.
+
+    \begin{itemize}
+        \item \textbf{Resultado A}: Muito contra intuitivamente, o tempo de ping caiu para para um intervalo de \textbf{1 a 5 milissegundos}.
+        \item \textbf{Resultado B}: Muito contra intuitivamente, o tempo de ping caiu para para um intervalo de \textbf{1 a 5 milissegundos}.
+    \end{itemize}
+
+
+\end{itemize}
 
 
 

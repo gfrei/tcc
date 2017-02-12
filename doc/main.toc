@@ -17,23 +17,25 @@
 \contentsline {subsubsection}{\numberline {4.3.1}THREE.JS}{}{subsubsection.4.3.1}
 \contentsline {subsection}{\numberline {4.4}Servidor}{}{subsection.4.4}
 \contentsline {subsubsection}{\numberline {4.4.1}Node.js e ExpressJS para criar um servidor}{}{subsubsection.4.4.1}
-\contentsline {subsection}{\numberline {4.5}Aplica\IeC {\c c}\IeC {\~o}es do modelo}{}{subsection.4.5}
-\contentsline {section}{\numberline {5}Implementa\IeC {\c c}\IeC {\~a}o}{}{section.5}
-\contentsline {subsection}{\numberline {5.1}Aplicativo Android}{}{subsection.5.1}
+\contentsline {subsection}{\numberline {4.5}Exemplos de aplica\IeC {\c c}\IeC {\~o}es do modelo}{}{subsection.4.5}
+\contentsline {section}{\numberline {5}Implementa\IeC {\c c}\IeC {\~a}o do caso de uso}{}{section.5}
+\contentsline {subsection}{\numberline {5.1}Aplicativo}{}{subsection.5.1}
 \contentsline {subsubsection}{\numberline {5.1.1}C\IeC {\'o}digo da Interface}{}{subsubsection.5.1.1}
 \contentsline {subsubsection}{\numberline {5.1.2}C\IeC {\'o}digo da parte l\IeC {\'o}gica}{}{subsubsection.5.1.2}
 \contentsline {subsection}{\numberline {5.2}Webpage}{}{subsection.5.2}
 \contentsline {subsection}{\numberline {5.3}Servidor}{}{subsection.5.3}
-\contentsline {section}{\numberline {6}Estudo Aprofundado da Tecnologia}{}{section.6}
-\contentsline {subsection}{\numberline {6.1}Desenvolvendo Aplicativos com Apache Cordova}{}{subsection.6.1}
-\contentsline {subsection}{\numberline {6.2}Comunica\IeC {\c c}\IeC {\~a}o Web e Aplica\IeC {\c c}\IeC {\~o}es Web}{}{subsection.6.2}
-\contentsline {subsubsection}{\numberline {6.2.1}Modelo cliente-servidor}{}{subsubsection.6.2.1}
-\contentsline {subsubsection}{\numberline {6.2.2}AJAX}{}{subsubsection.6.2.2}
-\contentsline {subsubsection}{\numberline {6.2.3}Necessidade de Comunica\IeC {\c c}\IeC {\~a}o Bilateral}{}{subsubsection.6.2.3}
-\contentsline {subsubsection}{\numberline {6.2.4}Sockets}{}{subsubsection.6.2.4}
-\contentsline {subsubsection}{\numberline {6.2.5}Websockets}{}{subsubsection.6.2.5}
-\contentsline {subsubsection}{\numberline {6.2.6}Teste de efici\IeC {\^e}ncia de Websockets}{}{subsubsection.6.2.6}
+\contentsline {section}{\numberline {6}Teste e avalia\IeC {\c c}\IeC {\~a}o}{}{section.6}
+\contentsline {subsection}{\numberline {6.1}Comunica\IeC {\c c}\IeC {\~a}o via Socket.io}{}{subsection.6.1}
+\contentsline {section}{\numberline {7}Estudo Aprofundado da Tecnologia}{}{section.7}
+\contentsline {subsection}{\numberline {7.1}Desenvolvendo Aplicativos com Apache Cordova}{}{subsection.7.1}
+\contentsline {subsection}{\numberline {7.2}Comunica\IeC {\c c}\IeC {\~a}o Web e Aplica\IeC {\c c}\IeC {\~o}es Web}{}{subsection.7.2}
+\contentsline {subsubsection}{\numberline {7.2.1}Modelo cliente-servidor}{}{subsubsection.7.2.1}
+\contentsline {subsubsection}{\numberline {7.2.2}AJAX}{}{subsubsection.7.2.2}
+\contentsline {subsubsection}{\numberline {7.2.3}Necessidade de Comunica\IeC {\c c}\IeC {\~a}o Bilateral}{}{subsubsection.7.2.3}
+\contentsline {subsubsection}{\numberline {7.2.4}Sockets}{}{subsubsection.7.2.4}
+\contentsline {subsubsection}{\numberline {7.2.5}Websockets}{}{subsubsection.7.2.5}
+\contentsline {subsubsection}{\numberline {7.2.6}Teste de efici\IeC {\^e}ncia de Websockets}{}{subsubsection.7.2.6}
 \contentsline {paragraph}{Informa\IeC {\c c}\IeC {\~o}es para entender o exemplo:}{}{section*.2}
 \contentsline {paragraph}{Em conclus\IeC {\~a}o}{}{section*.3}
-\contentsline {subsubsection}{\numberline {6.2.7}Socket.io}{}{subsubsection.6.2.7}
-\contentsline {section}{\numberline {7}Conclus\IeC {\~a}o}{}{section.7}
+\contentsline {subsubsection}{\numberline {7.2.7}Socket.io}{}{subsubsection.7.2.7}
+\contentsline {section}{\numberline {8}Conclus\IeC {\~a}o}{}{section.8}
