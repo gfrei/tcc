@@ -1310,10 +1310,7 @@ Quando uma conexão é iniciada, o socket criado é atribuído de eventos e seus
 
 Esse capítulo descreve os resultados da implementação do caso de uso acima.
 
-
-\subsection{Comunicação via Socket.io}
-
-A conexão foi testada durante todos os momentos do desenvolvimento, desde o momento da sua implementação. O teste foi feito somente em redes locais, pois implementar segurança para conexão em qualquer endereço estava fora do escopo.
+A conexão via Socket.io foi testada durante todos os momentos do desenvolvimento, desde o momento da sua implementação. O teste foi feito somente em redes locais, pois implementar segurança para conexão em qualquer endereço estava fora do escopo.
 
 Na maior parte dos testes, a rede WiFi local não era dividida por vários dispositivos, na prática era exclusiva do servidor e do smartphone.
 
@@ -1337,43 +1334,56 @@ Aqui estão lembretes de funcionalidades implementadas:
         \item 1 veze por segundo.
     \end{itemize}
 
-    \item \textbf{Cálculo Local}: Há uma função de cálculo, presente tanto no aplicativo como no servidor. É calculado o tempo que cada dispositivo leva para fazê-lo, para comparar a eficiência entre eles.
-
-    A função é a seguinte:
-    \begin{lstlisting}[language=JavaScript]
-    var r = 0;
-    var i, j, k;
-    for(i = 0; i < 1000000; i++) {
-        for(i = 0; i < 10000000; i++) {
-            for(i = 0; i < 10000000; i++) {
-                r += (3 * i + (j + k / 2))% 103;
-            }
-        }
-    }
-    \end{lstlisting}
-
 \end{itemize}
 
 De volta aos testes, os pontos que merecem ser citados:
 
 \begin{itemize}
 
+    \item Sobre as várias opções de Fluxo de Eventos, quanto maior a taxa de envio, mais flúido era a resposta da webpage. Não há dados para embasar esse resultado, mas a experiência de uso a taxas mais elevadas é melhor, e a latência é quase imperceptível na taxa de 60 vezes por segundo. Esse resultado foi igual entre os dispositivos A e B.
+
     \item Uma conexão é feita entre o smartphone e o servidor. Nesse momento, enquanto os dois processos estão em repouso, foram executadas chamadas à função de Ping.
 
     \begin{itemize}
-        \item \textbf{Resultado A}: valores variavam bastante entre \textbf{15 milissegundos} e \textbf{120 milissegundos}. Poucos valores saíam desse intervalo, a média era de \textbf{65 milissegundos}, aproximadamente.
-        \item \textbf{Resultado B}: valores variavam bastante entre \textbf{15 milissegundos} e \textbf{120 milissegundos}. Poucos valores saíam desse intervalo, a média era de \textbf{65 milissegundos}, aproximadamente.
+
+        \item \textbf{Resultado A}: valores variavam bastante entre \textbf{50 a 120 milissegundos}. Alguns valores saíam desse intervalo, chegando a \textbf{10 ou 300 milissegundos}, mas são pouco frequentes. A média é de \textbf{65 milissegundos}, aproximadamente.
+
+        \item \textbf{Resultado B}: valores quase constantes em \textbf{105 milissegundos}. Alguns valores esporádicos eram de \textbf{20, 50, 200, 300 milissegundos}, faz sua frequência era baixa.
+
     \end{itemize}
 
-    \item O teste acima foi refeito, com o Fluxo de Eventos ligado a 60 e 30 vezes por segundo.
+    \item O teste acima foi refeito, com o Fluxo de Eventos ligado a 60 e 30 vezes por segundo. (Os resultados com 10 vezes e 1 vez por segundo não variaram significativamente)
 
     \begin{itemize}
-        \item \textbf{Resultado A}: Muito contra intuitivamente, o tempo de ping caiu para para um intervalo de \textbf{1 a 5 milissegundos}.
-        \item \textbf{Resultado B}: Muito contra intuitivamente, o tempo de ping caiu para para um intervalo de \textbf{1 a 5 milissegundos}.
+
+        \item \textbf{Resultado A}: Muito contra intuitivamente, o tempo de ping caiu para para um intervalo de \textbf{5 a 10 milissegundos}.
+
+        \item \textbf{Resultado B}: o tempo de ping não foi alterado.
+
     \end{itemize}
 
+\end{itemize}
+
+Um teste foi feito em uma rede WiFi com um grande fluxo de dados e dispositivos conectados, o que a deixava congestionada. Nessas condições, a eficiência do sistema foi fortemente danificada.
+
+\begin{itemize}
+
+    \item O Ping calculado estava na faixa de \textbf{500 a 1000 milissegundos}.
+
+    \item Um Fluxo de Eventos de 30 vezes por segundo ou menos funcionava corretamente, mas apresentou problemas sérios de latência, que era grande e prejudicava muito a experiência.
+
+    \item A webpage apresentou um comportamento anômalo ao se ativar o Fluxo de Eventos a 60 vezes por segundo. A rede não dava conta de tantos eventos, então eles demoravam muito para chegar e sua ordem não era preservada.
+
+    Após ativar o fluxo, a esfera passou a apresentar um comportamente aparentemente aleatório e deixou de responder aos comandos do smartphone (resultado do motivo acima).
+
+    \begin{itemize}
+
+        \item Houve uma tentativa de se calcular o Ping nessas condições, mas o resultado mostrou como a rede claramente não dava conta do volume de eventos. O Ping calculado foi de \textbf{67000 milissegundos (mais de um minuto!)}.
+
+    \end{itemize}
 
 \end{itemize}
+
 
 
 
@@ -1402,7 +1412,7 @@ De volta aos testes, os pontos que merecem ser citados:
 
 \newpage
 
-\section{Estudo Aprofundado da Tecnologia}
+\section{Estudo Aprofundado das Tecnologias}
 
 \subsection{Desenvolvendo Aplicativos com Apache Cordova}
 
