@@ -419,7 +419,7 @@ Para começar a estruturação, o primeiro ponto a ser aprofundado é a visualiz
 
 Um servidor possui um código estritamente lógico, não é possível fazer uma aplicação direta nele, precisa haver algo para intermediar essa interface. A maneira mais natural para que isso ocorra é fazer ele gerar uma webpage que recebe seus dados e faz um processamento próprio.
 
-Essa webpage é uma aplicação que será executada no cliente e reduz a carga de dados a ser processada pelo servidor\footnote{É uma boa prática de desenvolvimento deixar o mínimo de processamento possível à cargo do servidor, pois ele pode estar lidando com uma quantidade muito grande de dados vindos de outros clientes.}. Essa situação torna necessário novos requerimentos a serem levados em consideração.
+Essa webpage é uma aplicação que será executada em um cliente e reduz a carga de dados a ser processada pelo servidor\footnote{É uma boa prática de desenvolvimento deixar o mínimo de processamento possível à cargo do servidor, pois ele pode estar lidando com uma quantidade muito grande de dados vindos de outros clientes.}. Essa situação torna necessário novos requerimentos a serem levados em consideração.
 
 Os requerimentos para essa nova webpage:
 
@@ -431,7 +431,7 @@ Os requerimentos para essa nova webpage:
 
 \end{itemize}
 
-A estrutura fica mais clara com esses três elementos trabalhando juntos, o aplicativo, o servidor e a webpage. O aplicativo vai se conectar ao servidor e iniciar sua troca de dados enquanto é executado. O servidor faz um processamento leve desses dados e os emite à webpage, executada em outro cliente. Essa webpage por sua vez, enquanto executa uma aplicação, recebe, processa e incorpora esses dados a si, alterando os resultados de sua execução.
+A estrutura fica mais clara com esses três elementos trabalhando juntos, o aplicativo, o servidor e a webpage. O aplicativo vai se conectar ao servidor e iniciar sua troca de dados enquanto é executado. O servidor faz um processamento leve desses dados e os emite à webpage, executada em outro cliente. A webpage, enquanto executa uma aplicação, recebe, processa e incorpora esses dados a si, alterando os resultados de sua execução.
 
 O próximo passo é analisar e definir concretamente cada componente deste ecossistema:
 
@@ -439,6 +439,7 @@ O próximo passo é analisar e definir concretamente cada componente deste ecoss
 
 
 
+\newpage
 \subsection{Comunicação}
 
 A comunicação entre o servidor e os clientes é o ponto mais importante deste sistema. Idealmente, ele deve satisfazer os seguintes requerimentos:
@@ -595,9 +596,31 @@ Ao se levar em conta o modo em que o código em JavaScript pode ser estruturado 
 Express é um \emph{framework} mínimo e flexível para Node.js que oferece um conjunto robusto de funcionalidades. Sua API é simples, mas oferece ferramentas essenciais para o desenvolvimento de para páginas e aplicações Web e Mobile, e programas de \emph{backend}. Ela lida com detalhes de baixo nível como protocolos e processos. Além da sua funcionalidade básica, existem módulos disponíveis para adicionar novas, que são diretamente aplicados ao Express.
 
 
+\newpage
 \subsection{Aplicações do modelo}
 
-TODO
+\begin{itemize}
+    \item Com a base proposta pelo Projeto, a aplicação natural a ser desenvolvida seria um jogo virual. Para seu funcionamento, o smartphone serviria como o controle, e a execução do jogo seria na webpage.
+
+    \begin{itemize}
+        \item Uma ideia simples de jogo é utilizar o acelerômetro para calcular a inclinação do dispositivo e simular essa inclinação em um labirinto na webpage, guiar uma bola através dele com ajuda da gravidade.
+
+        \item Outro exemplo mais tradicional é simular o layout de um controle na tela do dispositivo, quatro botões em cruz para setas e mais alguns para ações, e executar um jogo de plataforma na webpage.
+    \end{itemize}
+
+    \item É possível criar um aplicativo para supermercados. O consumidor usaria a câmera para consultar valores de produtos, recebendo-os do servidor do mercado. A webpage poderia ser apresentada no caixa, para que ele pudesse se atender sozinho, sem ajuda de funcionários.
+
+    \begin{itemize}
+        \item A webpage poderia ser utilizada também pela gerência, para ter um controle de quais produtos são mais requisitados ou quais possuem índices altos de desistência.
+    \end{itemize}
+
+    \item O smartphone pode ser utilizado para medir luz e ruído sonoro em um ambiente, e enviar esses valores para o servidor. A webpage pode exibir gráficos e estatísticas sobre essas leituras.
+
+    \item A webpage pode exibir imagens, músicas, filmes ou vídeos. O smartphone serviria como um controle de multimídia, permitindo contolar volume, equalização de músicas, avançar ou voltar faixas ou filmes, pausar, entre outros. Além de ser um controle, o dispositivo também poderia exibir informações de contexto sobre a mídia exibida; caso seja um filme, mostra a sinopse, informações técnicas e atores.
+
+    \item O modelo pode implementar um software para catalogar objetos. O smartphone pode tirar fotos e as enviar ao servidor, adicionar valores como nome, valor e tamanho. O servidor receberia essas tuplas e as inseriria em um bando de dados.
+
+\end{itemize}
 
 
 
