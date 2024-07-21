@@ -1,4 +1,7 @@
 # Final Graduation Project 
+Guilherme Freire
+
+IME-USP - Bacharelado de Ciência da Computação /2017
 ## Low latency bilateral communication between server and client in a Web environment
 
 
